@@ -1,0 +1,35 @@
+<% include partials/header %>
+
+<h1>Add page</h1><br>
+
+<h3>Book added to the database...</h3><br><br>
+
+
+<lu>
+    <picture>        
+            <img src=<%=data.thumnail%>>
+    </picture></br>
+
+    Title: <%= data.title %></br>
+    Subtitle: <%= data.subtitle %></br>
+    Author: <%= data.author %></br>
+    Publisher: <%= data.publisher %></br>
+    Published Date: <%= data.published_date %></br>
+    ISBN_13: <%= data.ISBN_13 %></br>
+    ISBN_10: <%= data.ISBN_10 %></br>
+    page_count: <%= data.page_count %></br>
+    print_type: <%= data.print_type %></br>
+    category: <%= data.category %></br>
+    avg_rating: <%= data.avg_rating %></br>
+    rating_count: <%= data.rating_count %></br>
+    language: <%= data.language %></br>
+    thumnail: <%= data.thumnail %></br>
+    description: <%= data.description %></br><br>
+
+</lu>
+
+
+<a href="/search">Search Again!</a>
+
+<% include partials/footer %>
+

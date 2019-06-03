@@ -1,0 +1,61 @@
+<% include partials/header %>
+
+
+
+<h1>Results Page!!</h1>
+<ul>
+    <% var i = 0; %>
+    <% data["items"].forEach(function(movie){ %>
+        <% var title = movie["volumeInfo"]["title"] %>
+    <li>
+            <picture>
+                <% if(movie["volumeInfo"]["imageLinks"]) { %>
+                    <img src=<%=movie["volumeInfo"]["imageLinks"].thumbnail%>>
+                <%}%>     
+                
+            </picture></br>
+
+        Title: <%= movie["volumeInfo"]["title"] %></br>
+        Subtitle: <%= movie["volumeInfo"]["subtitle"] %></br>
+        Author: <%=movie["volumeInfo"]["authors"]%></br>
+        Publisher: <%=movie["volumeInfo"]["publisher"]%></br>
+        Published Date: <%=movie["volumeInfo"]["publishedDate"]%></br>
+        <% if(movie["volumeInfo"]["industryIdentifiers"]) { %>
+            Industry Identifiers:<br>
+            <% movie["volumeInfo"]["industryIdentifiers"].forEach(function(movie2){ %>
+                <span style="margin-left:2em"><%=movie2["type"]%>: <%=movie2["identifier"]%></span></br>  
+            <% }) %>
+        <%}%>
+       
+        Page Count: <%=movie["volumeInfo"]["pageCount"]%></br>
+        Print Type: <%=movie["volumeInfo"]["printType"]%></br>
+        Categories: <%=movie["volumeInfo"]["categories"]%></br>
+        Average Rating: <%=movie["volumeInfo"]["averageRating"]%></br>
+        Rating Count: <%=movie["volumeInfo"]["ratingsCount"]%></br>
+        Language: <%=movie["volumeInfo"]["language"]%></br>
+        Image Link: </br>
+            <span style="margin-left:2em">Thumbnail: </span>
+            <% if(movie["volumeInfo"]["imageLinks"]) { %>
+                <%=movie["volumeInfo"]["imageLinks"]["thumbnail"]%></br></br>
+            <%}%> 
+             
+        Description: <%=movie["volumeInfo"]["description"]%></br><br>
+        
+        
+        <%i++%>            
+        <form action="/add" method="GET">
+            <button type="submit" value=<%=i%> name="id">Add to database!!</button>
+        </form>
+        <br><br>
+        
+    
+    </li>
+<% }) %>
+    
+</ul>
+
+<a href="/search">Search Again!</a>
+
+<% include partials/footer %>
+
+
