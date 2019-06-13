@@ -1,0 +1,25 @@
+p, h4 {
+	margin: 8px 0px 8px 0px;
+}
+.geektext-lr {
+    width: 350px;
+    height: auto;
+    margin: 10px auto 0px auto;
+    border: 1px #ddd solid;
+    border-radius: 3px;
+    padding-bottom: 10px;
+}
+
+div.geektext-lr-error {
+    color: #c40000;
+    border: 1px #c40000 solid;
+    padding: 5px 0px;
+}
+
+div.geektext-lr-ok {
+	padding: 5px 0px;
+}
+
+div.geektext-lr-error p {
+    color: black;
+}
