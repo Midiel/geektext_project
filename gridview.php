@@ -1,5 +1,5 @@
 <?php
-    require_once('connect.inc.php');
+    require_once('includes/connect.inc.php');
     //flag to detect user's credentials
     $logged_in = false;
 
