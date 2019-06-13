@@ -11,7 +11,7 @@
         && isset($_POST['password']) && !empty($_POST['password'])
         && isset($_POST['name']) && !empty($_POST['name']))
     {
-        require_once('connect.inc.php');
+        require_once('includes/connect.inc.php');
         $email = $_POST['email'];
         $password = $_POST['password'];     //need to encrypt it
         $name = $_POST['name'];
@@ -62,11 +62,13 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>GeekText Registration</title>
     <?php include("includes/head-data.php");?>
     <link rel="stylesheet" href="css/geektext-lr.css">
 </head>
+
 <body>
     <h1 style="text-align: center;" alt="logo placeholder">GeekText</h1>
     <div class="geektext-lr geektext-lr-error" style="display: <?php echo ($email_exists) ? 'block' : 'none'; ?>;">
@@ -97,4 +99,5 @@
         <div style="padding-top: 16px; padding-bottom: 4px">Already have an account? <a href="login.php">Sign in</a></div>
     </form>
 </body>
+
 </html>
