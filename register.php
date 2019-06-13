@@ -65,7 +65,7 @@
 <head>
     <title>GeekText Registration</title>
     <?php include("includes/head-data.php");?>
-    <link rel="stylesheet" href="styles/geektext-lr.css">
+    <link rel="stylesheet" href="css/geektext-lr.css">
 </head>
 <body>
     <h1 style="text-align: center;" alt="logo placeholder">GeekText</h1>

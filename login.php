@@ -7,7 +7,7 @@
     if(isset($_POST['email']) && !empty($_POST['email'])
         && isset($_POST['password']) && !empty($_POST['password']))
     {
-        require_once('connect.inc.php');
+        require_once('includes/connect.inc.php');
         $email = $_POST['email'];
         $password = $_POST['password'];     //need to encrypt it
         if ($stmt = mysqli_prepare($con, "SELECT email, password FROM users WHERE
@@ -67,7 +67,7 @@
 <head>
     <title>GeekText Login</title>
     <?php include("includes/head-data.php");?>
-    <link rel="stylesheet" href="styles/geektext-lr.css">
+    <link rel="stylesheet" href="css/geektext-lr.css">
 </head>
 
 <body>
