@@ -41,7 +41,7 @@
                 $_SESSION['email'] = $email;
 
                 /* redirect browser */
-                header('Location: gridview/index.php');
+                header('Location: gridview.php');
                 exit();
             }
             else /* login detail error */
