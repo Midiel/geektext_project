@@ -46,7 +46,7 @@ while($row = mysqli_fetch_assoc($run))
 {
     $book[$counter]['id']= $row['id'];
     $book[$counter]['title']= $row['title'];
-    $book[$counter]['author']= $row['author']; 
+    $book[$counter]['author']= $row['author'];
     $book[$counter]['cover']= $row['cover'];
     $book[$counter]['bio']= $row['bio'];
     $book[$counter]['description']= $row['description'];
@@ -114,7 +114,7 @@ while($row = mysqli_fetch_assoc($run))
                 </li>
                  <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>
-      </li> 
+      </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -156,7 +156,7 @@ while($row = mysqli_fetch_assoc($run))
 
     <div class="container text-left" id="books">
         <div class="row">
-            <?php $c = count($book); 
+            <?php $c = count($book);
             for($i = 0; $i < $c; $i++): ?>
 
             <div id="parent-card" class="col-xs col-sm-6 col-md-4 col-lg-3 col-xl-3">
