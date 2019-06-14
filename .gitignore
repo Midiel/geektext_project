@@ -1,3 +1,3 @@
 # avoid uploading/downloading images
 images/*
-#includes/connect.inc.php
+includes/connect.inc.php
