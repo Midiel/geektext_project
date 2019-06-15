@@ -69,7 +69,7 @@ while($row = mysqli_fetch_assoc($run))
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/imageModal.js"></script>
+    <script type="text/javascript" src="js/gridviewThumbnails.js"></script>
     <link rel="stylesheet" type="text/css" href="css/gridview.css">
 
 </head>
@@ -227,11 +227,11 @@ while($row = mysqli_fetch_assoc($run))
                             </div>
                         </div>
 
-						<!-- Midiel: Add to cart button --> 
-						<form method="POST" action="cart.php">
-							<button type="submit" name="move_to_cart" value="<?php echo $book[$i]['id'];?>" class="btn btn-primary btn-sm mt-1">ADD TO CART </button>							
-						</form>
-						<!-- end add to cart -->
+                        <!-- Midiel: Add to cart button -->
+                        <form method="POST" action="cart.php">
+                            <button type="submit" name="move_to_cart" value="<?php echo $book[$i]['id'];?>" class="btn btn-primary btn-sm mt-1">ADD TO CART </button>
+                        </form>
+                        <!-- end add to cart -->
 
                     </article> <!-- "button-section" -->
                 </section> <!-- "card" -->
