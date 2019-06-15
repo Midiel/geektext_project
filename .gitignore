@@ -2,7 +2,7 @@
 images/*
 
 # removing IDE files
-.vs
+.vs/
 .gitattributes
 
 includes/connect.inc.php
