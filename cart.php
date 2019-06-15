@@ -207,7 +207,7 @@
 	<div class="row justify-content-between">
 		<div class="col-4">
 			<td>
-				<a href="gridview.php" class="btn btn-warning">
+				<a href="index.php" class="btn btn-warning">
 					<i class="fa fa-angle-left"></i> Continue Shopping</a></td>
 					<td colspan="2" class="hidden-xs"></td>
 		</div>
