@@ -13,7 +13,7 @@
     {
         require_once('includes/connect.inc.php');
         $email = $_POST['email'];
-        $password = $_POST['password'];     //need to encrypt it
+        $password = $_POST['password'];
         $name = $_POST['name'];
 
         /* check if email exists */
@@ -43,6 +43,9 @@
                     $lname = implode(" ", $names);
                 }
 
+                /* hash password */
+                $password = password_hash($password, PASSWORD_DEFAULT);
+
                 /* insert user row into db */
                 mysqli_stmt_bind_param($stmt, "sssss", $email, $fname, $lname, $nickname, $password);
                 mysqli_stmt_execute($stmt);
@@ -65,7 +68,12 @@
 
 <head>
     <title>GeekText Registration</title>
-    <?php include("includes/head-data.php");?>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/geektext-lr.css">
 </head>
 
@@ -76,7 +84,7 @@
         <h4>There was a problem</h4>
         <p>An account with this email already exists</p>
     </div>
-    <form method="post" action="register.php" class="container geektext-lr">
+    <form method="post" action="register.php" class="container geektext-lr" id="register-form">
         <h3 style="padding-bottom: 5px">Create account</h3>
         <div class="form-group">
             <label>Your name</label>
@@ -86,18 +94,26 @@
             <label>Email</label>
             <input class="form-control" type="email" name="email">
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 10px;">
             <label>Password</label>
-            <input type="password" class="form-control">
+            <input id="password1" type="password" class="form-control">
         </div>
-        <!-- <p>password notes</p> -->
         <div class="form-group">
+            <div><i id="sixlen-check" class="fa fa-circle geektext-icon"></i>At least 6 characters</div>
+            <div><i id="upperlower-check" class="fa fa-circle geektext-icon"></i>Upper/lowercase letters</div>
+            <div><i id="numpunc-check" class="fa fa-circle geektext-icon"></i>Number or punctuation</div>
+        </div>
+        <div class="form-group" style="margin-bottom: 10px;">
             <label>Re-enter password</label>
-            <input type="password" class="form-control" name="password">
+            <input id="password2" type="password" class="form-control" name="password">
+        </div>
+        <div class="form-group">
+            <div><i id="passmatch-check" class="fa fa-circle geektext-icon"></i>Passwords match</div>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Create your GeekText account</button>
         <div style="padding-top: 16px; padding-bottom: 4px">Already have an account? <a href="login.php">Sign in</a></div>
     </form>
+    <script src="js/register.js"></script>
 </body>
 
 </html>

@@ -9,18 +9,18 @@
     {
         require_once('includes/connect.inc.php');
         $email = $_POST['email'];
-        $password = $_POST['password'];     //need to encrypt it
+        $password = $_POST['password'];
         if ($stmt = mysqli_prepare($con, "SELECT email, password FROM users WHERE
-            email = ? AND password = ?"))
+            email = ?"))
         {
             /* bind parameters for markers */
-            mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+            mysqli_stmt_bind_param($stmt, "s", $email);
 
             /* execute query */
             mysqli_stmt_execute($stmt);
 
             /* bind vars to columns */
-            mysqli_stmt_bind_result($stmt, $db_email, $db_pass); // instead: get_result to fetch_assoc
+            mysqli_stmt_bind_result($stmt, $db_email, $passhash); // instead: get_result to fetch_assoc
 
             /* fetch 1st row into vars */
             mysqli_stmt_fetch($stmt); // instead: while loop fetch_assoc
@@ -28,7 +28,7 @@
             /* close statement */
             mysqli_stmt_close($stmt);
 
-            if ($db_email == $email && $db_pass == $password) // logged in
+            if (password_verify($password, $passhash)) // logged in
             {
                 /* creating remember token */
                 $token = md5(rand(10,100000));
@@ -38,10 +38,10 @@
                 mysqli_query($con, $query);
 
                 $_SESSION['token'] = $token;
-                $_SESSION['email'] = $email;
+                $_SESSION['email'] = $db_email;
 
                 /* redirect browser */
-                header('Location: gridview.php');
+                header('Location: index.php');
                 exit();
             }
             else /* login detail error */
@@ -66,7 +66,11 @@
 
 <head>
     <title>GeekText Login</title>
-    <?php include("includes/head-data.php");?>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/geektext-lr.css">
 </head>
 
@@ -78,7 +82,7 @@
         <p>Invalid username or password</p>
     </div>
     <div class="geektext-lr geektext-lr-ok" style="display: <?php echo ($new_account) ? 'block' : 'none'; ?>;">
-        <h3 style="float: left; padding: 10px 16px; margin:0px; alt=" reg icon placeholder">OK</h3>
+        <h3 style="float: left; padding: 10px 16px; margin:0px; alt="reg icon placeholder">OK</h3>
         <h4>Account created</h4>
         <p>Login with your new account</p>
     </div>
