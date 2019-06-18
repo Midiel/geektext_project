@@ -27,13 +27,13 @@
         <ul class="navbar-nav ml-auto">
 
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo ROOT_URL; ?>register.php">Register</a>
+                <a class="nav-link" href="register.php">Register</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo ROOT_URL; ?>login.php">Login</a>
+                <a class="nav-link" href="login.php">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo ROOT_URL; ?>cart.php">Cart</a>
+                <a class="nav-link" href="cart.php">Cart</a>
             </li>
 
         </ul>
