@@ -1,7 +1,7 @@
 <?php
     //squelch undefined index error
     error_reporting( error_reporting() & ~E_NOTICE);
-    
+
     include('includes/header.php');
     require_once('includes/connect.inc.php');
     //flag to detect user's credentials
@@ -22,14 +22,12 @@
     //checking if there is a user logged in
     session_start();
     $email = $_SESSION['email'];
-
-    //$password = $_SESSION['password'];//need to encript it
     $token = $_SESSION['token'];
     $user_id = null;
 
 if (isset($token) && !empty($token))
 {
-      $query = "SELECT remember_token FROM users WHERE email = '$email'";
+      $query = "SELECT remember_token FROM user WHERE email = '$email'";
       $run = mysqli_query($con, $query);
       while($row = mysqli_fetch_assoc($run)){
         if ($row['remember_token'] == $token)
@@ -58,18 +56,18 @@ if (isset($token) && !empty($token))
     $counter = 0;
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
-    $query = "SELECT * FROM books WHERE id > 0 LIMIT $display_from, $display_to";
+    $query = "SELECT * FROM book WHERE book_id > 0 LIMIT $display_from, $display_to";
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {
-          $book[$counter]['id']= $row['id'];
+          $book[$counter]['book_id']= $row['book_id'];
           $book[$counter]['title']= $row['title'];
           $book[$counter]['author']= $row['author'];
-          $book[$counter]['cover']= $row['cover'];
+          $book[$counter]['image_url']= $row['image_url'];
           $book[$counter]['bio']= $row['bio'];
           $book[$counter]['description']= $row['description'];
           $book[$counter]['price']= $row['price'];
-          $book[$counter]['release_date']= $row['release_date'];
+          $book[$counter]['published_date']= $row['published_date'];
           $book[$counter]['sales']= $row['sales'];
           $book[$counter]['category']= $row['category'];
           $counter++;
@@ -164,7 +162,7 @@ if (isset($token) && !empty($token))
                   <section class="card">
                       <article class="image-section">
                           <a class="img-thumbnail">
-                              <img src="<?php echo $book[$i]['cover'];?>">
+                              <img src="<?php echo $book[$i]['image_url'];?>">
                           </a>
 
 
