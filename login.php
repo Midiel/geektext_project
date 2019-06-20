@@ -10,7 +10,7 @@
         require_once('includes/connect.inc.php');
         $email = $_POST['email'];
         $password = $_POST['password'];
-        if ($stmt = mysqli_prepare($con, "SELECT email, password FROM users WHERE
+        if ($stmt = mysqli_prepare($con, "SELECT email, password FROM user WHERE
             email = ?"))
         {
             /* bind parameters for markers */
@@ -33,7 +33,7 @@
                 /* creating remember token */
                 $token = md5(rand(10,100000));
 
-                $query = "UPDATE users SET remember_token = '$token' WHERE
+                $query = "UPDATE user SET token = '$token' WHERE
                     email = '$db_email'";
                 mysqli_query($con, $query);
 
