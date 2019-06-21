@@ -53,9 +53,9 @@
 			//require_once('includes/config.php');
 
 			// include the navbar for all pages
-			include('navbar.php');
+			require('navbar.php');
 
 			// start sessions for all pages
-			session_start();
+			//session_start();
 		
 		?>

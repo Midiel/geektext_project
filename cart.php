@@ -73,6 +73,37 @@
 	}
 	*/
 
+
+	/*
+    $query = $con->prepare("CALL getCartQty(?)");
+    $query->bind_param('s', $_SESSION['token']);
+    $query->execute();
+    $arr = $query->get_result()->fetch_assoc();
+
+    // verify execution
+    if($arr) {
+        var_export($arr);
+    } 
+*/
+
+	$query = $con->prepare("CALL getCartQty(?)");
+	$query->bind_param('s', $_SESSION['token']);
+	$query->execute();
+	$query->store_result();
+	if($query->num_rows === 0) exit('No rows');
+	$query->bind_result($_SESSION['cart_qty']);
+	$query->fetch();
+
+
+	echo "\$_SESSION['cart_qty'] = " . $_SESSION['cart_qty']; 
+
+	$query->close();
+
+	//$_SESSION['number_of_items'] = $arr['number_of_items'];
+
+
+
+
 	$books_on_cart = array();
 
 	$query = "CALL getCart(" . $_SESSION['token'] . ")";

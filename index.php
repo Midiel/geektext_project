@@ -2,7 +2,7 @@
     //squelch undefined index error
     error_reporting( error_reporting() & ~E_NOTICE);
 
-    include('includes/header.php');
+    include_once('includes/header.php');
     require_once('includes/connect.inc.php');
     //flag to detect user's credentials
     $logged_in = false;
