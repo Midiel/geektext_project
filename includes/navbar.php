@@ -7,8 +7,14 @@
 
   //checking if there is a user logged in
   session_start();
-  $email = $_SESSION['email'];
-  $token = $_SESSION['token'];
+
+  if(isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
+    $token = $_SESSION['token'];
+  }
+  
+  $logged_in = false;
+
   $user_id = null;
 
 if (isset($token) && !empty($token))
@@ -38,6 +44,29 @@ if (isset($token) && !empty($token))
   }
 
 
+    // get number of items in the shopping cart
+    if(!(isset($_SESSION['token']))) {
+		$_SESSION['token'] = '123';
+    };
+    
+    
+
+    $query = $con->prepare("CALL getCartQty(?)");
+    $query->bind_param('s', $_SESSION['token']);
+    $query->execute();
+    $arr = $query->get_result()->fetch_assoc();
+
+    // verify execution
+    if($arr) {
+        var_export($arr);
+    } 
+
+    $query->close();
+
+    $_SESSION['number_of_items'] = $arr['number_of_items'];
+
+	
+
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -61,7 +90,7 @@ if (isset($token) && !empty($token))
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="#"  onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
             <?php echo $glyphicon_log_in;?>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault();"><span class="fa fa-shopping-cart"> <?php echo $items_in_cart;?> </span></a> </li>
+            <li class="nav-item"><a class="nav-link" href="cart.php" ><span class="fa fa-shopping-cart"> <?php echo $_SESSION['number_of_items'];?> </span></a> </li>
 
         </ul>
 

@@ -94,6 +94,8 @@
 	$subtotal = 0;
 	$num_items = 0;
 
+	$_SESSION['items_in_cart'] = $num_items;
+
 ?>
 
 
