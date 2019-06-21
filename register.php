@@ -17,7 +17,7 @@
         $name = $_POST['name'];
 
         /* check if email exists */
-        if ($stmt = mysqli_prepare($con, "SELECT email FROM users WHERE
+        if ($stmt = mysqli_prepare($con, "SELECT email FROM user WHERE
             email = ?"))
         {
             /* sql manipulation */
@@ -29,7 +29,7 @@
 
             /* if not in db, "register" new user */
             if (empty($db_email) && $stmt = mysqli_prepare($con, "INSERT INTO
-                users (email, fname, lname, nickname, password) VALUES (?, ?, ?, ?, ?)"))
+                user (email, f_name, l_name, nickname, password) VALUES (?, ?, ?, ?, ?)"))
             {
                 /* split name */
                 $names = explode(" ", $name);

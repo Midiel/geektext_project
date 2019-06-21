@@ -1,3 +1,44 @@
+<?php
+
+	// Midiel: You meed the config/config.php file for this narvbar to function
+    //require_once('config/config.php');
+
+	require_once('includes/connect.inc.php');
+
+  //checking if there is a user logged in
+  session_start();
+  $email = $_SESSION['email'];
+  $token = $_SESSION['token'];
+  $user_id = null;
+
+if (isset($token) && !empty($token))
+{
+    $query = "SELECT remember_token FROM user WHERE email = '$email'";
+    $run = mysqli_query($con, $query);
+    while($row = mysqli_fetch_assoc($run)){
+      if ($row['remember_token'] == $token)
+          $logged_in = true;
+      }
+  }
+
+  //displaying login info in html
+  if($logged_in == true)
+  {
+    $glyphicon_log_in = '<li class="nav-item"><a class="nav-link" href="login.php"  ><span class="fa fa-sign-out"></span> Log out </a></li>';
+  }
+  else
+  {
+    $email = '';
+    $password = '';
+    $token = '';
+    session_destroy();
+    $glyphicon_log_in =
+      '<li class="nav-item"><a class="nav-link" href="#"  onclick="event.preventDefault();"><span class="fa fa-new-window"></span> Sign Up </a></li>
+      <li class="nav-item"><a class="nav-link" href="login.php"><span class="fa fa-plus"></span> Log in </a></li>';
+  }
+
+
+?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="index.php">GeekText</a>
@@ -18,16 +59,9 @@
         </ul>
 
         <ul class="navbar-nav ml-auto">
-
-            <li class="nav-item">
-                <a class="nav-link" href="register.php">Register</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="login.php">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="cart.php">Cart</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="#"  onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
+            <?php echo $glyphicon_log_in;?>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault();"><span class="fa fa-shopping-cart"> <?php echo $items_in_cart;?> </span></a> </li>
 
         </ul>
 
