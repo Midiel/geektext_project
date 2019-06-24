@@ -61,8 +61,21 @@ if (isset($token) && !empty($token))
 
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link active" href="index.php?new_arrivals=true" >New Arrivals</a> </li>
-            <li class="nav-item"><a class="nav-link" href="index.php?top_sellers=true">Top Sellers</a> </li>
+            <li class="nav-item"><a class="nav-link active" href="?new_arrivals=true" >New Arrivals</a> </li>
+            <li class="nav-item"><a class="nav-link" href="?top_sellers=true">Top Sellers</a> </li>
+            <li class="nav-item">
+              <div class="dropdown">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                  Sorth by
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="?sorth_by=tittle">Tittle</a>
+                  <a class="dropdown-item" href="?sorth_by=price">Price</a>
+                  <a class="dropdown-item" href="?sorth_by=release_date">Release Date</a>
+                </div>
+              </div>
+            </li>
+
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="#"  onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>

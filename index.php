@@ -20,23 +20,6 @@
       $page = 1;
     }
 
-<<<<<<< HEAD
-    //checking if there is a user logged in
-    session_start();
-    $email = $_SESSION['email'];
-    $token = $_SESSION['token'];
-    $user_id = null;
-
-if (isset($token) && !empty($token))
-{
-      $query = "SELECT remember_token FROM user WHERE email = '$email'";
-      $run = mysqli_query($con, $query);
-      while($row = mysqli_fetch_assoc($run)){
-        if ($row['remember_token'] == $token)
-            $logged_in = true;
-        }
-    }
-=======
     //top sellers
     if ($_GET['top_sellers'] == 'true' || $_SESSION['top_sellers'] == 'true')
     {
@@ -45,7 +28,6 @@ if (isset($token) && !empty($token))
 
 
 
->>>>>>> 15af85325350a2bd9fd159353a3e1e1f87b481b0
 
 
     //Displaying books
@@ -53,9 +35,6 @@ if (isset($token) && !empty($token))
     $counter = 0;
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
-<<<<<<< HEAD
-    $query = "SELECT * FROM book WHERE book_id > 0 LIMIT $display_from, $display_to";
-=======
     if ($top_sellers == true)
     {
       $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC LIMIT $display_from, $display_to";
@@ -65,7 +44,6 @@ if (isset($token) && !empty($token))
       $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY book_id DESC LIMIT $display_from, $display_to";
     }
 
->>>>>>> 15af85325350a2bd9fd159353a3e1e1f87b481b0
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {
