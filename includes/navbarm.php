@@ -11,6 +11,7 @@
   $token = $_SESSION['token'];
   $user_id = null;
 
+
 if (isset($token) && !empty($token))
 {
     $query = "SELECT remember_token FROM user WHERE email = '$email'";
@@ -38,6 +39,8 @@ if (isset($token) && !empty($token))
   }
 
 
+
+
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -57,7 +60,10 @@ if (isset($token) && !empty($token))
             </form>
 
         </ul>
-
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link active" href="index.php?new_arrivals=true" >New Arrivals</a> </li>
+            <li class="nav-item"><a class="nav-link" href="index.php?top_sellers=true">Top Sellers</a> </li>
+        </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="#"  onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
             <?php echo $glyphicon_log_in;?>

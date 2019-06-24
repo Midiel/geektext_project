@@ -8,6 +8,7 @@
     $logged_in = false;
     $DISPLAY_PER_PAGE = 12;
     $DISPLAY_PER_ROW = 3;
+    $top_sellers = false;
 
     //Pagination Code
     if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] != 1)
@@ -19,13 +20,30 @@
       $page = 1;
     }
 
-  
+    //top sellers
+    if ($_GET['top_sellers'] == 'true' || $_SESSION['top_sellers'] == 'true')
+    {
+      $top_sellers = true;
+    }
+
+
+
+
+
     //Displaying books
     $book = array(array());
     $counter = 0;
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
-    $query = "SELECT * FROM book WHERE book_id > 0 LIMIT $display_from, $display_to";
+    if ($top_sellers == true)
+    {
+      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC LIMIT $display_from, $display_to";
+    }
+    else
+    {
+      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY book_id DESC LIMIT $display_from, $display_to";
+    }
+
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {
