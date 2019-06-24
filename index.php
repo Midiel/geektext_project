@@ -8,6 +8,7 @@
     $logged_in = false;
     $DISPLAY_PER_PAGE = 12;
     $DISPLAY_PER_ROW = 3;
+    $top_sellers = false;
 
     //Pagination Code
     if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] != 1)
@@ -19,6 +20,7 @@
       $page = 1;
     }
 
+<<<<<<< HEAD
     //checking if there is a user logged in
     session_start();
     $email = $_SESSION['email'];
@@ -34,29 +36,36 @@ if (isset($token) && !empty($token))
             $logged_in = true;
         }
     }
+=======
+    //top sellers
+    if ($_GET['top_sellers'] == 'true' || $_SESSION['top_sellers'] == 'true')
+    {
+      $top_sellers = true;
+    }
 
-    //displaying login info in html
-    if($logged_in == true)
-    {
-      $glyphicon_log_in = '<li class="nav-item"><a class="nav-link" href="login.php"  ><span class="fa fa-sign-out"></span> Log out </a></li>';
-    }
-    else
-    {
-      $email = '';
-      $password = '';
-      $token = '';
-      session_destroy();
-      $glyphicon_log_in =
-        '<li class="nav-item"><a class="nav-link" href="#"  onclick="event.preventDefault();"><span class="fa fa-new-window"></span> Sign Up </a></li>
-        <li class="nav-item"><a class="nav-link" href="login.php"><span class="fa fa-plus"></span> Log in </a></li>';
-    }
+
+
+>>>>>>> 15af85325350a2bd9fd159353a3e1e1f87b481b0
+
 
     //Displaying books
     $book = array(array());
     $counter = 0;
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
+<<<<<<< HEAD
     $query = "SELECT * FROM book WHERE book_id > 0 LIMIT $display_from, $display_to";
+=======
+    if ($top_sellers == true)
+    {
+      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC LIMIT $display_from, $display_to";
+    }
+    else
+    {
+      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY book_id DESC LIMIT $display_from, $display_to";
+    }
+
+>>>>>>> 15af85325350a2bd9fd159353a3e1e1f87b481b0
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {
