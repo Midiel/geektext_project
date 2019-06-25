@@ -9,6 +9,16 @@
     $DISPLAY_PER_PAGE = 12;
     $DISPLAY_PER_ROW = 3;
     $top_sellers = false;
+    $sorting = false;
+
+
+    //sorting value
+    if (isset($_GET['sort_by']) && !empty($_GET['sort_by']))
+    {
+      $sort_by = $_GET['sort_by'];
+      $sorting = true;
+    }
+
 
     //Pagination Code
     if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] != 1)
@@ -35,15 +45,23 @@
     $counter = 0;
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
-    if ($top_sellers == true)
+    //determine query
+    if ($top_sellers == true && $sorting == false)
     {
       $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC LIMIT $display_from, $display_to";
     }
-    else
+    else if ($top_sellers == false && $sorting == false)
     {
       $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY book_id DESC LIMIT $display_from, $display_to";
     }
-
+    else if ($top_sellers == true && $sorting == true)
+    {
+      $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+    }
+    else if ($top_sellers == false && $sorting == true)
+    {
+      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+    }
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {

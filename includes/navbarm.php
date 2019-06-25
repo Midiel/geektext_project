@@ -42,8 +42,26 @@ if (isset($token) && !empty($token))
       <li class="nav-item"><a class="nav-link" href="login.php"><span class="fa fa-plus"></span> Log in </a></li>';
   }
 
+  //appending or replacing path
+  $path = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+  if(strpos($path,"?") > 0)
+  {
+    $path .= "&";
+  }
+  else
+  {
+    $path .= "?";
+  }
 
-
+  //setting as active top sellers or New arrivals
+  if(strpos($path,"top_sellers=true") > 0)
+  {
+    $top_seller_link = '<li class="nav-item"><a class="nav-link active" href="?new_arrivals=true" >See our new arrivals</a> </li>';
+  }
+  else
+  {
+    $top_seller_link = '<li class="nav-item"><a class="nav-link active" href="?top_sellers=true">See our top sellers</a> </li>';
+  }
 
 ?>
 
@@ -65,17 +83,20 @@ if (isset($token) && !empty($token))
 
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link active" href="?new_arrivals=true" >New Arrivals</a> </li>
-            <li class="nav-item"><a class="nav-link" href="?top_sellers=true">Top Sellers</a> </li>
+            <?php echo $top_seller_link;?>
+          </ul>
+          <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <div class="dropdown">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                  Sorth by
+                  Sort by
                 </button>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="?sorth_by=tittle">Tittle</a>
-                  <a class="dropdown-item" href="?sorth_by=price">Price</a>
-                  <a class="dropdown-item" href="?sorth_by=release_date">Release Date</a>
+                  <a class="dropdown-item" href="<?php echo $path.'sort_by=title';?>">Title</a>
+                  <a class="dropdown-item" href="<?php echo $path.'sort_by=author';?>">Author</a>
+                  <a class="dropdown-item" href="<?php echo $path.'sort_by=price';?>">Price</a>
+                  <a class="dropdown-item" href="<?php echo $path.'sort_by=average_rating';?>">Rating</a>
+                  <a class="dropdown-item" href="<?php echo $path.'sort_by=published_date';?>">Release Date</a>
                 </div>
               </div>
             </li>
