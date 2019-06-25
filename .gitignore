@@ -1,4 +1,9 @@
 # avoid uploading/downloading images
 images/*
+
+# removing IDE files
+.vs/
+.gitattributes
+
 includes/connect.inc.php
 config/config.php

@@ -23,3 +23,17 @@ div.geektext-lr-ok {
 div.geektext-lr-error p {
     color: black;
 }
+
+.geektext-icon {
+    width: 32px;
+    text-align: center;
+}
+
+.fa-circle {
+    font-size: 10px;
+    color: #c9c9c9;
+}
+
+.fa-check {
+    color: #48a848;
+}

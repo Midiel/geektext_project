@@ -162,7 +162,6 @@ while($row = mysqli_fetch_assoc($run))
         </div> <!-- row end -->
     </div> <!-- section end -->
 
-
 </body>
 
 </html>

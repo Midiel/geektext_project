@@ -1,11 +1,12 @@
 
-<?php 
+<?php
     include('includes/header.php');
-	require_once('includes/connect.inc.php');
+    require_once('includes/connect.inc.php');
+	//require_once('includes/connect.inc.php');
     //require_once('config/db.php');
-	
+
 	// start the session
-	session_start();
+	//session_start();
 
 	// hard code session token to 123 (user1) if session is not set, user not logged in
 	if(!(isset($_SESSION['token']))) {
@@ -33,6 +34,7 @@
 
 		$query = "DELETE FROM cart WHERE book_id = " . $book_id . " AND user_id IN (SELECT user_id FROM user WHERE token = " . $_SESSION['token'] .")";
 		$result = mysqli_query($con, $query);
+    echo mysqli_error($con);
 
 
 	} else if(isset($_POST['save_for_later'])) {
@@ -49,14 +51,14 @@
 		//echo "<br>token = " . $_SESSION['token'] . "<br>";
 		//echo "book_id = " . $book_id . "<br>";
 
-		$query = "UPDATE cart SET saved_for_later = 1, qty = 1 
-				WHERE book_id = " . $book_id ." 
+		$query = "UPDATE cart SET saved_for_later = 1, qty = 1
+				WHERE book_id = " . $book_id ."
 				AND user_id IN (SELECT user_id FROM user WHERE token = " . $_SESSION['token'] .")";
-		
-		//echo "\n" . $query;
-			
-		$result = mysqli_query($con, $query);
 
+		//echo "\n" . $query;
+
+		$result = mysqli_query($con, $query);
+    echo mysqli_error($con);
 
 	} else if(isset($_POST['move_to_cart'])) {
 		$book_id = mysqli_real_escape_string($con, $_POST['move_to_cart']);
@@ -70,7 +72,7 @@
 
 		$query = "UPDATE cart SET saved_for_later = 0 WHERE book_id = ". $book_id . " AND user_id IN (SELECT user_id FROM user WHERE token = " . $_SESSION['token'] .")";
 		$result = mysqli_query($con, $query);
-
+    echo mysqli_error($con);
 
 
 	} else if(isset($_POST['change_qty'])) {
@@ -86,9 +88,8 @@
 
 		$query = "UPDATE cart SET qty = " . $qty . " WHERE book_id = ". $book_id . " AND user_id IN (SELECT user_id FROM user WHERE token = " . $_SESSION['token'] .")";
 		$result = mysqli_query($con, $query);
-
-	} 
-
+    echo mysqli_error($con);
+	}
 
 
 	$query = "SELECT title, author, price, image_url, cart.qty, price, cart.book_id, saved_for_later\n"
@@ -99,8 +100,17 @@
 	// Get Result
 	$result = mysqli_query($con, $query);
 
-	// Fetch Data
-	$books_on_cart = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+	// Fetch Data. Not supported in Yasmany's MySQL version
+	// $books_on_cart = mysqli_fetch_all($result, MYSQLI_ASSOC);		// deleted
+
+	$books_on_cart = array();
+
+	while($row = mysqli_fetch_assoc($result)) {
+		echo mysqli_error($con);
+		array_push($books_on_cart, $row);
+	}
+
 	//var_dump($books);
 
 	// Free Result
@@ -108,7 +118,7 @@
 
 	// Close Connection
 	mysqli_close($con);
-    
+
 ?>
 
 
@@ -135,8 +145,7 @@
 			<th scope="col" width="5%" class="text-right">Quantity</th>
 			</tr>
 		</thead>
-
-		<?php foreach($books_on_cart as $book) : 
+		<?php foreach($books_on_cart as $book) :
 			if(!$book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
 
 			<tbody>
@@ -171,7 +180,6 @@
 					<td class="text-center">
 						$<?php echo $book['price']; ?>
 					</td>
-
 					<td>
 						<form method="POST" action="cart.php">
 							<div class="form-group">
@@ -195,7 +203,7 @@
 							$temp = $book['qty'] * $book['price'];
 							$subtotal += $temp;
 						?>
-						
+
 					</td>
 				</tr>
 				
@@ -237,13 +245,13 @@
 		<tr>
 			<th scope="col" width="15%" class="text-left"><h5>Saved for Later</h5></th>
 			<th scope="col" width="45%" class="text-left"></th>
-			<th scope="col" width="15%" class="text-left">Price</th>	
+			<th scope="col" width="15%" class="text-left">Price</th>
 		</tr>
 
-		
+
 	</thead>
 
-	<?php foreach($books_on_cart as $book) : 
+	<?php foreach($books_on_cart as $book) :
 			if($book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
 
 	<tbody>
@@ -251,7 +259,7 @@
 			<th scope="row">
 				<div class="col-sm-3 hidden-xs"><img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive"/></div>
 			</th>
-		
+
 			<td>
 				<div class="container" >
 							<div class="row">
@@ -275,25 +283,24 @@
 								</div>
 							</div>
 				</div>
-					
+
 			</td>
 			<td>
 				$<?php echo $book['price']; ?>
 			</td>
-		
+
 		</tr>
-		
-		
+
+
 	</tbody>
 
 	<?php } endforeach; ?>
 
 	</table>
-								
+
 
 </div>
 
 
 
 <?php include('includes/footer.php'); ?>
-
