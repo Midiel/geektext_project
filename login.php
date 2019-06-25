@@ -10,8 +10,8 @@
         require_once('includes/connect.inc.php');
         $email = $_POST['email'];
         $password = $_POST['password'];
-        if ($stmt = mysqli_prepare($con, "SELECT email, password FROM user WHERE
-            email = ?"))
+        if ($stmt = mysqli_prepare($con, "SELECT user_id, email, password FROM user WHERE
+            email = ? LIMIT 1"))
         {
             /* bind parameters for markers */
             mysqli_stmt_bind_param($stmt, "s", $email);
@@ -20,7 +20,7 @@
             mysqli_stmt_execute($stmt);
 
             /* bind vars to columns */
-            mysqli_stmt_bind_result($stmt, $db_email, $passhash); // instead: get_result to fetch_assoc
+            mysqli_stmt_bind_result($stmt, $db_user_id, $db_email, $passhash); // instead: get_result to fetch_assoc
 
             /* fetch 1st row into vars */
             mysqli_stmt_fetch($stmt); // instead: while loop fetch_assoc
@@ -39,6 +39,7 @@
 
                 $_SESSION['token'] = $token;
                 $_SESSION['email'] = $db_email;
+                $_SESSION['user_id'] = $db_user_id;
 
                 /* redirect browser */
                 header('Location: index.php');

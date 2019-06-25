@@ -1,23 +1,27 @@
 <?php
 
 	// Midiel: You meed the config/config.php file for this narvbar to function
-    require_once('config/config.php');
+  require_once('config/config.php');
 
 	require_once('includes/connect.inc.php');
 
+  /* check if session has already started */
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+  }
+
   //checking if there is a user logged in
-  session_start();
   $email = $_SESSION['email'];
   $token = $_SESSION['token'];
-  $user_id = null;
+  $user_id = $_SESSION['user_id'];
 
 
 if (isset($token) && !empty($token))
 {
-    $query = "SELECT remember_token FROM user WHERE email = '$email'";
+    $query = "SELECT token FROM user WHERE email = '$email' LIMIT 1";
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run)){
-      if ($row['remember_token'] == $token)
+      if ($row['token'] == $token)
           $logged_in = true;
       }
   }
