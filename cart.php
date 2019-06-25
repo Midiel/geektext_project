@@ -105,7 +105,11 @@
 	// $books_on_cart = mysqli_fetch_all($result, MYSQLI_ASSOC);		// deleted
 
 	$books_on_cart = array();
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> origin/master
 	while($row = mysqli_fetch_assoc($result)) {
 		echo mysqli_error($con);
 		array_push($books_on_cart, $row);

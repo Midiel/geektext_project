@@ -47,4 +47,8 @@ $("#password2").keyup(function() {
 	} else {
 		passMatchCheck.removeClass("fa-check").addClass("fa-circle");
 	}
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> origin/master
