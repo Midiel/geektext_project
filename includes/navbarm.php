@@ -2,7 +2,7 @@
 
 	// Midiel: You meed the config/config.php file for this narvbar to function
   require_once('config/config.php');
-
+  require_once('header.php');
 	require_once('includes/connect.inc.php');
 
   /* check if session has already started */
@@ -77,8 +77,16 @@ if (isset($token) && !empty($token))
                 <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
             </li>
             <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                <input list="search_list" class="form-control mr-sm-2" id="search"  placeholder="Search">
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                <datalist id="search_list">
+                  <option id="op1" >
+                  <option id="op2" >
+                  <option id="op3" >
+                  <option id="op4" >
+                  <option id="op5" >
+                  <option id="op6" >
+                 </datalist>
             </form>
 
         </ul>
@@ -111,3 +119,22 @@ if (isset($token) && !empty($token))
 
     </div>
 </nav>
+
+<script>
+
+//ajax code for service Autocomplete$(document).ready(function(){
+$(document).ready(function(){
+  $("#search").keyup(function(){
+    var to_server = document.getElementById('search').value;
+      $.ajax({url: "http://yasmanisubirat.com/cen4010/includes/search_ajax.php?val="+to_server, success: function(result){
+        var serv_arr = result.split(",");
+          $("#op1").val(serv_arr[0]);
+          $("#op2").val(serv_arr[1]);
+          $("#op3").val(serv_arr[2]);
+          $("#op4").val(serv_arr[3]);
+          $("#op5").val(serv_arr[4]);
+          $("#op6").val(serv_arr[5]);
+      }});
+  });
+});
+</script>
