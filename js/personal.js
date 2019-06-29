@@ -1,25 +1,30 @@
+$(window).keydown(function(event) {
+	// prevents 'Enter' submit
+    if(event.keyCode == 13) {
+      	event.preventDefault();
+        return false;
+	}
+});
+
 var sixLenCheck = $("#sixlen-check");
 var upperLowerCheck = $("#upperlower-check");
 var numPuncCheck = $("#numpunc-check");
-var passMatchCheck = $("#passmatch-check");
 var isSixLen = false;
 var isUpperLower = false;
 var isNumPunc = false;
-var isMatch = false;
-var password1 = "";
 
-$("#register-form").submit((event) => {
+$("#password-form").submit(function(event) {
 	//if any check failed
-	if (!isSixLen || !isUpperLower || !isNumPunc || !isMatch) {
+	if (!isSixLen || !isUpperLower || !isNumPunc) {
 		event.preventDefault();
 	}
 });
 
-$("#password1").keyup(function() {
-	password1 = $(this).val();
-	isSixLen = (password1.length >= 6);
-	isUpperLower = (/[a-z]/.test(password1) && /[A-Z]/.test(password1));
-	isNumPunc = /[0-9\.]/.test(password1);
+$("#password").keyup(function() {
+	var password = $(this).val();
+	isSixLen = (password.length >= 6);
+	isUpperLower = (/[a-z]/.test(password) && /[A-Z]/.test(password));
+	isNumPunc = /[0-9\.]/.test(password);
 
 	if (isSixLen) {
 		sixLenCheck.removeClass("fa-circle").addClass("fa-check");
@@ -40,11 +45,8 @@ $("#password1").keyup(function() {
 	}
 });
 
-$("#password2").keyup(function() {
-	isMatch =  (password1 !== "") && (password1 === $(this).val());
-	if (isMatch) {
-		passMatchCheck.removeClass("fa-circle").addClass("fa-check");
-	} else {
-		passMatchCheck.removeClass("fa-check").addClass("fa-circle");
-	}
+$(".geektext-edit").click(function(){	
+	var entryRow = this.parentNode.parentNode.parentNode;
+	$(entryRow.children[0]).toggleClass("hidden");
+	$(entryRow.children[1]).toggleClass("hidden");
 });
