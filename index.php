@@ -86,25 +86,25 @@
     {
       $pagination = '<li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Previous</a></li>';
       $pagination .= '<li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>';
-      $pagination .= '<li class="page-item "><a class="page-link" href="index.php?page=2">2</a></li>';
-      $pagination .= '<li class="page-item"><a class="page-link" href="index.php?page=2">Next</a></li>';
+      $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page=2">2</a></li>';
+      $pagination .= '<li class="page-item"><a class="page-link" href="'.$path.'page=2">Next</a></li>';
     }
     else
     {
       $pagination = '<li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Previous</a></li>';
       $pagination .= '<li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>';
-      $pagination .= '<li class="page-item "><a class="page-link" href="index.php?page=2">2</a></li>';
-      $pagination .= '<li class="page-item "><a class="page-link" href="index.php?page=3">3</a></li>';
-      $pagination .= '<li class="page-item"><a class="page-link" href="index.php?page=2">Next</a></li>';
+      $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page=2">2</a></li>';
+      $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page=3">3</a></li>';
+      $pagination .= '<li class="page-item"><a class="page-link" href="'.$path.'page=2">Next</a></li>';
     }
   }
   else
   {
-      $pagination = '<li class="page-item"><a class="page-link" href="index.php?page='.($page - 1).'">Previous</a></li>';
-      $pagination .= '<li class="page-item "><a class="page-link" href="index.php?page='.($page - 1).'">'.($page - 1).'</a></li>';
-      $pagination .= '<li class="page-item active"><a class="page-link" href="index.php?page='.($page).'">'.($page).'</a></li>';
-      $pagination .= '<li class="page-item "><a class="page-link" href="index.php?page='.($page + 1).'">'.($page + 1).'</a></li>';
-      $pagination .= '<li class="page-item"><a class="page-link" href="index.php?page='.($page + 1).'">Next</a></li>';
+      $pagination = '<li class="page-item"><a class="page-link" href="'.$path.'page='.($page - 1).'">Previous</a></li>';
+      $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page='.($page - 1).'">'.($page - 1).'</a></li>';
+      $pagination .= '<li class="page-item active"><a class="page-link" href="'.$path.'page='.($page).'">'.($page).'</a></li>';
+      $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page='.($page + 1).'">'.($page + 1).'</a></li>';
+      $pagination .= '<li class="page-item"><a class="page-link" href="'.$path.'page='.($page + 1).'">Next</a></li>';
   }
 
   //updating pagination when reach the end of the books
@@ -114,22 +114,22 @@
     if($page == 1)
     {
       $pagination = '<li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Previous</a></li>';
-      $pagination .= '<li class="page-item active"><a class="page-link" href="index.php?page='.($page).'">'.($page).'</a></li>';
+      $pagination .= '<li class="page-item active"><a class="page-link" href="'.$path.'page='.($page).'">'.($page).'</a></li>';
       $pagination .= '<li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Next</a></li>';
     }
     else if ($page == 2)
     {
-      $pagination = '<li class="page-item"><a class="page-link" href="index.php?page='.($page - 1).'">Previous</a></li>';
-      $pagination .= '<li class="page-item "><a class="page-link" href="index.php?page='.($page - 1).'">'.($page - 1).'</a></li>';
-      $pagination .= '<li class="page-item active"><a class="page-link" href="index.php?page='.($page).'">'.($page).'</a></li>';
+      $pagination = '<li class="page-item"><a class="page-link" href="'.$path.'page='.($page - 1).'">Previous</a></li>';
+      $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page='.($page - 1).'">'.($page - 1).'</a></li>';
+      $pagination .= '<li class="page-item active"><a class="page-link" href="'.$path.'page='.($page).'">'.($page).'</a></li>';
       $pagination .= '<li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Next</a></li>';
     }
     else
     {
-      $pagination = '<li class="page-item"><a class="page-link" href="index.php?page='.($page - 1).'">Previous</a></li>';
-      $pagination .= '<li class="page-item "><a class="page-link" href="index.php?page='.($page - 2).'">'.($page - 2).'</a></li>';
-      $pagination .= '<li class="page-item "><a class="page-link" href="index.php?page='.($page - 1).'">'.($page - 1).'</a></li>';
-      $pagination .= '<li class="page-item active"><a class="page-link" href="index.php?page='.($page).'">'.($page).'</a></li>';
+      $pagination = '<li class="page-item"><a class="page-link" href="'.$path.'page='.($page - 1).'">Previous</a></li>';
+      $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page='.($page - 2).'">'.($page - 2).'</a></li>';
+      $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page='.($page - 1).'">'.($page - 1).'</a></li>';
+      $pagination .= '<li class="page-item active"><a class="page-link" href="'.$path.'page='.($page).'">'.($page).'</a></li>';
       $pagination .= '<li class="page-item disabled"><a class="page-link" href="javascript:void(0);">Next</a></li>';
     }
     $last_page = true;
@@ -247,9 +247,6 @@
         </div> <!-- row end -->
     </div> <!-- section end -->
 
-<<<<<<< HEAD
-=======
-
     <!--page navegation-->
     <div class="container">
       <ul class="pagination justify-content-center">
@@ -258,7 +255,7 @@
 
         </ul>
       </div>
->>>>>>> origin/master
+
 </body>
 
 </html>
