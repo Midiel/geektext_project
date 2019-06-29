@@ -1,6 +1,5 @@
 body {
     font-size: 100%;
-    background: #262626;
 }
 
 #books {
@@ -8,43 +7,35 @@ body {
 }
 
 .row {
-    /*    background: #ffffff;*/
+    /*    background-color: aqua;*/
 }
 
 #parent-card {
-    padding-bottom: 20px;
-}
 
-.flex-container {
-    display: flex;
-    flex-direction: column;
+    padding-bottom: 20px;
 }
 
 .card {
     display: flex;
     flex-direction: column;
-    /*    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);*/
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);
     height: 480px;
     width: 100%;
-    border: #262626;
-    background: #262626;
-    color: #ffffff;
-    /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, 1));*/
 
 }
 
 .card:hover {
     top: -3px;
-    box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 1);
+    box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.3);
 
 }
 
 .image-section {
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
 
-    /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, .2));*/
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(200, 200, 200, .2));
     min-height: 52%;
 
     /*
@@ -57,7 +48,6 @@ body {
 
 .img-thumbnail {
     background-color: #744774;
-    border: #262626;
 
 }
 
@@ -78,7 +68,7 @@ img {
     padding-top: 10px;
     letter-spacing: .01em;
 
-    /*    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(38, 38, 38, 1));*/
+    background-image: linear-gradient(rgba(200, 200, 200, .2), rgba(0, 0, 0, 0));
 
 
     /*
@@ -90,8 +80,8 @@ img {
 }
 
 .title {
-    font-size: .9em;
-    font-weight: 600;
+    font-size: 1em;
+    font-weight: 700;
     line-height: 1.1em;
 }
 
@@ -105,6 +95,7 @@ img {
 .category {
     display: flex;
     justify-content: flex-start;
+    color: grey;
     font-size: .8em;
     font-weight: 400;
     line-height: 1.2em;
