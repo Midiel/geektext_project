@@ -1,4 +1,3 @@
-
 <?php
     include('includes/header.php');
     require_once('includes/connect.inc.php');
@@ -140,99 +139,102 @@
 
 
 <div class="container">
-	<table class="table">
-		<thead>
-			<tr>
-			<th scope="col" width="15%" class="text-left"><h5>Shopping Cart</h5></th>
-			<th scope="col" width="45%" class="text-left"></th>
-			<th scope="col" width="15%" class="text-center">Price</th>
-			<th scope="col" width="5%" class="text-right">Quantity</th>
-			</tr>
-		</thead>
-		<?php foreach($books_on_cart as $book) :
-			if(!$book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" width="15%" class="text-left">
+                    <h5>Shopping Cart</h5>
+                </th>
+                <th scope="col" width="45%" class="text-left"></th>
+                <th scope="col" width="15%" class="text-center">Price</th>
+                <th scope="col" width="5%" class="text-right">Quantity</th>
+            </tr>
+        </thead>
+        <?php foreach($books_on_cart as $book) :
+			if(!$book['saved_for_later']) {?>
+        <!-- only display not saved books, aka not in saved list -->
 
-			<tbody>
-				<tr>
-					<th scope="row">
-						<div class="col-sm-3 hidden-xs"><img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive"/></div>
-					</th>
-					<td>
-						<div class="container" >
-							<div class="row">
-								<div class="col">
-									Title: <?php echo $book['title']; ?><br>
-									Author: <?php echo $book['author']; ?><br><br>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-2">
-									<form name="deleteForm" method="POST" action="cart.php">
-										<input type="hidden" name="delete" value="<?php echo $book['book_id']; ?>">
-										<input type="submit" class="btn btn-outline-danger" value="Delete">
-									</form>
-								</div>
-								<div class="col-sm-4">
-									<form name="deleteForm" method="POST" action="cart.php">
-											<input type="hidden" name="save_for_later" value="<?php echo $book['book_id']; ?>">
-											<input type="submit" class="btn btn-outline-secondary" value="Save for Later">
-									</form>
-								</div>
-							</div>
-						</div>
-					</td>
-					<td class="text-center">
-						$<?php echo $book['price']; ?>
-					</td>
-					<td>
-						<form method="POST" action="cart.php">
-							<div class="form-group">
-							<input type="hidden" id="custId" name="change_qty" value="<?php echo $book['book_id']; ?>">
-								<select class="form-control" name="qty" id="sel1" onchange="if(this.value != 0) { this.form.submit(); }">
-									<option value="" selected disabled hidden><?php echo $book['qty']; ?></option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-									<option value="5">5</option>
-									<option value="6">6</option>
-									<option value="7">7</option>
-									<option value="8">8</option>
-									<option value="9">9</option>
-								</select>
-							</div>
-						</form>
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <div class="col-sm-3 hidden-xs"><img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive" /></div>
+                </th>
+                <td>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                Title: <?php echo $book['title']; ?><br>
+                                Author: <?php echo $book['author']; ?><br><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <form name="deleteForm" method="POST" action="cart.php">
+                                    <input type="hidden" name="delete" value="<?php echo $book['book_id']; ?>">
+                                    <input type="submit" class="btn btn-outline-danger" value="Delete">
+                                </form>
+                            </div>
+                            <div class="col-sm-4">
+                                <form name="deleteForm" method="POST" action="cart.php">
+                                    <input type="hidden" name="save_for_later" value="<?php echo $book['book_id']; ?>">
+                                    <input type="submit" class="btn btn-outline-secondary" value="Save for Later">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="text-center">
+                    $<?php echo $book['price']; ?>
+                </td>
+                <td>
+                    <form method="POST" action="cart.php">
+                        <div class="form-group">
+                            <input type="hidden" id="custId" name="change_qty" value="<?php echo $book['book_id']; ?>">
+                            <select class="form-control" name="qty" id="sel1" onchange="if(this.value != 0) { this.form.submit(); }">
+                                <option value="" selected disabled hidden><?php echo $book['qty']; ?></option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                        </div>
+                    </form>
 
-						<?php $num_items += $book['qty'];
+                    <?php $num_items += $book['qty'];
 							$temp = $book['qty'] * $book['price'];
 							$subtotal += $temp;
 						?>
 
-					</td>
-				</tr>
-				
-			</tbody>
-		<?php } endforeach; ?>
-	</table>
+                </td>
+            </tr>
 
-	<br>
-	<div class="row justify-content-between">
-		<div class="col-4">
-			<td>
-				<a href="index.php" class="btn btn-warning">
-					<i class="fa fa-angle-left"></i> Continue Shopping</a></td>
-					<td colspan="2" class="hidden-xs"></td>
-		</div>
-		<div class="col-3">
-			<strong>Subtotal (<?php echo $num_items;
+        </tbody>
+        <?php } endforeach; ?>
+    </table>
+
+    <br>
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <td>
+                <a href="index.php" class="btn btn-warning">
+                    <i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+            <td colspan="2" class="hidden-xs"></td>
+        </div>
+        <div class="col-3">
+            <strong>Subtotal (<?php echo $num_items;
 									if($num_items<2) {
 										echo " item):";
 									} else {
 										echo " items):";
 									}
 									?></strong> $<?php echo $subtotal;?>
-		</div>
-  	</div>
+        </div>
+    </div>
 
 </div>
 
@@ -243,64 +245,67 @@
 <!-- Start of Saved for Later list -->
 <br>
 <div class="container">
-	<table class="table">
-	<thead>
+    <table class="table">
+        <thead>
 
-		<tr>
-			<th scope="col" width="15%" class="text-left"><h5>Saved for Later</h5></th>
-			<th scope="col" width="45%" class="text-left"></th>
-			<th scope="col" width="15%" class="text-left">Price</th>
-		</tr>
-
-
-	</thead>
-
-	<?php foreach($books_on_cart as $book) :
-			if($book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
-
-	<tbody>
-		<tr>
-			<th scope="row">
-				<div class="col-sm-3 hidden-xs"><img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive"/></div>
-			</th>
-
-			<td>
-				<div class="container" >
-							<div class="row">
-								<div class="col">
-									Title: <?php echo $book['title']; ?><br>
-									Author: <?php echo $book['author']; ?><br><br>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-2">
-									<form name="deleteForm" method="POST" action="cart.php">
-										<input type="hidden" name="delete" value="<?php echo $book['book_id']; ?>">
-										<input type="submit" class="btn btn-outline-danger" value="Delete">
-									</form>
-								</div>
-								<div class="col-sm-4">
-									<form name="deleteForm" method="POST" action="cart.php">
-											<input type="hidden" name="move_to_cart" value="<?php echo $book['book_id']; ?>">
-											<input type="submit" class="btn btn-link" value="Move to Cart">
-									</form>
-								</div>
-							</div>
-				</div>
-
-			</td>
-			<td>
-				$<?php echo $book['price']; ?>
-			</td>
-
-		</tr>
+            <tr>
+                <th scope="col" width="15%" class="text-left">
+                    <h5>Saved for Later</h5>
+                </th>
+                <th scope="col" width="45%" class="text-left"></th>
+                <th scope="col" width="15%" class="text-left">Price</th>
+            </tr>
 
 
-	</tbody>
+        </thead>
 
-	<?php } endforeach; ?>
+        <?php foreach($books_on_cart as $book) :
+			if($book['saved_for_later']) {?>
+        <!-- only display not saved books, aka not in saved list -->
 
-	</table>
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <div class="col-sm-3 hidden-xs"><img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive" /></div>
+                </th>
+
+                <td>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                Title: <?php echo $book['title']; ?><br>
+                                Author: <?php echo $book['author']; ?><br><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <form name="deleteForm" method="POST" action="cart.php">
+                                    <input type="hidden" name="delete" value="<?php echo $book['book_id']; ?>">
+                                    <input type="submit" class="btn btn-outline-danger" value="Delete">
+                                </form>
+                            </div>
+                            <div class="col-sm-4">
+                                <form name="deleteForm" method="POST" action="cart.php">
+                                    <input type="hidden" name="move_to_cart" value="<?php echo $book['book_id']; ?>">
+                                    <input type="submit" class="btn btn-link" value="Move to Cart">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+                <td>
+                    $<?php echo $book['price']; ?>
+                </td>
+
+            </tr>
+
+
+        </tbody>
+
+        <?php } endforeach; ?>
+
+    </table>
 
 
 </div>

@@ -149,9 +149,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/imageModal.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="stylesheet" type="text/css" href="css/rating.css">
-    <link rel="stylesheet" type="text/css" href="css/test.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/rating.css">
+    <link rel="stylesheet" href="css/test.css">
 
 </head>
 
