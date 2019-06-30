@@ -3,6 +3,7 @@
 	if (empty($_SESSION['user_id']) || empty($_SESSION['token']))
 	{
 		// not logged in, redirect
+		$_SESSION['not_logged_in'] = true;
         header('Location: login.php');
         exit();
 	}
