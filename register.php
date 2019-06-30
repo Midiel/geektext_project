@@ -2,7 +2,6 @@
     /* clear session (i.e. soft log out) */
     session_start();
     $_SESSION = array();
-    // session_destroy();
 
     $email_exists = false;
 
@@ -74,13 +73,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/geektext-lr.css">
 </head>
 
 <body>
     <h1 style="text-align: center;" alt="logo placeholder">GeekText</h1>
-    <div class="geektext-lr geektext-lr-error" style="display: <?php echo ($email_exists) ? 'block' : 'none'; ?>;">
-        <h2 style="float: left; padding: 10px 20px; margin:0px;" alt="err icon placeholder">!</h2>
+    <div class="geektext-lr geektext-error geektext-dialog" style="display: <?php echo ($email_exists) ? 'block' : 'none'; ?>;">
+        <i class="fa fa-exclamation-triangle fa-2x geektext-dialog-icon" aria-hidden="true"></i>
         <h4>There was a problem</h4>
         <p>An account with this email already exists</p>
     </div>

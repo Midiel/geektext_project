@@ -1,6 +1,6 @@
 <?php
     session_start();
-    $login_error = false;
+    $login_error = "";
     $new_account = false;
 
     /* if form submitted */
@@ -47,7 +47,7 @@
             }
             else /* login detail error */
             {
-                $login_error = true;
+                $login_error = "Invalid username or password";
             }
         } // else stmt prep failure
     }
@@ -58,6 +58,10 @@
     }
     else /* log out user */
     {
+        if (isset($_SESSION['not_logged_in']) && $_SESSION['not_logged_in'])
+        {
+            $login_error = "Please login to continue";
+        }
         $_SESSION = array();
         session_destroy();
     }
@@ -72,18 +76,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/geektext-lr.css">
 </head>
 
 <body>
     <h1 style="text-align: center;" alt="logo placeholder">GeekText</h1>
-    <div class="geektext-lr geektext-lr-error" style="display: <?php echo ($login_error) ? 'block' : 'none'; ?>;">
-        <h2 style="float: left; padding: 10px 20px; margin:0px;" alt="err icon placeholder">!</h2>
+    <div class="geektext-lr geektext-dialog geektext-error" style="display: <?php echo empty($login_error) ? 'none' : 'block' ?>;">
+        <i class="fa fa-exclamation-triangle fa-2x geektext-dialog-icon" aria-hidden="true"></i>
         <h4>There was a problem</h4>
-        <p>Invalid username or password</p>
+        <p><?php echo $login_error; ?></p>
     </div>
-    <div class="geektext-lr geektext-lr-ok" style="display: <?php echo ($new_account) ? 'block' : 'none'; ?>;">
-        <h3 style="float: left; padding: 10px 16px; margin:0px; alt="reg icon placeholder">OK</h3>
+    <div class="geektext-lr geektext-dialog geektext-success" style="display: <?php echo ($new_account) ? 'block' : 'none'; ?>;">
+        <i class="fa fa-check-square-o fa-2x geektext-dialog-icon" aria-hidden="true"></i>
         <h4>Account created</h4>
         <p>Login with your new account</p>
     </div>
