@@ -151,6 +151,7 @@
     <script type="text/javascript" src="js/imageModal.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/rating.css">
+    <link rel="stylesheet" type="text/css" href="css/test.css">
 
 </head>
 
@@ -263,14 +264,14 @@
         </div> <!-- row end -->
     </div> <!-- section end -->
 
-<!--page navegation-->
-        <div class="container">
-            <ul class="pagination justify-content-center">
+    <!--page navegation-->
+    <div class="container">
+        <ul class="pagination justify-content-center">
 
-                <?php echo $pagination; ?>
+            <?php echo $pagination; ?>
 
-            </ul>
-        </div>
+        </ul>
+    </div>
 
 </body>
 
