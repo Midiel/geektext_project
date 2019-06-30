@@ -5,6 +5,7 @@
 	if (empty($_SESSION['user_id']) || empty($_SESSION['token']))
 	{
 		// not logged in, redirect
+		$_SESSION['not_logged_in'] = true;
         header('Location: login.php');
         exit();
 	}
@@ -22,6 +23,7 @@
     if (empty($user) || $user['token'] !== $_SESSION['token'])
     {
 		// not logged in, redirect
+		$_SESSION['not_logged_in'] = true;
         header('Location: login.php');
         exit();
     }
@@ -89,7 +91,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>My Personal & Account</title>
+    <title>My Personal & Security</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
