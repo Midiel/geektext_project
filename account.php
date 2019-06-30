@@ -1,3 +1,12 @@
+<?php
+    session_start();
+	if (empty($_SESSION['user_id']) || empty($_SESSION['token']))
+	{
+		// not logged in, redirect
+        header('Location: login.php');
+        exit();
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
