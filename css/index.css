@@ -4,10 +4,11 @@ body {
 }
 
 #books {
-    padding-top: 50px;
+    padding-top: 20px;
 }
 
 .row {
+<<<<<<< Updated upstream
     /*    background: #ffffff;*/
 }
 
@@ -19,6 +20,15 @@ body {
     flex-direction: column;
 >>>>>>> 06e9345091035a49990196f48bb2699d11fa7839
     padding-bottom: 20px;
+=======
+    /*        background-color: aqua;*/
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 200px;
+>>>>>>> Stashed changes
 }
 
 .flex-container {
@@ -32,8 +42,7 @@ body {
     /*    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);*/
     height: 480px;
     width: 100%;
-    border: #262626;
-    background: #262626;
+    background: #aaa;
     color: #ffffff;
 <<<<<<< HEAD
     /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, 1));*/
@@ -58,14 +67,19 @@ body {
     /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, .2));*/
 =======
     /*    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(200, 200, 200, .2));*/
+<<<<<<< Updated upstream
 >>>>>>> 06e9345091035a49990196f48bb2699d11fa7839
     min-height: 52%;
+=======
+    min-height: 48%;
+>>>>>>> Stashed changes
 
     /*
     border-width: 1px;
     border-style: dashed;
     border-color: red;
 */
+    background: red;
 
 }
 
@@ -87,15 +101,21 @@ img {
     justify-content: space-between;
     flex: auto;
 
+    /*    color: aqua;*/
 
-    padding: 0px 20px;
-    padding-top: 10px;
+    /*    padding: 0px 20px;*/
+    /*    padding-top: 10px;*/
+    margin: 10px 40px;
     letter-spacing: .01em;
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     /*    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(38, 38, 38, 1));*/
 =======
     background: #fff;
+=======
+    background: #808303;
+>>>>>>> Stashed changes
 
     /*    background-image: linear-gradient(rgba(200, 200, 200, .2), rgba(0, 0, 0, 0));*/
 >>>>>>> 06e9345091035a49990196f48bb2699d11fa7839
@@ -110,24 +130,24 @@ img {
 }
 
 .title {
-    font-size: .9em;
+    font-size: .8em;
     font-weight: 600;
     line-height: 1.1em;
 }
 
 .author {
-    font-size: .9em;
+    font-size: .7em;
     font-weight: 500;
-    line-height: 1.2em;
+    line-height: 1.1em;
     letter-spacing: .04em;
 }
 
 .category {
     display: flex;
     justify-content: flex-start;
-    font-size: .8em;
+    font-size: .6em;
     font-weight: 400;
-    line-height: 1.2em;
+    line-height: 1.1em;
     letter-spacing: .04em;
 
 
