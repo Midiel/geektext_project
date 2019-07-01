@@ -8,14 +8,6 @@ body {
 }
 
 .row {
-    <<<<<<< Updated upstream
-}
-
-<< <<<<< HEAD=======.flex-container {
-    display: flex;
-    flex-direction: column;
-    > > > > > > > 06e9345091035a49990196f48bb2699d11fa7839 padding-bottom: 20px;
-    =======
     /*        background-color: aqua;*/
 }
 
@@ -23,12 +15,6 @@ body {
     display: flex;
     flex-direction: column;
     margin-bottom: 200px;
-    > > > > > > > Stashed changes
-}
-
-.flex-container {
-    display: flex;
-    flex-direction: column;
 }
 
 .card {
@@ -39,11 +25,8 @@ body {
     width: 100%;
     background: #aaa;
     color: #ffffff;
-    <<<<<<< HEAD
-    /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, 1));*/
-    =======
     /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, 1));*/
-    > > > > > > > 06e9345091035a49990196f48bb2699d11fa7839
+
 }
 
 .card:hover {
@@ -57,13 +40,9 @@ body {
     justify-content: center;
     align-items: flex-end;
 
-    <<<<<<< HEAD
-    /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, .2));*/
-    =======
     /*    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(200, 200, 200, .2));*/
-    <<<<<<< Updated upstream > > > > > > > 06e9345091035a49990196f48bb2699d11fa7839 min-height: 52%;
-    =======min-height: 48%;
-    > > > > > > > Stashed changes
+    min-height: 48%;
+
     /*
     border-width: 1px;
     border-style: dashed;
@@ -98,13 +77,11 @@ img {
     margin: 10px 40px;
     letter-spacing: .01em;
 
-    <<<<<<< Updated upstream <<<<<<< HEAD
-    /*    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(38, 38, 38, 1));*/
-    =======background: #fff;
-    =======background: #808303;
-    > > > > > > > Stashed changes
+    background: #808303;
+
     /*    background-image: linear-gradient(rgba(200, 200, 200, .2), rgba(0, 0, 0, 0));*/
-    > > > > > > > 06e9345091035a49990196f48bb2699d11fa7839
+
+
     /*
     background-color: chartreuse;
     border-width: 1px;
