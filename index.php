@@ -247,7 +247,7 @@
 
                         <!-- Midiel: Add to cart button -->
                         <form method="POST" action="cart.php">
-                            <button type="submit" name="move_to_cart" value="<?php echo $book[$i]['id'];?>" class="btn btn-primary btn-sm mt-1">ADD TO CART </button>
+                            <button type="submit" name="move_to_cart" value="<?php echo $book[$i]['id'];?>" class="btn btn-primary btn-sm">ADD TO CART </button>
                         </form>
                         <!-- end add to cart -->
 
