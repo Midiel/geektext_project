@@ -1,53 +1,60 @@
 body {
     font-size: 100%;
+    background: #262626;
 }
 
 #books {
-    padding-top: 50px;
+    padding-top: 20px;
 }
 
 .row {
-    /*    background-color: aqua;*/
+    /*        background-color: aqua;*/
 }
 
-#parent-card {
-
-    padding-bottom: 20px;
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
 }
 
 .card {
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);
+    /*    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);*/
     height: 480px;
     width: 100%;
+    background: #aaa;
+    color: #ffffff;
+    /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, 1));*/
 
 }
 
 .card:hover {
     top: -3px;
-    box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 1);
 
 }
 
 .image-section {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 
-    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(200, 200, 200, .2));
-    min-height: 52%;
+    /*    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(200, 200, 200, .2));*/
+    min-height: 48%;
 
     /*
     border-width: 1px;
     border-style: dashed;
     border-color: red;
 */
+    background: red;
 
 }
 
 .img-thumbnail {
     background-color: #744774;
+    border: #262626;
 
 }
 
@@ -63,12 +70,16 @@ img {
     justify-content: space-between;
     flex: auto;
 
+    /*    color: #000;*/
 
-    padding: 0px 20px;
-    padding-top: 10px;
+    /*    padding: 0px 20px;*/
+    /*    padding-top: 10px;*/
+    margin: 10px 40px;
     letter-spacing: .01em;
 
-    background-image: linear-gradient(rgba(200, 200, 200, .2), rgba(0, 0, 0, 0));
+    background: #fff;
+
+    /*    background-image: linear-gradient(rgba(200, 200, 200, .2), rgba(0, 0, 0, 0));*/
 
 
     /*
@@ -80,25 +91,24 @@ img {
 }
 
 .title {
-    font-size: 1em;
-    font-weight: 700;
+    font-size: .8em;
+    font-weight: 600;
     line-height: 1.1em;
 }
 
 .author {
-    font-size: .9em;
+    font-size: .7em;
     font-weight: 500;
-    line-height: 1.2em;
+    line-height: 1.1em;
     letter-spacing: .04em;
 }
 
 .category {
     display: flex;
     justify-content: flex-start;
-    color: grey;
-    font-size: .8em;
+    font-size: .6em;
     font-weight: 400;
-    line-height: 1.2em;
+    line-height: 1.1em;
     letter-spacing: .04em;
 
 
@@ -112,8 +122,10 @@ img {
     justify-content: flex-end;
     flex: 0 0 auto;
 
+    /*
     padding-bottom: 10px;
-    padding-top: 10px;
+padding-top: 10px;
+*/
 
     /*
     border-width: 1px;
@@ -125,9 +137,20 @@ img {
 
 #description-button {
     margin-bottom: 6px;
-    width: 80%;
+    width: 60%;
+    font-size: .7em;
+    font-weight: 800;
+    /*    letter-spacing: .04em;*/
 }
 
 #authorbio-button {
-    width: 80%;
+    width: 60%;
+    font-size: .7em;
+    font-weight: 800;
+}
+
+.cart-button {
+    width: 60%;
+    font-size: .7em;
+    font-weight: 800;
 }

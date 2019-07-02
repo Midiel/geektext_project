@@ -1,3 +1,8 @@
+<head>
+			
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+			
+</head>
 
 <?php
     include('includes/header.php');
@@ -5,13 +10,13 @@
 
 	// hard code session token to 123 (user1) if session is not set, user not logged in
 	if(!(isset($_SESSION['token']))) {
-		$_SESSION['token'] = '123';
+		$_SESSION['token'] = 'c6734b5d94fdf74db73175ba5429ec11';
 	};
 	//$_SESSION['token'] = '456';		//user2
 
-	echo "session: ".$_SESSION['token']."<br>";
+	//echo "session: ".$_SESSION['token']."<br>";
 
-	print_r($_POST);
+	//print_r($_POST);
 	echo "<br>";
 
 
@@ -73,40 +78,12 @@
 	}
 	*/
 
+	//echo "token type: " . gettype($_SESSION['token']);
 
-	/*
-    $query = $con->prepare("CALL getCartQty(?)");
-    $query->bind_param('s', $_SESSION['token']);
-    $query->execute();
-    $arr = $query->get_result()->fetch_assoc();
-
-    // verify execution
-    if($arr) {
-        var_export($arr);
-    } 
-*/
-
-	$query = $con->prepare("CALL getCartQty(?)");
-	$query->bind_param('s', $_SESSION['token']);
-	$query->execute();
-	$query->store_result();
-	if($query->num_rows === 0) exit('No rows');
-	$query->bind_result($_SESSION['cart_qty']);
-	$query->fetch();
-
-
-	echo "\$_SESSION['cart_qty'] = " . $_SESSION['cart_qty']; 
-
-	$query->close();
-
-	//$_SESSION['number_of_items'] = $arr['number_of_items'];
-
-
-
-
+	
 	$books_on_cart = array();
 
-	$query = "CALL getCart(" . $_SESSION['token'] . ")";
+	$query = "CALL getCart('" . $_SESSION['token'] . "')";
 
 	if($result = mysqli_query($con, $query)) {
 		while($row = mysqli_fetch_assoc($result)) {
@@ -125,16 +102,30 @@
 	$subtotal = 0;
 	$num_items = 0;
 
-	$_SESSION['items_in_cart'] = $num_items;
+	$_SESSION['cart_qty'] = $num_items;
 
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+			
+</head>
+
+
+
 
 <br><br><br>
+<div class="container">
 
 <!-- Display the shopping cart -->
-<div class="container">
-	<table class="table">
+<div class="container" id="all">
+	<table class="table-responsive">
 		<thead>
 			<tr>
 			<th scope="col" width="15%" class="text-left"><h5>Shopping Cart</h5></th>
@@ -146,7 +137,7 @@
 		<?php foreach($books_on_cart as $book) :
 			if(!$book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
 
-			<tbody>
+			<tbody id="tableBody">
 				<tr>
 					<th scope="row">
 						<div class="col-sm-3 hidden-xs"><img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive"/></div>
@@ -156,7 +147,7 @@
 							<div class="row">
 								<div class="col">
 									Title: <?php echo $book['title']; ?><br>
-									Author: <?php echo $book['author']; ?><br><br>
+									Author: <?php echo $book['authors']; ?><br><br>
 								</div>
 							</div>
 							<div class="row">
@@ -164,14 +155,14 @@
 									<form name="deleteForm" method="POST" action="cart.php">
 										<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 										<input type="hidden" name="delete" value="true">
-										<input type="submit" class="btn btn-outline-danger" value="Delete">
+										<input type="submit" class="btn btn-outline-danger btn-sm" value="Delete">
 									</form>
 								</div>
 								<div class="col-sm-4">
 									<form name="deleteForm" method="POST" action="cart.php">
 											<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 											<input type="hidden" name="save_for_later" value="true">
-											<input type="submit" class="btn btn-outline-secondary" value="Save for Later">
+											<input type="submit" class="btn btn-outline-secondary btn-sm" value="Save for Later">
 									</form>
 								</div>
 							</div>
@@ -217,7 +208,7 @@
 	<div class="row justify-content-between">
 		<div class="col-4">
 			<td>
-				<a href="index.php" class="btn btn-warning">
+				<a href="index.php" class="btn btn-warning btn-sm">
 					<i class="fa fa-angle-left"></i> Continue Shopping</a></td>
 					<td colspan="2" class="hidden-xs"></td>
 		</div>
@@ -261,7 +252,7 @@
 					<div class="row">
 						<div class="col">
 							Title: <?php echo $book['title']; ?><br>
-							Author: <?php echo $book['author']; ?><br><br>
+							Author: <?php echo $book['authors']; ?><br><br>
 						</div>
 					</div>
 					<div class="row">
@@ -269,7 +260,7 @@
 							<form name="deleteForm" method="POST" action="cart.php">
 								<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 								<input type="hidden" name="delete" value="true">
-								<input type="submit" class="btn btn-outline-danger" value="Delete">
+								<input type="submit" class="btn btn-outline-danger btn-sm" value="Delete">
 							</form>
 						</div>
 						<div class="col-sm-4">
@@ -290,6 +281,52 @@
 	<?php } endforeach; ?>
 	</table>
 </div>
+
+</div>
+
+<body>
+    
+
+<script>
+
+	$(document).ready(function(){
+
+	$.post("ajax2.php",
+	{
+		update_nav: true
+		
+	})
+	.done(function (result, status, xhr) {
+		$("#nav-counter").html(result)
+	})
+	.fail(function (xhr, status, error) {
+		$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+	});
+
+	});
+
+
+
+    $("#submit").click(function (e) {
+    $.post("ajax.php",
+    {
+        firstName: $("#firstName").val(),
+        lastName: $("#lastName").val()
+    })
+    .done(function (result, status, xhr) {
+        $("#message").html(result)
+    })
+    .fail(function (xhr, status, error) {
+        $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+    });
+});
+
+</script>
+
+
+    
+
+</body>
 
 
 <?php include('includes/footer.php'); ?>

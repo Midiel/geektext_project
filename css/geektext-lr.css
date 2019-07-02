@@ -10,23 +10,32 @@ p, h4 {
     padding-bottom: 10px;
 }
 
-div.geektext-lr-error {
+div.geektext-error {
     color: #c40000;
-    border: 1px #c40000 solid;
-    padding: 5px 0px;
+    border-color: #c40000;
 }
 
-div.geektext-lr-ok {
+div.geektext-success {
+    color: #48a848;
+    border-color: #48a848;
+}
+
+div.geektext-dialog {
 	padding: 5px 0px;
 }
 
-div.geektext-lr-error p {
+div.geektext-lr p {
     color: black;
 }
 
 .geektext-icon {
     width: 32px;
     text-align: center;
+}
+
+.geektext-dialog-icon {
+    float: left;
+    padding: 12px 14px;
 }
 
 .fa-circle {

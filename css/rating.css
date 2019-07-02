@@ -1,0 +1,35 @@
+/*@import "compass/css3";*/
+
+$star-rating-outline-color: #cccccc;
+$star-rating-fill-color: #ffb400;
+$star-rating-aside-color: #999999;
+
+.star-rating-stars {
+    font-family: "Arial Unicode MS", Arial, sans-serif;
+    unicode-bidi: bidi-override;
+    color: $star-rating-outline-color;
+}
+
+.star-rating-star {
+    float: left;
+    width: 0.88em;
+}
+
+&:before {
+    content: "\2605";
+    position: absolute;
+    color: $star-rating-fill-color;
+}
+
+.s3:before,
+.s3 ~ .star-rating-star:before {
+    content: normal;
+}
+
+.star-rating-aside {
+    float: left;
+    margin-left: 5px;
+    color: $star-rating-aside-color;
+    font-size: 11px;
+    line-height: 24px;
+}

@@ -1,0 +1,33 @@
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);
+}
+
+.card:hover {
+    top: -3px;
+    box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.3);
+}
+
+a.card, a.card:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+#menu-container {
+	max-width: 1440px;
+	height: 50%;
+	align-items: center;
+	margin: auto;
+}
+
+html, body {
+	height: 100%;
+}
+
+.geektext-img {
+	width: 240px;
+	height: 240px;
+}
+
+.card-body {
+	text-align: center;
+}

@@ -1,0 +1,77 @@
+.geektext-container {
+    max-width: 825px;
+    margin: auto;
+    padding: 0px 10px;
+}
+
+.geektext-entry {
+    padding: 10px;
+    border-bottom: 1px #ddd solid;
+}
+
+.geektext-title {
+    margin: 20px 0px;
+}
+
+.geektext-btn {
+    padding: 4px 16px;
+    display: inline-block;
+    margin: 8px 0px;
+}
+
+.geektext-btn-submit {
+    margin-right: 5px;
+}
+
+.geektext-icon {
+    width: 32px;
+    text-align: center;
+}
+
+.geektext-dialog {
+    padding: 10px 5px;
+    border: 1px #48a848 solid;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    color: #48a848;
+}
+
+.geektext-dialog-icon {
+    float: left;
+    padding: 12px 14px;
+}
+
+.geektext-error {
+    color: #c40000;
+    border: 1px #c40000 solid;
+}
+
+.geektext-dialog div {
+    color: black;
+}
+
+.password-check {
+    padding-top: 5px;
+}
+
+input {
+    width: 100%;
+    max-width: 256px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);
+}
+
+.hidden {
+    display: none;
+}
+
+.fa-circle {
+    font-size: 10px;
+    color: #c9c9c9;
+}
+
+.fa-check {
+    color: #48a848;
+}

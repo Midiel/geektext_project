@@ -1,0 +1,148 @@
+<?php
+
+	// Midiel: You meed the config/config.php file for this narvbar to function
+  //require_once('config/config.php');
+  require_once('header.php');
+  require_once('includes/connect.inc.php');
+
+  /* check if session has already started */
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+  }
+
+  //checking if there is a user logged in
+  $logged_in = false;
+  if(isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
+    $token = $_SESSION['token'];
+    $user_id = $_SESSION['user_id'];
+    $logged_in = true;
+  }
+  
+
+
+if (isset($token) && !empty($token))
+{
+    $query = "SELECT token FROM user WHERE email = '$email' LIMIT 1";
+    $run = mysqli_query($con, $query);
+    while($row = mysqli_fetch_assoc($run)){
+      if ($row['token'] == $token)
+          $logged_in = true;
+      }
+  }
+
+  //displaying login info in html
+  if($logged_in == true)
+  {
+    $glyphicon_log_in = '<li class="nav-item"><a class="nav-link" href="login.php"  ><span class="fa fa-sign-out"></span> Log out </a></li>';
+  }
+  else
+  {
+    $email = '';
+    $password = '';
+    $token = '';
+    session_destroy();
+    $glyphicon_log_in =
+      '<li class="nav-item"><a class="nav-link" href="#"  onclick="event.preventDefault();"><span class="fa fa-new-window"></span> Sign Up </a></li>
+      <li class="nav-item"><a class="nav-link" href="login.php"><span class="fa fa-plus"></span> Log in </a></li>';
+  }
+
+  //appending or replacing path
+  $path = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+  if(strpos($path,"?") > 0)
+  {
+    $path .= "&";
+  }
+  else
+  {
+    $path .= "?";
+  }
+
+  //setting as active top sellers or New arrivals
+  if(strpos($path,"top_sellers=true") > 0)
+  {
+    $top_seller_link = '<li class="nav-item"><a class="nav-link active" href="?new_arrivals=true" >See our new arrivals</a> </li>';
+  }
+  else
+  {
+    $top_seller_link = '<li class="nav-item"><a class="nav-link active" href="?top_sellers=true">See our top sellers</a> </li>';
+  }
+
+?>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="index.php">GeekText</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01" bis_skin_checked="1">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <form class="form-inline my-2 my-lg-0">
+                <input list="search_list" class="form-control mr-sm-2" id="search" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                <datalist id="search_list">
+                    <option id="op1">
+                    <option id="op2">
+                    <option id="op3">
+                    <option id="op4">
+                    <option id="op5">
+                    <option id="op6">
+                </datalist>
+            </form>
+
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <?php echo $top_seller_link;?>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        Sort by
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="<?php echo $path.'sort_by=title';?>">Title</a>
+                        <a class="dropdown-item" href="<?php echo $path.'sort_by=author';?>">Author</a>
+                        <a class="dropdown-item" href="<?php echo $path.'sort_by=price';?>">Price</a>
+                        <a class="dropdown-item" href="<?php echo $path.'sort_by=average_rating';?>">Rating</a>
+                        <a class="dropdown-item" href="<?php echo $path.'sort_by=published_date';?>">Release Date</a>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
+            <?php echo $glyphicon_log_in;?>
+            <li class="nav-item"><a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart"> 0 </span></a> </li>
+
+        </ul>
+
+    </div>
+</nav>
+
+<script>
+    //ajax code for service Autocomplete$(document).ready(function(){
+    $(document).ready(function() {
+        $("#search").keyup(function() {
+            var to_server = document.getElementById('search').value;
+            $.ajax({
+                url: "http://yasmanisubirat.com/cen4010/includes/search_ajax.php?val=" + to_server,
+                success: function(result) {
+                    var serv_arr = result.split(",");
+                    $("#op1").val(serv_arr[0]);
+                    $("#op2").val(serv_arr[1]);
+                    $("#op3").val(serv_arr[2]);
+                    $("#op4").val(serv_arr[3]);
+                    $("#op5").val(serv_arr[4]);
+                    $("#op6").val(serv_arr[5]);
+                }
+            });
+        });
+    });
+
+</script>
