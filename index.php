@@ -144,11 +144,6 @@
     <title>Book Details Grid View</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/imageModal.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/rating.css">
 
@@ -252,7 +247,7 @@
 
                         <!-- Midiel: Add to cart button -->
                         <form method="POST" action="cart.php">
-                            <button type="submit" name="move_to_cart" value="<?php echo $book[$i]['id'];?>" class="btn btn-primary btn-sm mt-1">ADD TO CART </button>
+                            <button type="submit" name="move_to_cart" value="<?php echo $book[$i]['id'];?>" class="btn btn-primary btn-sm">ADD TO CART </button>
                         </form>
                         <!-- end add to cart -->
 
@@ -263,14 +258,14 @@
         </div> <!-- row end -->
     </div> <!-- section end -->
 
-<!--page navegation-->
-        <div class="container">
-            <ul class="pagination justify-content-center">
+    <!--page navegation-->
+    <div class="container">
+        <ul class="pagination justify-content-center">
 
-                <?php echo $pagination; ?>
+            <?php echo $pagination; ?>
 
-            </ul>
-        </div>
+        </ul>
+    </div>
 
 </body>
 

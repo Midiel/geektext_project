@@ -5,11 +5,13 @@
 
 
     # Handle Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ index.php [L]
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteRule ^ index.php
 
-    RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule ^ %{REQUEST_FILENAME} [L]
+    # RewriteCond %{REQUEST_FILENAME}/cart.php -d
+    # RewriteRule ^ cart.php
+
+    # RewriteCond %{REQUEST_FILENAME} -f
+    # RewriteRule ^ %{REQUEST_FILENAME}
 
 </IfModule>
