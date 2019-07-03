@@ -1,20 +1,22 @@
 <?php
   /* NOTE: Include "navbar_libs.php" in <head> for styles to properly apply. */
 
-	// Midiel: You meed the config/config.php file for this narvbar to function
-  require_once('config/config.php');
   require_once('includes/connect.inc.php');
 
   /* check if session has already started */
   if (session_status() === PHP_SESSION_NONE) {
     session_start();
+    $logged_in = false;
+
+  } else {
+     //checking if there is a user logged in
+    $email = $_SESSION['email'];
+    $token = $_SESSION['token'];
+    $user_id = $_SESSION['user_id'];
+    $logged_in = true;
   }
 
-  //checking if there is a user logged in
-  $email = $_SESSION['email'];
-  $token = $_SESSION['token'];
-  $user_id = $_SESSION['user_id'];
-
+  
 
 if (isset($token) && !empty($token))
 {
