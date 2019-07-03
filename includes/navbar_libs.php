@@ -1,7 +1,7 @@
 <!--
 Includes:
     Font Awesome 4.7.0 
-    jquery 3.4.1
+    jQuery 3.4.1
     Popper 1.14.3
     Bootstrap 4.1.3
 -->

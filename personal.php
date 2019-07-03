@@ -102,7 +102,7 @@
     <link rel="stylesheet" href="css/geektext-personal.css">
 </head>
 <body>
-	<?php //include('includes/navbarm.php');?>
+	<?php include('includes/navbar.php');?>
 	<div class="geektext-container">
 		<h3 class="geektext-title">Personal information & security</h3>
 		<div class="geektext-dialog geektext-error" style="display: <?php echo empty($error) ? 'none' : 'block'; ?>;">

@@ -42,10 +42,10 @@ if (isset($token) && !empty($token))
       <li class="nav-item"><a class="nav-link" href="login.php"><span class="fa fa-plus"></span> Log in </a></li>';
   }
 
-  //appending or replacing path
   $on_homepage = !empty($path); // if '$path' exists, we are on homepage (index.php)
   if ($on_homepage)
   {
+    //appending or replacing path
     if(strpos($path,"?") > 0)
     {
       $path .= "&";
