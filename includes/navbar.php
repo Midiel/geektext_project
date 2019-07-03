@@ -8,13 +8,16 @@
     session_start();
     $logged_in = false;
 
-  } else {
+  } 
+
+  $logged_in = false;
+  //else {
      //checking if there is a user logged in
     $email = $_SESSION['email'];
     $token = $_SESSION['token'];
     $user_id = $_SESSION['user_id'];
-    $logged_in = true;
-  }
+    //$logged_in = true;
+  //}
 
   
 
@@ -125,7 +128,7 @@ if (isset($token) && !empty($token))
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
             <?php echo $glyphicon_log_in;?>
-            <li class="nav-item"><a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart"> <?php echo $items_in_cart;?> </span></a> </li>
+            <li class="nav-item"><a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart" id="nav-counter"> 0 </span></a> </li>
 
         </ul>
 
@@ -149,6 +152,20 @@ if (isset($token) && !empty($token))
                     $("#op6").val(serv_arr[5]);
                 }
             });
+        });
+
+
+        // update cart counter
+        $.post("includes/cart_ajax.php",
+        {
+            update_nav: true
+            
+        })
+        .done(function (result, status, xhr) {
+            $("#nav-counter").html(result)
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
     });
 

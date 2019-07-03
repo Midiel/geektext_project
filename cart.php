@@ -1,7 +1,9 @@
 
 <?php
+
     //include('includes/header.php');
-    require_once('includes/connect.inc.php');
+	require_once('includes/connect.inc.php');
+	//include_once('includes/cart_ajax.php');
     include_once("includes/navbar_libs.php"); 
     include_once("includes/navbar.php");
 
@@ -11,7 +13,7 @@
 	// };
 	//$_SESSION['token'] = '456';		//user2
 
-    //echo "session: ".$_SESSION['token']."<br>";
+    echo "session: ".$_SESSION['token']."<br>";
     
 
 	//print_r($_POST);
@@ -56,25 +58,6 @@
 		$query->close();
 	}
 
-
-	/*
-	// get all items from shopping cart
-	$query = $con->prepare('CALL getCart(?)');
-	$query->bind_param('i', $_SESSION['token']);
-	$query->execute();
-	echo "61 ---------";
-	// variable to hold all records in the cart
-	$books_on_cart = array();
-	
-	
-	// loop through all the records and save them to the books variable
-	if($result = $query->get_result()) {
-		while($row = mysqli_fetch_assoc($result)) {
-			echo mysqli_error($con);
-			array_push($books_on_cart, $row);
-		}
-	}
-	*/
 
 	//echo "token type: " . gettype($_SESSION['token']);
 
@@ -180,10 +163,10 @@
 						$<?php echo $book['price']; ?>
 					</td>
 					<td>
-						<form method="POST" action="cart.php">
+						<form>
 							<div class="form-group">
 							<input type="hidden" id="custId" name="book_id" value="<?php echo $book['book_id']; ?>">
-								<select class="form-control" name="qty" id="sel1" onchange="if(this.value != 0) { this.form.submit(); }">
+								<select class="form-control" name="qty" id="<?php echo $book['book_id']; ?>" onchange="changeqty()">
 									<option value="" selected disabled hidden><?php echo $book['qty']; ?></option>
 									<option value="1">1</option>
 									<option value="2">2</option>
@@ -220,7 +203,7 @@
 					<i class="fa fa-angle-left"></i> Continue Shopping</a></td>
 					<td colspan="2" class="hidden-xs"></td>
 		</div>
-		<div class="col-3">
+		<div class="col-3" id="subtotal">
 			<strong>Subtotal (<?php echo $num_items;
 									if($num_items<2) {
 										echo " item):";
@@ -292,50 +275,51 @@
 
 </div>
 
-
-    
-
 <script>
 
-	$(document).ready(function(){
-
-	$.post("ajax2.php",
-	{
-		update_nav: true
+	// change number of items/qty
+	function changeqty(e) {
+		var thisid = event.target.id;
 		
-	})
-	.done(function (result, status, xhr) {
-		$("#nav-counter").html(result)
-	})
-	.fail(function (xhr, status, error) {
-		$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-	});
+		$.post("includes/cart_ajax.php",
+		{
+			book_id: thisid,
+			changeQty: $("#"+thisid).val()
+		})
+		.done(function (result, status, xhr) {
+			$("#"+thisid).html(result)
+			updateSubtotal();
+		})
+		.fail(function (xhr, status, error) {
+			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+		});
 
-	});
 
 
+		
 
-    $("#submit").click(function (e) {
-    $.post("ajax.php",
-    {
-        firstName: $("#firstName").val(),
-        lastName: $("#lastName").val()
-    })
-    .done(function (result, status, xhr) {
-        $("#message").html(result)
-    })
-    .fail(function (xhr, status, error) {
-        $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-    });
-});
+	};
+
+	function updateSubtotal(e) {
+		$.post("includes/cart_ajax.php",
+		{
+			get_subtotal: true
+		})
+		.done(function (result, status, xhr) {
+			$("#subtotal").html(result)
+		})
+		.fail(function (xhr, status, error) {
+			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+		});
+	}
+
 
 </script>
-
-
     
+   
 
 </body>
 
-
+</html>
 
 
