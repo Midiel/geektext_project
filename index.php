@@ -2,7 +2,6 @@
     //squelch undefined index error
     error_reporting( error_reporting() & ~E_NOTICE);
 
-    include('includes/header.php');
     require_once('includes/connect.inc.php');
     //flag to detect user's credentials
     $logged_in = false;
@@ -79,6 +78,7 @@
       }
 
       //Pagination Code
+  $path = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
   $pages_available = $counter / $DISPLAY_PER_PAGE;
   if($page == 1)
   {
@@ -144,12 +144,13 @@
     <title>Book Details Grid View</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php include("includes/navbar_libs.php"); ?>
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/rating.css">
-
 </head>
 
 <body>
+    <?php include_once("includes/navbar.php"); ?>
     <div class="container text-left" id="books">
         <div class="row">
             <?php if($last_page != true){
