@@ -1,8 +1,8 @@
 <?php
+  /* NOTE: Include "navbar_libs.php" in <head> for styles to properly apply. */
 
 	// Midiel: You meed the config/config.php file for this narvbar to function
   require_once('config/config.php');
-  require_once('header.php');
   require_once('includes/connect.inc.php');
 
   /* check if session has already started */
@@ -43,26 +43,36 @@ if (isset($token) && !empty($token))
   }
 
   //appending or replacing path
-  $path = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-  if(strpos($path,"?") > 0)
+  $on_homepage = !empty($path); // if '$path' exists, we are on homepage (index.php)
+  if ($on_homepage)
   {
-    $path .= "&";
+    if(strpos($path,"?") > 0)
+    {
+      $path .= "&";
+    }
+    else
+    {
+      $path .= "?";
+    }
+
+    //setting as active top sellers or New arrivals
+    if(strpos($path,"top_sellers=true") > 0)
+    {
+      $top_seller_link = '<li class="nav-item"><a class="nav-link active" href="?new_arrivals=true" >See our new arrivals</a> </li>';
+    }
+    else
+    {
+      $top_seller_link = '<li class="nav-item"><a class="nav-link active" href="?top_sellers=true">See our top sellers</a> </li>';
+    }
   }
-  else
+  else // do not add sorting to navbar
   {
-    $path .= "?";
+    // done to prevent errors
+    $path = "";
+    $top_seller_link = "";
   }
 
-  //setting as active top sellers or New arrivals
-  if(strpos($path,"top_sellers=true") > 0)
-  {
-    $top_seller_link = '<li class="nav-item"><a class="nav-link active" href="?new_arrivals=true" >See our new arrivals</a> </li>';
-  }
-  else
-  {
-    $top_seller_link = '<li class="nav-item"><a class="nav-link active" href="?top_sellers=true">See our top sellers</a> </li>';
-  }
-
+  if (empty($items_in_cart)) { $items_in_cart = ""; }// For debugging, delete later
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -90,10 +100,10 @@ if (isset($token) && !empty($token))
             </form>
 
         </ul>
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto" style="display: <?php echo $on_homepage ? "flex" : "none";?>">
             <?php echo $top_seller_link;?>
         </ul>
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto" style="display: <?php echo $on_homepage ? "flex" : "none";?>">
             <li class="nav-item">
                 <div class="dropdown">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
