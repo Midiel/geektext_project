@@ -2,6 +2,8 @@
 <?php
     //include('includes/header.php');
     require_once('includes/connect.inc.php');
+    include_once("includes/navbar_libs.php"); 
+    include_once("includes/navbar.php");
 
 	// hard code session token to 123 (user1) if session is not set, user not logged in
 	// if(!(isset($_SESSION['token']))) {
@@ -9,7 +11,8 @@
 	// };
 	//$_SESSION['token'] = '456';		//user2
 
-	//echo "session: ".$_SESSION['token']."<br>";
+    //echo "session: ".$_SESSION['token']."<br>";
+    
 
 	//print_r($_POST);
 	//echo "<br>";
