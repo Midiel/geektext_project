@@ -18,6 +18,23 @@ if(isset($_SESSION['token'])) {
         $query->execute();
         $query->close();
 
+        echo "
+            <div class=\"form-group\">
+                <input type=\"hidden\" name=\"book_id\" value=" . $_POST['book_id'] . ">
+                    <select class=\"form-control\" id=\"qty\" name=\"qty\">
+                        <option value=\"1\" selected=\"1\">1</option>
+                        <option value=\"2\">2</option>
+                        <option value=\"3\">3</option>
+                        <option value=\"4\">4</option>
+                        <option value=\"5\">5</option>
+                        <option value=\"6\">6</option>
+                        <option value=\"7\">7</option>
+                        <option value=\"8\">8</option>
+                        <option value=\"9\">9</option>
+                    </select>
+                    <button type=\"submit\" id=\"test\" name=\"add_to_cart\" value=\"true\" class=\"btn btn-primary btn-sm mt-1\" >ADD TO CART </button>                             
+                </div>";
+
     } else if(isset($_POST['changeQty'])) {
 
         echo "\nbook id: " . $_POST['book_id'];
