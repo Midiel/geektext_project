@@ -128,7 +128,7 @@ if (isset($token) && !empty($token))
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
             <?php echo $glyphicon_log_in;?>
-            <li class="nav-item"><a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart" id="nav-counter">  </span></a> </li>
+            <li class="nav-item" id="nav-counter"><a class="nav-link disabled" href="cart.php"><span class="fa fa-shopping-cart">  </span></a> </li>
 
         </ul>
 
@@ -154,19 +154,22 @@ if (isset($token) && !empty($token))
             });
         });
 
+        <?php if(isset($_SESSION['token'])) { ?>
+            // update cart counter
+            $.post("includes/cart_ajax.php",
+            {
+                update_nav: true
+                
+            })
+            .done(function (result, status, xhr) {
+                $("#nav-counter").html(result)
+            })
+            .fail(function (xhr, status, error) {
+                $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }); 
 
-        // update cart counter
-        $.post("includes/cart_ajax.php",
-        {
-            update_nav: true
-            
-        })
-        .done(function (result, status, xhr) {
-            $("#nav-counter").html(result)
-        })
-        .fail(function (xhr, status, error) {
-            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-        });
+        <?php } ?>
+        
     });
 
 </script>

@@ -6,6 +6,8 @@ require_once('connect.inc.php');
 
 //echo $_POST;
     
+if(isset($_SESSION['token'])) {
+
 
 
     if(isset($_POST['add_to_cart'])) {
@@ -81,10 +83,13 @@ require_once('connect.inc.php');
     
         if($result = mysqli_query($con, $query)) {
             while($row = mysqli_fetch_assoc($result)) {
-                echo " " . $row['number_of_items'];
+
+                echo "<a class=\"nav-link\" href=\"cart.php\"><span class=\"fa fa-shopping-cart\"> ". $row['number_of_items'] . "</span></a>";
+                //echo " " . $row['number_of_items'];
             }
         }
         
     }
+}
 
 ?>
