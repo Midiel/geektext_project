@@ -128,7 +128,7 @@ if (isset($token) && !empty($token))
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
             <?php echo $glyphicon_log_in;?>
-            <li class="nav-item"><a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart" id="nav-counter"> 0 </span></a> </li>
+            <li class="nav-item"><a class="nav-link" href="cart.php"><span class="fa fa-shopping-cart" id="nav-counter">  </span></a> </li>
 
         </ul>
 

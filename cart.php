@@ -13,7 +13,7 @@
 	// };
 	//$_SESSION['token'] = '456';		//user2
 
-    echo "session: ".$_SESSION['token']."<br>";
+    //echo "session: ".$_SESSION['token']."<br>";
     
 
 	//print_r($_POST);
@@ -307,11 +307,30 @@
 		})
 		.done(function (result, status, xhr) {
 			$("#subtotal").html(result)
+			updateNavbar();
 		})
 		.fail(function (xhr, status, error) {
 			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
 		});
-	}
+	};
+
+
+	// update cart counter
+	function updateNavbar(e) {
+
+		$.post("includes/cart_ajax.php",
+			{
+				update_nav: true
+				
+			})
+			.done(function (result, status, xhr) {
+				$("#nav-counter").html(result)
+			})
+			.fail(function (xhr, status, error) {
+				$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+			});
+	};
+	
 
 
 </script>

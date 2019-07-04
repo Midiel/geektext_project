@@ -247,9 +247,9 @@
                         </div>
 
                          <!-- Midiel: Add to cart button -->
-						  <form method="POST" action="cart.php">
+						  <form id="<?php echo $book[$i]['book_id'];?>" onsubmit="addToCart(); return false;">
 							<div class="form-group">
-							<input type="hidden" id="custId" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
+							<input type="hidden" id="<?php echo $book[$i]['book_id'];?>" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
 								<select class="form-control" id="qty" name="qty">
 									<option value="1" selected="1">1</option>
 									<option value="2">2</option>
@@ -261,10 +261,14 @@
 									<option value="8">8</option>
 									<option value="9">9</option>
 								</select>
-                                <button type="submit" name="add_to_cart" value="true" class="btn btn-primary btn-sm mt-1" >ADD TO CART </button>                             
+                                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-primary btn-sm mt-1" >ADD TO CART </button>                             
 							</div>
 						</form>
                         <!-- end add to cart -->
+
+                        <div class="modal-body" id="modales">
+                ...
+                        </div>
 
                     </article> <!-- "button-section" -->
                 </section> <!-- "card" -->
@@ -281,6 +285,138 @@
 
         </ul>
     </div>
+
+    <!-- Bootstrap modal to confirm add to cart -->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modales">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+    function addToCart(){
+
+        //e.preventDefault();
+
+        var thisid = event.target.id;
+
+        //window.alert(thisid);
+        var values = $("#"+thisid).serializeArray();
+
+         var inputs = {};
+         $.each(values, function(k, v){
+             inputs[v.name]= v.value;
+             window.alert(v.name + " " + v.value);
+         });
+
+
+         $.post("includes/cart_ajax.php",
+		{
+            add_to_cart: true,
+            book_id: inputs['book_id'],
+            qty: inputs['qty']
+		})
+		.done(function (result, status, xhr) {
+            //$("#"+thisid).html(result)
+            //$("#modales").html(result)
+            //updateSubtotal();
+            window.alert("worked");
+		})
+		.fail(function (xhr, status, error) {
+			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+		});
+
+        //test();
+        //window.alert("boo idddd: " + inputs['book_id']);
+
+        //window.alert("alert!!!");
+
+        //e.preventDefault();
+        // var thisid = event.target.id;
+        //window.alert(thisid);
+        //window.alert($("#"+thisid).val());
+
+        // var elements = $(this).elements;
+
+        
+
+        // let $input = $("#"+ thisid + " :input");
+        // var values = {};
+        // $inputs.each(function() {
+        //     values[this.name] = $(this).val();
+            
+        // });
+
+        // $.post("includes/test_ajax.php",
+		// {
+        //     book_id: inputs['book_id'],
+        //     qty: inputs['qty'],
+        //     //add_to_cart: inputs['add_to_cart'],
+        //     test: true
+		// 	//changeQty: $("#"+thisid).val()
+		// })
+		// .done(function (result, status, xhr) {
+        //     //$("#"+thisid).html(result)
+        //     $("#modales").html(result)
+		// 	//updateSubtotal();
+		// })
+		// .fail(function (xhr, status, error) {
+		// 	$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+		// });
+
+    }
+
+
+    function test() {
+        window.alert("inside test");
+        $.post("includes/test_ajax.php",
+		{
+            test: true
+		})
+		.done(function (result, status, xhr) {
+            //$("#"+thisid).html(result)
+            $("#modales").html(result)
+			//updateSubtotal();
+		})
+		.fail(function (xhr, status, error) {
+			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+		});
+    }
+    // $('#myForm').submit(function() {
+    //     // get all the inputs into an array.
+    //     var $inputs = $('#myForm :input');
+
+    //     // not sure if you wanted this, but I thought I'd add it.
+    //     // get an associative array of just the values.
+    //     var values = {};
+    //     $inputs.each(function() {
+    //         values[this.name] = $(this).val();
+    //     });
+
+    // });
+
+</script>
 
 </body>
 

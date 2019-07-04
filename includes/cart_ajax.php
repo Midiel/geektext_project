@@ -3,9 +3,20 @@
 session_start();
 require_once('connect.inc.php');
 //print_r($_POST);
+
+//echo $_POST;
     
 
-    if(isset($_POST['changeQty'])) {
+
+    if(isset($_POST['add_to_cart'])) {
+
+        // (token, book_id, qty)
+        $query = $con->prepare('CALL addToCart(?,?,?)');
+        $query->bind_param('sii', $_SESSION['token'], $_POST['book_id'], $_POST['qty']);
+        $query->execute();
+        $query->close();
+
+    } else if(isset($_POST['changeQty'])) {
 
         echo "\nbook id: " . $_POST['book_id'];
         
