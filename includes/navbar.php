@@ -11,13 +11,15 @@
   } 
 
   $logged_in = false;
-  //else {
-     //checking if there is a user logged in
+
+  if(isset($_SESSION['token'])) {
     $email = $_SESSION['email'];
     $token = $_SESSION['token'];
     $user_id = $_SESSION['user_id'];
-    //$logged_in = true;
-  //}
+    $logged_in = true;
+  }
+  
+  
 
   
 
@@ -154,22 +156,27 @@ if (isset($token) && !empty($token))
             });
         });
 
-        <?php if(isset($_SESSION['token'])) { ?>
-            // update cart counter
-            $.post("includes/cart_ajax.php",
-            {
-                update_nav: true
-                
-            })
-            .done(function (result, status, xhr) {
-                $("#nav-counter").html(result)
-            })
-            .fail(function (xhr, status, error) {
-                $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-            }); 
 
+        // update the cart counter
+        <?php if(isset($_SESSION['token'])) { ?>
+            updateCartCounter();
         <?php } ?>
-        
+  
     });
+
+    function updateCartCounter() {
+
+        $.post("includes/cart_ajax.php",
+        {
+            update_nav: true
+            
+        })
+        .done(function (result, status, xhr) {
+            $("#nav-counter").html(result)
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        }); 
+    }
 
 </script>

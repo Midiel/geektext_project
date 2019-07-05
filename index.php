@@ -261,7 +261,7 @@
 									<option value="8">8</option>
 									<option value="9">9</option>
 								</select>
-                                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-primary btn-sm mt-1" >ADD TO CART </button>                             
+                                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-primary btn-sm mt-1">ADD TO CART </button>                             
 							</div>
 						</form>
                         <!-- end add to cart -->
@@ -284,11 +284,11 @@
 
    
     <!-- Modal to show item was added to cart-->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="addedToCartModal" tabindex="-1" role="dialog" aria-labelledby="addedToCartModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Added to Shopping Cart</h5>
+                <h5 class="modal-title" id="addedToCartModalTitle">Added to Shopping Cart</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -304,38 +304,66 @@
         </div>
     </div>
 
+
+    <!-- Modal to show item was added to cart-->
+    <div class="modal fade" id="notLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="notLoggedInModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notLoggedInModalTitle">Not Logged In</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modales">
+                You need to be logged in to be able to add items to the shopping cart.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" onclick="javascript:window.location='login.php'">Log in</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="javascript:window.location='register.php'">Register</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
 <script>
 
     function addToCart(){
 
-        //e.preventDefault();
+        <?php if(!isset($_SESSION['token'])) { ?>
 
-        var thisid = event.target.id;
+            $("#notLoggedInModal").modal('show');
 
-        //window.alert(thisid);
-        var values = $("#"+thisid).serializeArray();
+        <?php } else { ?>
+        
+            var thisid = event.target.id;
 
-         var inputs = {};
-         $.each(values, function(k, v){
-             inputs[v.name]= v.value;
-             //window.alert(v.name + " " + v.value);
-         });
+            //window.alert(thisid);
+            var values = $("#"+thisid).serializeArray();
 
+            var inputs = {};
+            $.each(values, function(k, v){
+                inputs[v.name]= v.value;
+                //window.alert(v.name + " " + v.value);
+            });
 
-         $.post("includes/cart_ajax.php",
-		{
-            add_to_cart: true,
-            book_id: inputs['book_id'],
-            qty: inputs['qty']
-		})
-		.done(function (result, status, xhr) {
-            $("#"+thisid).html(result)
-            $("#exampleModalCenter").modal('show');
-		})
-		.fail(function (xhr, status, error) {
-			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-		});
+            $.post("includes/cart_ajax.php",
+            {
+                add_to_cart: true,
+                book_id: inputs['book_id'],
+                qty: inputs['qty']
+            })
+            .done(function (result, status, xhr) {
+                $("#"+thisid).html(result)
+                updateCartCounter();                        // it's in the navbar
+                $("#addedToCartModal").modal('show');
+                
+            })
+            .fail(function (xhr, status, error) {
+                $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            });
 
+        <?php } ?>
         //test();
         //window.alert("boo idddd: " + inputs['book_id']);
 
@@ -375,35 +403,6 @@
 		// });
 
     }
-
-
-    function test() {
-        window.alert("inside test");
-        $.post("includes/test_ajax.php",
-		{
-            test: true
-		})
-		.done(function (result, status, xhr) {
-            //$("#"+thisid).html(result)
-            $("#modales").html(result)
-			//updateSubtotal();
-		})
-		.fail(function (xhr, status, error) {
-			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-		});
-    }
-    // $('#myForm').submit(function() {
-    //     // get all the inputs into an array.
-    //     var $inputs = $('#myForm :input');
-
-    //     // not sure if you wanted this, but I thought I'd add it.
-    //     // get an associative array of just the values.
-    //     var values = {};
-    //     $inputs.each(function() {
-    //         values[this.name] = $(this).val();
-    //     });
-
-    // });
 
 </script>
 
