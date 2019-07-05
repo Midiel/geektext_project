@@ -34,7 +34,7 @@
                 $token = md5(rand(10,100000));
 
                 $query = "UPDATE user SET token = '$token' WHERE
-                    email = '$db_email'";                           // Midiel: Maybe change to user_id?
+                    user_id = '$db_user_id'";
                 mysqli_query($con, $query);
 
                 $_SESSION['token'] = $token;
