@@ -1,14 +1,14 @@
 
 <?php
 session_start();
-require_once('connect.inc.php');
+//require_once('connect.inc.php');
 //print_r($_POST);
 
 //echo $_POST;
     
 if(isset($_SESSION['token'])) {
 
-
+    require_once('connect.inc.php');
 
     if(isset($_POST['add_to_cart'])) {
 
@@ -106,6 +106,85 @@ if(isset($_SESSION['token'])) {
             }
         }
         
+    } else if(isset($_POST['verify_delete'])) {
+
+        $books_on_cart = array();
+        $image_url = "";
+        $title = "";
+        $author ="";
+
+        echo $_POST['book_id'];
+
+        $query = " SELECT image_url, title, authors FROM book WHERE book_id = '" . $_POST['book_id'] . "'";
+        //$query = "CALL getCart('" . $_SESSION['token'] . "')";
+
+        if($result = mysqli_query($con, $query)) {
+            while($row = mysqli_fetch_assoc($result)) {
+                echo mysqli_error($con);
+                array_push($books_on_cart, $row);
+            }
+        }
+
+        // Free Result
+        mysqli_free_result($result);
+
+        // Close Connection
+        mysqli_close($con);
+
+        foreach($books_on_cart as $book) :
+
+            $image_url = $book['image_url'];
+            $title = $book['title'];
+            $author = $book['authors'];
+
+
+        endforeach;
+
+
+        echo "
+            
+
+
+            <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">
+                <div class=\"modal-content\">
+                    <div class=\"modal-header\">
+                        <h5 class=\"modal-title\" id=\"verifyDeleteModalTitle\">Delete</h5>
+                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+                        <span aria-hidden=\"true\">&times;</span>
+                        </button>
+                    </div>
+                    <div class=\"modal-body\" id=\"verify_delete_modal\">
+
+
+                        <div class=\"container\">
+                            <div class=\"row\">
+                                <div class=\"col-sm-3\">
+                                    <img src=" . $image_url . " width=\"100\" height=\"100\" alt=\"...\" class=\"img-responsive\" style=\"float:left\" /> 
+                                </div>
+                                <div class=\"col-sm-9\">
+                                    <strong> Title</strong>: ".$title ."<br>
+                                    <strong> Author</strong>: ".$author ."<br><br>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        
+                        
+                        <p class=\"text-danger\"><br><strong>Are you sure you want to delete this book?</strong></p>
+                    </div>
+                    <div class=\"modal-footer\">
+                        
+
+                        <form name=\"delete-item\" method=\"POST\" action=\"cart.php\">
+                            <input type=\"hidden\" name=\"book_id\" value='" . $_POST['book_id'] ."'>
+                            <input type=\"hidden\" name=\"delete\" value=\"true\">
+                            <button type=\"submit\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>
+                            <input type=\"submit\" class=\"btn btn-danger\" value=\"Delete\">
+                        </form>
+                    </div>
+                </div>
+            </div>";
+
     }
 }
 

@@ -102,7 +102,7 @@
     ?>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shopping Cart</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    
 			
 </head>
 
@@ -143,14 +143,14 @@
 							</div>
 							<div class="row">
 								<div class="col-sm-2">
-									<form name="deleteForm" method="POST" action="cart.php">
+									<form name="deleteForm" id="<?php echo $book['book_id']; ?><br>" onsubmit="verifyDeletion(); return false;">
 										<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 										<input type="hidden" name="delete" value="true">
 										<input type="submit" class="btn btn-outline-danger btn-sm" value="Delete">
 									</form>
 								</div>
 								<div class="col-sm-4">
-									<form name="deleteForm" method="POST" action="cart.php">
+									<form name="saveForLaterForm" method="POST" action="cart.php">
 											<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 											<input type="hidden" name="save_for_later" value="true">
 											<input type="submit" class="btn btn-outline-secondary btn-sm" value="Save for Later">
@@ -275,6 +275,13 @@
 
 </div>
 
+
+	<!-- Modal to verify deletion-->
+	<div class="modal fade" id="verifyDeleteModal" tabindex="-1" role="dialog" aria-labelledby="verifyDeleteModalTitle" aria-hidden="true">
+
+    </div>
+
+
 <script>
 
 	// change number of items/qty
@@ -293,11 +300,6 @@
 		.fail(function (xhr, status, error) {
 			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
 		});
-
-
-
-		
-
 	};
 
 	function updateSubtotal(e) {
@@ -320,7 +322,8 @@
 
 		$.post("includes/cart_ajax.php",
 			{
-				update_nav: true
+				update_nav: true,
+				damn: true
 				
 			})
 			.done(function (result, status, xhr) {
@@ -330,6 +333,25 @@
 				$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
 			});
 	};
+
+	function verifyDeletion(e) {
+
+		var thisid = event.target.id;
+
+		$.post("includes/cart_ajax.php",
+		{
+			book_id: thisid,
+			verify_delete: true
+		})
+		.done(function (result, status, xhr) {
+			$("#verifyDeleteModal").html(result);
+			$("#verifyDeleteModal").modal('show');
+			//updateSubtotal();
+		})
+		.fail(function (xhr, status, error) {
+			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+		});
+	}
 	
 
 
