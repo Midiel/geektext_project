@@ -199,7 +199,7 @@
 	<div class="row justify-content-between">
 		<div class="col-4">
 			<td>
-				<a href="index.php" class="btn btn-warning btn-sm">
+				<a href="index.php" class="btn btn-success btn-sm">
 					<i class="fa fa-angle-left"></i> Continue Shopping</a></td>
 					<td colspan="2" class="hidden-xs"></td>
 		</div>

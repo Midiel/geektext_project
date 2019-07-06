@@ -261,7 +261,7 @@
 									<option value="8">8</option>
 									<option value="9">9</option>
 								</select>
-                                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-primary btn-sm mt-1">ADD TO CART </button>                             
+                                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-success btn-sm mt-1">ADD TO CART </button>                             
 							</div>
 						</form>
                         <!-- end add to cart -->
@@ -285,27 +285,11 @@
    
     <!-- Modal to show item was added to cart-->
     <div class="modal fade" id="addedToCartModal" tabindex="-1" role="dialog" aria-labelledby="addedToCartModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addedToCartModalTitle">Added to Shopping Cart</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modales">
-                Your book was added to your shopping cart!!!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-dismiss="modal">Continue Shopping</button>
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="javascript:window.location='cart.php'">Go to Shopping Cart</button>
-            </div>
-            </div>
-        </div>
+
     </div>
 
 
-    <!-- Modal to show item was added to cart-->
+    <!-- Modal for not logged in-->
     <div class="modal fade" id="notLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="notLoggedInModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -328,6 +312,7 @@
 
 <script>
 
+    // add items to the cart
     function addToCart(){
 
         <?php if(!isset($_SESSION['token'])) { ?>
@@ -356,7 +341,8 @@
             .done(function (result, status, xhr) {
                 $("#"+thisid).html(result)
                 updateCartCounter();                        // it's in the navbar
-                $("#addedToCartModal").modal('show');
+                addToCartModal(inputs);
+                //$("#addedToCartModal").modal('show');
                 
             })
             .fail(function (xhr, status, error) {
@@ -364,45 +350,29 @@
             });
 
         <?php } ?>
-        //test();
-        //window.alert("boo idddd: " + inputs['book_id']);
+    }
 
-        //window.alert("alert!!!");
 
-        //e.preventDefault();
-        // var thisid = event.target.id;
-        //window.alert(thisid);
-        //window.alert($("#"+thisid).val());
+    // show modal for add to cart
+    function addToCartModal(inputs) {
 
-        // var elements = $(this).elements;
-
-        
-
-        // let $input = $("#"+ thisid + " :input");
-        // var values = {};
-        // $inputs.each(function() {
-        //     values[this.name] = $(this).val();
-            
-        // });
-
-        // $.post("includes/test_ajax.php",
-		// {
-        //     book_id: inputs['book_id'],
-        //     qty: inputs['qty'],
-        //     //add_to_cart: inputs['add_to_cart'],
-        //     test: true
-		// 	//changeQty: $("#"+thisid).val()
-		// })
-		// .done(function (result, status, xhr) {
-        //     //$("#"+thisid).html(result)
-        //     $("#modales").html(result)
-		// 	//updateSubtotal();
-		// })
-		// .fail(function (xhr, status, error) {
-		// 	$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-		// });
+        $.post("includes/cart_ajax.php",
+            {
+                add_to_cart_modal: true,
+                book_id: inputs['book_id'],
+                qty: inputs['qty']
+            })
+            .done(function (result, status, xhr) {
+                $("#addedToCartModal").html(result);
+                $("#addedToCartModal").modal('show');
+                                
+            })
+            .fail(function (xhr, status, error) {
+                $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            });
 
     }
+
 
 </script>
 
