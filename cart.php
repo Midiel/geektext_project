@@ -102,6 +102,7 @@
     ?>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shopping Cart</title>
+	
     
 			
 </head>
@@ -110,13 +111,11 @@
 <body>
     
 
-
-<br><br><br>
 <div class="container">
 
 <!-- Display the shopping cart -->
-<div class="container" id="all">
-	<table class="table-responsive">
+<div class="container mt-5 pb-5" id="all">
+	<table class="table">
 		<thead>
 			<tr>
 			<th scope="col" width="15%" class="text-left"><h5>Shopping Cart</h5></th>
@@ -137,19 +136,19 @@
 						<div class="container" >
 							<div class="row">
 								<div class="col">
-									Title: <?php echo $book['title']; ?><br>
-									Author: <?php echo $book['authors']; ?><br><br>
+									<strong>Title</strong>: <?php echo $book['title']; ?><br>
+									<strong>Author</strong>: <?php echo $book['authors']; ?><br><br>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-sm-2">
+							<div class="row d-flex justify-content-start">
+								<div class="p-2">
 									<form name="deleteForm" id="<?php echo $book['book_id']; ?><br>" onsubmit="verifyDeletion(); return false;">
 										<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 										<input type="hidden" name="delete" value="true">
 										<input type="submit" class="btn btn-outline-danger btn-sm" value="Delete">
 									</form>
 								</div>
-								<div class="col-sm-4">
+								<div class="p-2">
 									<form name="saveForLaterForm" method="POST" action="cart.php">
 											<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 											<input type="hidden" name="save_for_later" value="true">
@@ -193,15 +192,17 @@
 		<?php } endforeach; ?>
 	</table>
 
-	<br>
+	
 
 	<!-- Continue shopping and subtotal line -->
 	<div class="row justify-content-between">
 		<div class="col-4">
 			<td>
 				<a href="index.php" class="btn btn-success btn-sm">
-					<i class="fa fa-angle-left"></i> Continue Shopping</a></td>
-					<td colspan="2" class="hidden-xs"></td>
+					<i class="fa fa-angle-left"></i> Continue Shopping
+				</a>
+			</td>
+			<td colspan="2" class="hidden-xs"></td>
 		</div>
 		<div class="col-3" id="subtotal">
 			<strong>Subtotal (<?php echo $num_items;
@@ -213,14 +214,25 @@
 									?></strong> $<?php echo $subtotal;?>
 		</div>
   	</div>
+	
+	<!-- Go to checkout button -->
+	<div class="row justify-content-end">
+		<div class="col-3">
+		<td>
+				<a href="checkout.php" class="btn btn-warning btn-sm">
+					<i class="fa fa-angle-left"></i> Proceed to checkout
+				</a>
+			</td>
+		</div>
+	</div>
 </div>
 
-<br><br><br><br><br>
+
 
 
 <!-- Start of Saved for Later list -->
 <br>
-<div class="container">
+<div class="container mt-5">
 	<table class="table">
 	<thead>
 		<tr>
@@ -242,19 +254,19 @@
 				<div class="container" >
 					<div class="row">
 						<div class="col">
-							Title: <?php echo $book['title']; ?><br>
-							Author: <?php echo $book['authors']; ?><br><br>
+							<strong>Title</strong>: <?php echo $book['title']; ?><br>
+							<strong>Author</strong>: <?php echo $book['authors']; ?><br><br>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-sm-2">
+					<div class="row d-flex justify-content-start">
+						<div class="p-2">
 							<form name="deleteForm" method="POST" action="cart.php">
 								<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 								<input type="hidden" name="delete" value="true">
 								<input type="submit" class="btn btn-outline-danger btn-sm" value="Delete">
 							</form>
 						</div>
-						<div class="col-sm-4">
+						<div class="p-1">
 							<form name="deleteForm" method="POST" action="cart.php">
 									<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
 									<input type="hidden" name="move_to_cart" value="true">
