@@ -66,7 +66,7 @@
     {
           $book[$counter]['book_id']= $row['book_id'];
           $book[$counter]['title']= $row['title'];
-          $book[$counter]['author']= $row['author'];
+          $book[$counter]['author']= $row['authors'];
           $book[$counter]['image_url']= $row['image_url'];
           $book[$counter]['bio']= $row['bio'];
           $book[$counter]['description']= $row['description'];
@@ -261,7 +261,7 @@
 									<option value="8">8</option>
 									<option value="9">9</option>
 								</select>
-                                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-success btn-sm mt-1">ADD TO CART </button>                             
+                                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-success btn-sm mt-1">ADD TO CART </button>
 							</div>
 						</form>
                         <!-- end add to cart -->
@@ -282,7 +282,7 @@
         </ul>
     </div>
 
-   
+
     <!-- Modal to show item was added to cart-->
     <div class="modal fade" id="addedToCartModal" tabindex="-1" role="dialog" aria-labelledby="addedToCartModalTitle" aria-hidden="true">
 
@@ -320,7 +320,7 @@
             $("#notLoggedInModal").modal('show');
 
         <?php } else { ?>
-        
+
             var thisid = event.target.id;
 
             //window.alert(thisid);
@@ -343,7 +343,7 @@
                 updateCartCounter();                        // it's in the navbar
                 addToCartModal(inputs);
                 //$("#addedToCartModal").modal('show');
-                
+
             })
             .fail(function (xhr, status, error) {
                 $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
@@ -365,7 +365,7 @@
             .done(function (result, status, xhr) {
                 $("#addedToCartModal").html(result);
                 $("#addedToCartModal").modal('show');
-                                
+
             })
             .fail(function (xhr, status, error) {
                 $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)

@@ -8,7 +8,7 @@
     session_start();
     $logged_in = false;
 
-  } 
+  }
 
   $logged_in = false;
 
@@ -18,10 +18,10 @@
     $user_id = $_SESSION['user_id'];
     $logged_in = true;
   }
-  
-  
 
-  
+
+
+
 
 if (isset($token) && !empty($token))
 {
@@ -118,7 +118,7 @@ if (isset($token) && !empty($token))
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="<?php echo $path.'sort_by=title';?>">Title</a>
-                        <a class="dropdown-item" href="<?php echo $path.'sort_by=author';?>">Author</a>
+                        <a class="dropdown-item" href="<?php echo $path.'sort_by=authors';?>">Author</a>
                         <a class="dropdown-item" href="<?php echo $path.'sort_by=price';?>">Price</a>
                         <a class="dropdown-item" href="<?php echo $path.'sort_by=average_rating';?>">Rating</a>
                         <a class="dropdown-item" href="<?php echo $path.'sort_by=published_date';?>">Release Date</a>
@@ -161,7 +161,7 @@ if (isset($token) && !empty($token))
         <?php if(isset($_SESSION['token'])) { ?>
             updateCartCounter();
         <?php } ?>
-  
+
     });
 
     function updateCartCounter() {
@@ -169,14 +169,14 @@ if (isset($token) && !empty($token))
         $.post("includes/cart_ajax.php",
         {
             update_nav: true
-            
+
         })
         .done(function (result, status, xhr) {
             $("#nav-counter").html(result)
         })
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-        }); 
+        });
     }
 
 </script>
