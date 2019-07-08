@@ -160,7 +160,7 @@
             }
               for($i = 0; $i < $looping; $i++): ?>
 
-            <div id="parent-card" class="col-xs col-sm-6 col-md-4 col-lg-3 col-xl-3 flex-container">
+            <div id="parent-card" class="col-xs col-sm-6 col-md-4 col-lg-3 col-xl-3 flex-container mb-3">
                 <section class="card">
                     <article class="image-section">
                         <a class="img-thumbnail">
@@ -248,7 +248,7 @@
 
                          <!-- Midiel: Add to cart button -->
 						  <form id="<?php echo $book[$i]['book_id'];?>" onsubmit="addToCart(); return false;">
-							<div class="form-group">
+							<div class="form-group mt-2">
 							<input type="hidden" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
 								<select class="form-control" id="qty" name="qty">
 									<option value="1" selected="1">1</option>

@@ -199,7 +199,7 @@
 		<div class="col-4">
 			<td>
 				<a href="index.php" class="btn btn-success btn-sm">
-					<i class="fa fa-angle-left"></i> Continue Shopping
+					 Continue Shopping
 				</a>
 			</td>
 			<td colspan="2" class="hidden-xs"></td>
@@ -220,7 +220,7 @@
 		<div class="col-3">
 		<td>
 				<a href="checkout.php" class="btn btn-warning btn-sm">
-					<i class="fa fa-angle-left"></i> Proceed to checkout
+					 Proceed to checkout
 				</a>
 			</td>
 		</div>
