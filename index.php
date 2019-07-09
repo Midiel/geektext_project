@@ -9,6 +9,7 @@
     $DISPLAY_PER_ROW = 3;
     $top_sellers = false;
     $sorting = false;
+    $order == false;
 
 
     //sorting value
@@ -17,7 +18,10 @@
       $sort_by = $_GET['sort_by'];
       $sorting = true;
     }
-
+    if ($sort_by == 'average_rating_des')
+    {
+      $order = true;
+    }
 
     //Pagination Code
     if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] != 1)
@@ -36,9 +40,6 @@
     }
 
 
-
-
-
     //Displaying books
     $book = array(array());
     $counter = 0;
@@ -53,14 +54,24 @@
     {
       $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY book_id DESC LIMIT $display_from, $display_to";
     }
-    else if ($top_sellers == true && $sorting == true)
+    else if ($top_sellers == true && $sorting == true && $order == false)
     {
       $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
     }
-    else if ($top_sellers == false && $sorting == true)
+    else if ($top_sellers == false && $sorting == true && $order == false)
     {
       $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
     }
+    else if ($top_sellers == true && $sorting == true && $order == true)
+    {
+      $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+    }
+    else if ($top_sellers == false && $sorting == true && $order == true)
+    {
+      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+    }
+
+
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {
@@ -79,6 +90,15 @@
 
       //Pagination Code
   $path = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+  //appending or replacing path
+  if(strpos($path,"?") > 0)
+  {
+    $path .= "&";
+  }
+  else
+  {
+    $path .= "?";
+  }
   $pages_available = $counter / $DISPLAY_PER_PAGE;
   if($page == 1)
   {
@@ -190,6 +210,9 @@
                             <!--end star-rating-stars -->
                             <div class="star-rating-aside">
                                 (&thinsp;5&thinsp;)
+                            </div>
+                            <div class="text-right" style="font-size:12px;">
+                              <?php echo '$'.$book[$i]['price'];?>
                             </div>
                         </div>
                         <!--end star-rating -->

@@ -120,8 +120,9 @@ if (isset($token) && !empty($token))
                         <a class="dropdown-item" href="<?php echo $path.'sort_by=title';?>">Title</a>
                         <a class="dropdown-item" href="<?php echo $path.'sort_by=authors';?>">Author</a>
                         <a class="dropdown-item" href="<?php echo $path.'sort_by=price';?>">Price</a>
-                        <a class="dropdown-item" href="<?php echo $path.'sort_by=average_rating';?>">Rating</a>
                         <a class="dropdown-item" href="<?php echo $path.'sort_by=published_date';?>">Release Date</a>
+                        <a class="dropdown-item" href="<?php echo $path.'sort_by=average_rating';?>">Rating in Ascending Order</a>
+                        <a class="dropdown-item" href="<?php echo $path.'sort_by=average_rating_des';?>">Rating in Descending Order</a>
                     </div>
                 </div>
             </li>
