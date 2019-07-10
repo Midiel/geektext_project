@@ -6,6 +6,8 @@
 
     $shippingInfo = array();
 
+    print_r("token" . $_SESSION['token']);
+
     //$query = " SELECT image_url, title, authors FROM book WHERE book_id = '" . $book_id ."'";
     //$query = "CALL getCart('" . $_SESSION['token'] . "')";
 
@@ -84,16 +86,30 @@
         }
 
         // Free Result
-        mysqli_free_result($result);
+        //mysqli_free_result($result);
 
         // Close Connection
-        mysqli_close($con);
+        //mysqli_close($con);
 
 
 
-    // get cart subtotal
-
+    // get cart subtotal, not working, needs to be fixed
+    $query = "CALL getCartQty('" . $_SESSION['token'] . "')";
+    //print_r("token" . $_SESSION['token']);
     
+    $num_items = 0;
+    if($result = mysqli_query($con, $query)) {
+        print_r("here");
+        while($row = mysqli_fetch_assoc($result)) {
+            $num_items = $row['number_of_items'];
+            print_r("lets see " . $row['number_of_items']);
+            //echo "<a class=\"nav-link\" href=\"cart.php\"><span class=\"fa fa-shopping-cart\"> ". $row['number_of_items'] . "</span></a>";
+            //echo " " . $row['number_of_items'];
+        }
+    }
+
+    // Close Connection
+    mysqli_close($con);
 
 
 ?>
@@ -237,8 +253,6 @@
                 </div>
 
 
-
-
             </div>     <!-- end of left column -->
 
             <div class="border border-info col-sm-4">         <!-- right column -->
@@ -246,7 +260,7 @@
 
                 <div class="row">
                     <div class="d-flex border border-info col-7">
-                        Items:<br>
+                        Items (<?php echo $_SESSION['cart_qty']; ?>):<br>
                         Shipping:<br>
                         Subtotal:<br>
                         Tax:<br>
