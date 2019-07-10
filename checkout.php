@@ -8,9 +8,6 @@
 
     //print_r("token" . $_SESSION['token']);
 
-    //$query = " SELECT image_url, title, authors FROM book WHERE book_id = '" . $book_id ."'";
-    //$query = "CALL getCart('" . $_SESSION['token'] . "')";
-
     $query = "SELECT f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
 
     if($result = mysqli_query($con, $query)) {
@@ -19,8 +16,6 @@
             array_push($shippingInfo, $row);
         }
     }
-
-    //print_r($bookInfo);
 
     // Free Result
     mysqli_free_result($result);
@@ -37,18 +32,12 @@
     endforeach;
 
 
-    
-
-
     //print_r($info[0]['street_address']);
-
-    //return $info;
 
 
     // get card info
-
     $cards = array();
-    $query = "SELECT type, credit_card.nickname FROM credit_card, user WHERE credit_card.user_id = user.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
+    $query = "SELECT type, credit_card.nickname, number FROM credit_card, user WHERE credit_card.user_id = user.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
 
     if($result = mysqli_query($con, $query)) {
         while($row = mysqli_fetch_assoc($result)) {
@@ -72,6 +61,8 @@
     $counter2 = 0;
     foreach($cards as $book) :
         $card[$counter2] = $book;
+        $card[$counter2]['number'] = $card[$counter2]['number'] % 10000;
+        //echo "last 4: " .$card[$counter2]['number'];
         $counter2++;
         //print_r($card);
     endforeach;
@@ -117,7 +108,7 @@
         print_r("here");
         while($row = mysqli_fetch_assoc($result)) {
             $num_items = $row['number_of_items'];
-            print_r("lets see " . $row['number_of_items']);
+            //print_r("lets see " . $row['number_of_items']);
             //echo "<a class=\"nav-link\" href=\"cart.php\"><span class=\"fa fa-shopping-cart\"> ". $row['number_of_items'] . "</span></a>";
             //echo " " . $row['number_of_items'];
         }
@@ -176,15 +167,15 @@
                     <div class="border border-info col-3">
                         <h5>Shipping address</h5>
                     </div>
-                    <div class="border border-info col-sm-6">
-                        <strong>Address</strong> <br>
+                    <div class="border border-info col-sm-6 pt-1 pb-1">
+                        
                         <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
                         <?php echo $info[0]['street_address'];?> <br>
                         <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
 
                         
                     </div>
-                    <div class="border border-info col-sm-2">
+                    <div class="border border-info col-sm-2 pt-1 pb-1">
                         <strong>Change</strong>
                     </div>
 
@@ -197,13 +188,13 @@
                     <div class="border border-info col-sm-3">
                         <h5>Payment method</h5>
                     </div>
-                    <div class="border border-info col-sm-6">
-                        <strong>Card info</strong><br>
-                        <?php echo $card[0]['type'];?> <br>
-                        <?php echo $card[0]['nickname'];?> <br>
+                    <div class="border border-info col-sm-6 pt-1 pb-1">
+                        
+                        <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
+                        <strong>Nickname</strong>: <?php echo $card[0]['nickname'];?> <br>
 
                     </div>
-                    <div class="border border-info col-sm-2">
+                    <div class="border border-info col-sm-2 pt-1 pb-1">
                         <strong>Change</strong>
                     </div>
 
@@ -220,7 +211,7 @@
                         <?php foreach($books_on_cart as $book) :
 			                if(!$book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
 
-                            <div class="row border">
+                            <div class="row border m-1 mt-3">
                                 <div class="border border-info col-sm-3">
                                     <img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive"/>
 
