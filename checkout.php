@@ -6,7 +6,7 @@
 
     $shippingInfo = array();
 
-    print_r("token" . $_SESSION['token']);
+    //print_r("token" . $_SESSION['token']);
 
     //$query = " SELECT image_url, title, authors FROM book WHERE book_id = '" . $book_id ."'";
     //$query = "CALL getCart('" . $_SESSION['token'] . "')";
@@ -36,6 +36,10 @@
         //print_r($info);
     endforeach;
 
+
+    
+
+
     //print_r($info[0]['street_address']);
 
     //return $info;
@@ -61,6 +65,9 @@
     // Close Connection
     //mysqli_close($con);
 
+
+    
+
     $card = array();
     $counter2 = 0;
     foreach($cards as $book) :
@@ -71,6 +78,8 @@
 
     //print_r($card[0]);
 
+    
+
 
     // gets all items in the cart
 
@@ -80,22 +89,28 @@
 
         if($result = mysqli_query($con, $query)) {
             while($row = mysqli_fetch_assoc($result)) {
-                echo mysqli_error($con);
+                //echo mysqli_error($con);
                 array_push($books_on_cart, $row);
             }
         }
 
         // Free Result
-        //mysqli_free_result($result);
+        mysqli_free_result($result);
 
         // Close Connection
         //mysqli_close($con);
 
 
 
+
+
     // get cart subtotal, not working, needs to be fixed
     $query = "CALL getCartQty('" . $_SESSION['token'] . "')";
-    //print_r("token" . $_SESSION['token']);
+    //print_r(" \ntoken2" . $_SESSION['token']);
+
+    //print_r("session qty: " . $_SESSION['cart_qty']);
+
+    //$query = "SELECT SUM(qty) as number_of_items FROM cart WHERE saved_for_later = 0 AND cart.user_id IN (SELECT user_id FROM user WHERE user.token = 'f6fb5f43c0789a732e94555ff64bff3e'";
     
     $num_items = 0;
     if($result = mysqli_query($con, $query)) {
@@ -110,6 +125,8 @@
 
     // Close Connection
     mysqli_close($con);
+
+    //print_r("token3" . $_SESSION['token']);
 
 
 ?>
@@ -150,7 +167,7 @@
         <div class="row border">       <!-- only one row -->
            
             <div class="border border-info col-sm-8">         <!-- left column begins -->
-                left column
+             
 
                 <div class="row border">        <!-- row 1 begins -->
                     <div class="border border-info col-1">
@@ -255,12 +272,12 @@
 
             </div>     <!-- end of left column -->
 
-            <div class="border border-info col-sm-4">         <!-- right column -->
+            <div id="num_items" class="border border-info col-sm-4">         <!-- right column -->
                 Order Summary here
 
                 <div class="row">
-                    <div class="d-flex border border-info col-7">
-                        Items (<?php echo $_SESSION['cart_qty']; ?>):<br>
+                    <div id="num_items" class="d-flex border border-info col-7">
+                        Items ():<br>
                         Shipping:<br>
                         Subtotal:<br>
                         Tax:<br>
@@ -279,11 +296,11 @@
                 </div>
 
                 <div class="border border-warning row">
-                    <div class="d-flex border border-info col-7">
+                    <div class="d-flex border border-info col-8">
                         <h5 class="mt-3">Order total:</h5>
                     </div>
 
-                    <div class="d-flex border border-info col-5">
+                    <div class="d-flex border border-info col-4">
                         <p>
                             <h5 class="mt-3 text-right">$96.22</h5>
                         </p>
@@ -314,6 +331,16 @@
 
 <script>
 
+    $(document).ready(function() {
+
+        getNumItems();
+
+
+
+    });
+
+
+    
 	// change number of items/qty
 	function changeqty(e) {
 		var thisid = event.target.id;
@@ -325,7 +352,9 @@
 		})
 		.done(function (result, status, xhr) {
 			$("#"+thisid).html(result)
-			updateSubtotal();
+			//updateSubtotal();
+            getNumItems();
+
 		})
 		.fail(function (xhr, status, error) {
 			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
@@ -382,6 +411,22 @@
 			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
 		});
 	}
+
+
+    function getNumItems() {
+
+        $.post("includes/checkout_ajax.php",
+        {
+            get_num_items: true
+
+        })
+        .done(function (result, status, xhr) {
+            $("#num_items").html(result)
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+    }
 	
 
 
