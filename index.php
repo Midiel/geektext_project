@@ -40,35 +40,68 @@
     }
 
 
+
     //Displaying books
     $book = array(array());
     $counter = 0;
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
-    //determine query
-    if ($top_sellers == true && $sorting == false)
+
+    //Search code
+    if (isset($_POST['search']) && !empty($_POST['search']))
     {
-      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC LIMIT $display_from, $display_to";
+      $search = $_POST['search'];
+      $search_array = explode(': ', $search);
+      if(count($search_array) == 1)
+      {
+        $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' ORDER BY book_id DESC LIMIT $display_from, $display_to";
+      }
+      else
+      {
+        $search_by = $search_array[0];
+        $search_for = $search_array[1];
+        if ($search_by == 'Title')
+        {
+          $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' ORDER BY title DESC LIMIT $display_from, $display_to";
+        }
+        else if ($search_by == 'Author')
+        {
+          $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' ORDER BY authors DESC LIMIT $display_from, $display_to";
+        }
+        else
+        {
+          $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' ORDER BY category DESC LIMIT $display_from, $display_to";
+        }
+      }
     }
-    else if ($top_sellers == false && $sorting == false)
+    else
     {
-      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY book_id DESC LIMIT $display_from, $display_to";
-    }
-    else if ($top_sellers == true && $sorting == true && $order == false)
-    {
-      $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
-    }
-    else if ($top_sellers == false && $sorting == true && $order == false)
-    {
-      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
-    }
-    else if ($top_sellers == true && $sorting == true && $order == true)
-    {
-      $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY average_rating DESC LIMIT $display_from, $display_to";
-    }
-    else if ($top_sellers == false && $sorting == true && $order == true)
-    {
-      $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+
+        //determine query
+        if ($top_sellers == true && $sorting == false)
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == false)
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY book_id DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == true && $sorting == true && $order == false)
+        {
+          $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == true && $order == false)
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == true && $sorting == true && $order == true)
+        {
+          $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == true && $order == true)
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+        }
     }
 
 
@@ -88,7 +121,7 @@
           $counter++;
       }
 
-      //Pagination Code
+      //Pagination algorithm
   $path = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
   //appending or replacing path
   if(strpos($path,"?") > 0)

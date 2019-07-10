@@ -93,10 +93,10 @@ if (isset($token) && !empty($token))
             <li class="nav-item active">
                 <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
             </li>
-            <form class="form-inline my-2 my-lg-0">
-                <input list="search_list" class="form-control mr-sm-2" id="search" placeholder="Search">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="http://yasmanisubirat.com/cen4010/index.php">
+                <input list="search_list" class="form-control mr-sm-2" id="search" name="search" placeholder="Search">
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                <datalist id="search_list">
+                <datalist id="search_list" name="search2" >
                     <option id="op1">
                     <option id="op2">
                     <option id="op3">
