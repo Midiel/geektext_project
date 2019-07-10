@@ -21,7 +21,7 @@ body {
     display: flex;
     flex-direction: column;
     /*    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);*/
-    height: 480px;
+    height: 560px;
     width: 100%;
     background: #aaa;
     color: #ffffff;
