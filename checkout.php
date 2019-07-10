@@ -2,6 +2,13 @@
 <?php 
 
     session_start();
+
+    If(!isset($_SESSION['token'])){
+        header("Location: login.php");
+        exit;
+    }
+
+
     require_once('includes/connect.inc.php');
 
     $shippingInfo = array();
@@ -90,9 +97,6 @@
 
         // Close Connection
         //mysqli_close($con);
-
-
-
 
 
     // get cart subtotal, not working, needs to be fixed
