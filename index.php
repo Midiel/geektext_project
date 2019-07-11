@@ -109,29 +109,30 @@
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {
-          $book[$counter]['book_id']= $row['book_id'];
-          $book[$counter]['title']= $row['title'];
-          $temp_author_array = explode(',', $row['authors']);
-          $book[$counter]['author'] = '';
-          for($i = 0; $i < count($temp_author_array); $i++)
+        $book[$counter]['book_id']= $row['book_id'];
+        $book[$counter]['title']= $row['title'];
+        $temp_author_array = explode(',', $row['authors']);
+        $book[$counter]['author'] = '';
+        for($i = 0; $i < count($temp_author_array); $i++)
+        {
+          if($i == (count($temp_author_array) - 1))
           {
-            if($i == (count($temp_author_array) - 1))
-            {
-              $book[$counter]['author'] .= '<a href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
-            }else {
-              $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
-            }
+            $book[$counter]['author'] .= '<a href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
+          }else {
+            $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
           }
+        }
 
-          $book[$counter]['rating'] = set_stars($row['average_rating']);
-          $book[$counter]['image_url']= $row['image_url'];
-          $book[$counter]['bio']= $row['bio'];
-          $book[$counter]['description']= $row['description'];
-          $book[$counter]['price']= $row['price'];
-          $book[$counter]['published_date']= $row['published_date'];
-          $book[$counter]['sales']= $row['sales'];
-          $book[$counter]['category']= $row['category'];
-          $counter++;
+        $book[$counter]['count'] = $row['rating_count'];
+        $book[$counter]['rating'] = set_stars($row['average_rating']);
+        $book[$counter]['image_url']= $row['image_url'];
+        $book[$counter]['bio']= $row['bio'];
+        $book[$counter]['description']= $row['description'];
+        $book[$counter]['price']= $row['price'];
+        $book[$counter]['published_date']= $row['published_date'];
+        $book[$counter]['sales']= $row['sales'];
+        $book[$counter]['category']= $row['category'];
+        $counter++;
       }
 
       //Pagination algorithm
@@ -221,7 +222,7 @@ function set_stars($start_double)
 
   }
 
-  return $result . ' ' .$start_double;
+  return $result;
 }
 
 ?>
@@ -266,20 +267,14 @@ function set_stars($start_double)
               </div>
             </div>
           </article>
-
-          <article>
-            <div class="star-rating">
-              <div class="star-rating-stars">
-                <?php echo $book[$i]['rating'];?>
-              </div>
-              <!--end star-rating-stars -->
-              <div class="text-right" style="font-size:12px;">
-                <?php echo '$'.$book[$i]['price'];?>
-              </div>
+          <article class="star-rating">
+            <div class="stars">
+              <?php echo $book[$i]['rating']. ' ('.$book[$i]['count'] . ')';?>
             </div>
-            <!--end star-rating -->
+            <div class="price">
+              <?php echo '$'.$book[$i]['price'];?>
+            </div>
           </article>
-
           <article class="info-section">
             <div class="title-container">
               <h2 class="title"><?php echo $book[$i]['title'];?></h2>
@@ -333,7 +328,7 @@ function set_stars($start_double)
 
             <!-- Midiel: Add to cart button -->
             <form id="<?php echo $book[$i]['book_id'];?>" onsubmit="addToCart(); return false;">
-              <div class="form-group mt-2">
+              <div class="form-group btn-quantity">
                 <input type="hidden" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
                 <select class="form-control" id="qty" name="qty">
                   <option value="1" selected="1">1</option>
@@ -346,7 +341,7 @@ function set_stars($start_double)
                   <option value="8">8</option>
                   <option value="9">9</option>
                 </select>
-                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-success btn-sm mt-1">ADD TO CART </button>
+                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-default btn-sm">ADD TO CART </button>
               </div>
             </form>
             <!-- end add to cart -->

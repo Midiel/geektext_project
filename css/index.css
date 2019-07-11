@@ -10,7 +10,8 @@ body {
 .container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 50px;
+  margin-bottom: 25px;
+  margin-top: 25px;
 }
 
 .card {
@@ -35,7 +36,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  min-height: 48%;
+  min-height: 42%;
   background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, 0));
 
 }
@@ -51,6 +52,24 @@ img {
   height: auto;
 }
 
+.star-rating {
+  display: flex;
+  flex-basis: auto;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: initial;
+  margin: 10px 40px;
+  letter-spacing: .01em;
+}
+
+.stars {
+  color: gold;
+}
+
+.price {
+  font-size: .8em;
+}
+
 .info-section {
   display: flex;
   flex-basis: auto;
@@ -59,9 +78,9 @@ img {
   flex: auto;
   margin: 10px 40px;
   letter-spacing: .01em;
-
-
 }
+
+
 
 .title {
   font-size: .8em;
@@ -110,8 +129,29 @@ img {
   font-weight: 800;
 }
 
-.cart-button {
-  width: 60%;
+.btn-quantity {
   font-size: .7em;
   font-weight: 800;
+  margin-top: 10px;
+}
+
+.btn-default {
+  font-size: .7em;
+  font-weight: 800;
+  margin-top: 10px;
+  background-color: #31b4fa;
+  color: #FFF;
+  border-color: #2F3E48;
+
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+
+  background-color: #005eff;
+  color: #FFF;
+  border-color: #262626;
 }
