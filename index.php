@@ -250,7 +250,7 @@
             }
               for($i = 0; $i < $looping; $i++): ?>
 
-      <div class="col-xs col-sm-12 col-md-6 col-lg-4 col-xl-2">
+      <div class="col-xs col-sm-4 col-md-3 col-lg-2 col-xl-2">
         <section class="card">
           <article class="image-section">
             <a class="img-thumbnail">
