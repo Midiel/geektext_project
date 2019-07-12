@@ -173,17 +173,27 @@
                     <div class="border border-info col-3">
                         <h5>Shipping address</h5>
                     </div>
-                    <div class="border border-info col-sm-6 pt-1 pb-1">
-                        
-                        <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
-                        <?php echo $info[0]['street_address'];?> <br>
-                        <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
+                    <div id="address_field" class="border border-danger col-8">
+                        <div class="row borader">
+                            <div id="selected_address" class="border border-info col-sm-9 ">
+                                
+                                <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
+                                <?php echo $info[0]['street_address'];?> <br>
+                                <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
+
+                                
+                            </div>
+                            <div class="border border-info col-sm-3 pt-1 pb-1">
+                                <input type="submit" class="btn btn-link" onclick="changeAddress(); return false" value="Change">
+                                
+                            </div>
+                        </div>
 
                         
+
                     </div>
-                    <div class="border border-info col-sm-2 pt-1 pb-1">
-                        <strong>Change</strong>
-                    </div>
+
+                    
 
                 </div>
 
@@ -323,6 +333,12 @@
 
     </div>
 
+
+    <div id="change_address" class="container border border-primary mt-5 pt-5 pb-5">
+        
+        
+    </div>
+
      
 </body>
 
@@ -354,6 +370,7 @@
     $(document).ready(function() {
 
         getNumItems();
+        //changeAddress();
 
 
     
@@ -467,6 +484,46 @@
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
+    }
+
+
+    function changeAddress(){
+        $.post("includes/checkout_ajax.php",
+        {
+            change_shipping_address: true
+
+        })
+        .done(function (result, status, xhr) {
+            $("#address_field").html(result)
+            //$("#change_address").html(result)
+            
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+    }
+
+    function updateAddress(){
+
+        var selection = $('#address_selector input:radio:checked').val();
+
+
+        $.post("includes/checkout_ajax.php",
+        {
+            update_address: true,
+            address: selection
+
+        })
+        .done(function (result, status, xhr) {
+            $("#selected_address").html(result)
+            //$("#change_address").html(result)
+            
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+
+
     }
 	
 
