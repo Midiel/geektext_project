@@ -188,16 +188,10 @@
                                 
                             </div>
                         </div>
-
-                        
-
                     </div>
-
-                    
-
                 </div>
 
-                <div class="row border">        <!-- row 2 begins -->
+                <div class="row border">        <!-- row 2 begins, payment method -->
                     <div class="border border-info col-sm-1">
                         <h5>2</h5>
                     </div>
@@ -260,23 +254,13 @@
                                             <input type="hidden" name="change_qty" value="true">
                                         </form>
                                         </div>
-
                                     </div>
-
                                 </div>
-
-
                             </div>
-
                         <?php } endforeach; ?>
 
-
                     </div>
-                   
-
                 </div>
-
-
             </div>     <!-- end of left column -->
 
             <div id="num_items" class="border border-info col-sm-4">         <!-- right column -->
@@ -319,27 +303,17 @@
                     <div class="border border-info col-sm align-self-end">
 
                         <button id="submit_order" class="btn btn-default btn-block btn-warning mt-2 mb-2" onclick="orderConfirmation(); return false;" type="submit">Checkout</button>
-
-                        
-                        
+                   
                     </div>
                 </div>
-
-
-            </div>
-        
+            </div>      
         </div>
-            
-
     </div>
-
 
     <div id="change_address" class="container border border-primary mt-5 pt-5 pb-5">
-        
-        
-    </div>
+             
+    </div>   
 
-     
 </body>
 
 <script>
@@ -503,10 +477,10 @@
         });
     }
 
+
     function updateAddress(){
 
         var selection = $('#address_selector input:radio:checked').val();
-
 
         $.post("includes/checkout_ajax.php",
         {
@@ -515,7 +489,8 @@
 
         })
         .done(function (result, status, xhr) {
-            $("#selected_address").html(result)
+            $("#address_field").html(result)
+            //$("#selected_address").html(result)
             //$("#change_address").html(result)
             
         })

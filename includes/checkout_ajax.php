@@ -122,51 +122,84 @@ if(isset($_SESSION['token'])) {
             }
         }
 
+        echo "
+            <form id=\"address_selector\">
+                <div class=\"form-group\">
+                    <label class=\"control-label\">
+                        <p class=\"text-center\"><h6>Select an address</h6></p>
+                    </label>
+      
+        ";
+
 
         $info = array();
         $counter = 0;
         foreach($shippingInfo as $book) :
             $info[$counter] = $book;
 
-            echo "         
-                <div class=\"row border p-2\" id=\"address_selector\">       <!-- only one row -->
+            echo "
+                <div class=\"row border p-2\" id=\"address_selector\">
                     <div class=\"form-check\">
-                        <input class=\"form-check-input\" type=\"radio\" name=\"exampleRadios\" id=\"exampleRadios1\" value=" . $counter . ">
-                        <label class=\"form-check-label\" for=\"exampleRadios1\">
-                        <p>
+                        <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . ">
+                        <label>
+                            
+                            <p>
 
-                        ". $info[$counter]['f_name'] . ", ". $info[$counter]['l_name'] . "<br>
-                        ". $info[$counter]['street_address'] . "<br>
-                        ". $info[$counter]['city'] . ", ". $info[$counter]['state'] . " ". $info[$counter]['zip_code'] . "<br>
-                        </p>
+                            ". $info[$counter]['f_name'] . ", ". $info[$counter]['l_name'] . "<br>
+                            ". $info[$counter]['street_address'] . "<br>
+                            ". $info[$counter]['city'] . ", ". $info[$counter]['state'] . " ". $info[$counter]['zip_code'] . "<br>
+
+                            </p>
                         </label>
                     </div>
                 </div>
-                
-            ";
+
+                ";
 
             $counter++;
             //print_r($info);
         endforeach;
 
+        // save list of addresses to gloaval variable to be used later
+        $_SESSION['addresses'] = $info;
+
+
         echo "
-            <div class=\"row border p-2\" id=\"selection\">
-                <div class=\"d-flex justify-content-center\">
-
-                    <button type=\"submit\" id=\"change_address_button\" onclick=\"updateAddress(); return false\" name=\"submit_address\" class=\"btn btn-default btn-block btn-warning mt-2 mb-2\">Submit </button>
-                
-                </div>
-                
-
+            <div class=\"form-group\"> <!-- Submit button !-->
+                <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateAddress(); return false\">Use this address</button>
             </div>
-            
+        </form>
+        
         
         ";
 
 
     } else if(isset($_POST['update_address'])) {
 
-        print_r($_POST);
+        //print_r($_POST);
+
+        $selection = $_POST['address'];
+
+
+        echo "
+            <div class=\"row borader\">
+                <div id=\"selected_address\" class=\"border border-info col-sm-9 \">
+
+                <p>
+                    
+                    ". $_SESSION['addresses'][$selection]['f_name'] . ", " . $_SESSION['addresses'][$selection]['l_name'] . "<br>
+                    ". $_SESSION['addresses'][$selection]['street_address'] . "<br>
+                    ". $_SESSION['addresses'][$selection]['city'] . ", " . $_SESSION['addresses'][$selection]['state'] . " " . $_SESSION['addresses'][$selection]['zip_code'] ."
+
+                   </p> 
+                </div>
+                <div class=\"border border-info col-sm-3 pt-1 pb-1\">
+                    <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeAddress(); return false\" value=\"Change\">
+                    
+                </div>
+            </div>
+        
+        ";
 
     }
 
