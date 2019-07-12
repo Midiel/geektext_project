@@ -117,9 +117,9 @@
         {
           if($i == (count($temp_author_array) - 1))
           {
-            $book[$counter]['author'] .= '<a href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
+            $book[$counter]['author'] .= '<a id="author" style="color:white;text-decoration: underline" href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
           }else {
-            $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
+            $book[$counter]['author'] .= '<a style="color:white;text-decoration:underline" href="#" onmouseover="" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
           }
         }
 
@@ -236,7 +236,7 @@ function set_stars($start_double)
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php include("includes/navbar_libs.php"); ?>
   <link rel="stylesheet" type="text/css" href="css/index.css">
-  <link rel="stylesheet" type="text/css" href="css/rating.css">
+  <script src="js/image.js"></script>
 </head>
 
 <body>
@@ -250,8 +250,22 @@ function set_stars($start_double)
             }
               for($i = 0; $i < $looping; $i++): ?>
 
-      <div id="parent-card" class="col-xs col-sm-6 col-md-4 col-lg-3 col-xl-3 flex-container mb-3">
+      <div class="col-xs col-sm-12 col-md-6 col-lg-4 col-xl-2">
         <section class="card">
+          <div class="image-section">
+            <a class='img-thumbnail' href="#">
+              <img src="<?php echo $book[$i]['image_url'];?>">
+            </a>
+          </div>
+          <div class="modal fade">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              </div>
+            </div>
+          </div>
+
+
+          <!--
           <article class="image-section">
             <a class="img-thumbnail">
               <img src="<?php echo $book[$i]['image_url'];?>">
@@ -267,14 +281,22 @@ function set_stars($start_double)
               </div>
             </div>
           </article>
+-->
+
+
+
           <article class="star-rating">
-            <div class="stars">
-              <?php echo $book[$i]['rating']. ' ('.$book[$i]['count'] . ')';?>
-            </div>
+
             <div class="price">
               <?php echo '$'.$book[$i]['price'];?>
             </div>
-          </article>
+
+            <div class="stars">
+              <?php echo $book[$i]['rating']. ' ('.$book[$i]['count'].')';?>
+            </div>
+
+          </article><!-- end of stars section -->
+
           <article class="info-section">
             <div class="title-container">
               <h2 class="title"><?php echo $book[$i]['title'];?></h2>
@@ -285,7 +307,7 @@ function set_stars($start_double)
             <div class="category-container">
               <h3 class="category"><?php echo $book[$i]['category'];?></h3>
             </div>
-          </article> <!-- "info-section" -->
+          </article> <!-- end of info section -->
 
           <article class="button-section">
             <button id="description-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#description<?php echo $i ?>ModalLong">
