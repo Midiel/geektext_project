@@ -76,8 +76,6 @@ if(isset($_SESSION['token'])) {
                 <div class=\"border border-info row\">
                     <div class=\"border border-info col-sm align-self-end\">
 
-                        
-
                         <button id=\"submit_order\" class=\"btn btn-default btn-block btn-warning mt-2 mb-2\" onclick=\"orderConfirmation(); return false;\" type=\"submit\">Checkout</button>
                         
                     </div>
@@ -108,6 +106,68 @@ if(isset($_SESSION['token'])) {
                 
             </div>
             ";
+
+    } else if(isset($_POST['change_shipping_address'])) {
+
+        $shippingInfo = array();
+
+        //print_r("token" . $_SESSION['token']);
+
+        $query = "SELECT f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
+
+        if($result = mysqli_query($con, $query)) {
+            while($row = mysqli_fetch_assoc($result)) {
+                //echo mysqli_error($con);
+                array_push($shippingInfo, $row);
+            }
+        }
+
+
+        $info = array();
+        $counter = 0;
+        foreach($shippingInfo as $book) :
+            $info[$counter] = $book;
+
+            echo "         
+                <div class=\"row border p-2\" id=\"address_selector\">       <!-- only one row -->
+                    <div class=\"form-check\">
+                        <input class=\"form-check-input\" type=\"radio\" name=\"exampleRadios\" id=\"exampleRadios1\" value=" . $counter . ">
+                        <label class=\"form-check-label\" for=\"exampleRadios1\">
+                        <p>
+
+                        ". $info[$counter]['f_name'] . ", ". $info[$counter]['l_name'] . "<br>
+                        ". $info[$counter]['street_address'] . "<br>
+                        ". $info[$counter]['city'] . ", ". $info[$counter]['state'] . " ". $info[$counter]['zip_code'] . "<br>
+                        </p>
+                        </label>
+                    </div>
+                </div>
+                
+            ";
+
+            $counter++;
+            //print_r($info);
+        endforeach;
+
+        echo "
+            <div class=\"row border p-2\" id=\"selection\">
+                <div class=\"d-flex justify-content-center\">
+
+                    <button type=\"submit\" id=\"change_address_button\" onclick=\"updateAddress(); return false\" name=\"submit_address\" class=\"btn btn-default btn-block btn-warning mt-2 mb-2\">Submit </button>
+                
+                </div>
+                
+
+            </div>
+            
+        
+        ";
+
+
+    } else if(isset($_POST['update_address'])) {
+
+        print_r($_POST);
+
     }
 
 }
