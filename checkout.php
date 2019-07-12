@@ -3,13 +3,15 @@
 
     session_start();
 
-    If(!isset($_SESSION['token'])){
+    require_once('includes/connect.inc.php');
+
+    if(!isset($_SESSION['token'])){
         header("Location: login.php");
         exit;
-    }
+    } 
 
 
-    require_once('includes/connect.inc.php');
+
 
     $shippingInfo = array();
 
@@ -158,7 +160,7 @@
 
 
 
-    <div class="container border border-primary mt-5 pt-5 pb-5">
+    <div id="main_div" class="container border border-primary mt-5 pt-5 pb-5">
         <div class="row border">       <!-- only one row -->
            
             <div class="border border-info col-sm-8">         <!-- left column begins -->
@@ -306,9 +308,9 @@
                 <div class="border border-info row">
                     <div class="border border-info col-sm align-self-end">
 
-                        <a href="checkout.php" class="btn btn-default btn-block btn-warning mt-2 mb-2">
-                            Checkout
-                        </a>
+                        <button id="submit_order" class="btn btn-default btn-block btn-warning mt-2 mb-2" onclick="orderConfirmation(); return false;" type="submit">Checkout</button>
+
+                        
                         
                     </div>
                 </div>
@@ -320,20 +322,64 @@
             
 
     </div>
-        
 
+     
 </body>
 
 <script>
+
+    document.getElementById("submit_order").addEventListener("click", function(){
+
+        document.getElementById("main_div").innerHTML = trigered;
+
+        $.post("includes/checkout_ajax.php",
+        {
+            order_confirmation: true
+            
+        })
+        .done(function (result, status, xhr) {
+            $("#main_div").html(result)
+            //updateSubtotal();
+            //getNumItems();
+
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+
+
+
+    });
 
     $(document).ready(function() {
 
         getNumItems();
 
 
-
+    
     });
 
+
+
+
+    // order confirmation
+    function orderConfirmation(e){
+
+        $.post("includes/checkout_ajax.php",
+        {
+            order_confirmation: true
+            
+        })
+        .done(function (result, status, xhr) {
+            $("#main_div").html(result)
+            //updateSubtotal();
+            //getNumItems();
+
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+    }
 
     
 	// change number of items/qty

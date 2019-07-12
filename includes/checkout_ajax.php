@@ -76,9 +76,9 @@ if(isset($_SESSION['token'])) {
                 <div class=\"border border-info row\">
                     <div class=\"border border-info col-sm align-self-end\">
 
-                        <a href=\"checkout.php\" class=\"btn btn-default btn-block btn-warning mt-2 mb-2\">
-                            Checkout
-                        </a>
+                        
+
+                        <button id=\"submit_order\" class=\"btn btn-default btn-block btn-warning mt-2 mb-2\" onclick=\"orderConfirmation(); return false;\" type=\"submit\">Checkout</button>
                         
                     </div>
                 </div>
@@ -90,21 +90,27 @@ if(isset($_SESSION['token'])) {
         }
     
 
+    } else if(isset($_POST['order_confirmation'])){
+
+        
+        $query = $con->prepare('CALL emptyCart(?)');
+		$query->bind_param('s', $_SESSION['token']);
+		$query->execute();
+		$query->close();
+        
+        echo "
+            <div class=\"border border-warning row\">
+                <h5>Order Confirmation</h5>
+            </div>
+
+            <div class=\"border border-info row\">
+                <p>Your order is confirmed!!!<br>Please sit tight and wait for it ;)</p><br>
+                
+            </div>
+            ";
     }
 
-
-
-
-
-    
-
 }
-
-
-
-
-
-
 
 
 
