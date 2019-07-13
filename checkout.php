@@ -84,24 +84,30 @@
     
 
 
-    // gets all items in the cart
+    // gets all items in the cart. Move to checkout_ajax.php
 
     $books_on_cart = array();
 
     $query = "CALL getCart('" . $_SESSION['token'] . "')";
 
-        if($result = mysqli_query($con, $query)) {
-            while($row = mysqli_fetch_assoc($result)) {
-                //echo mysqli_error($con);
-                array_push($books_on_cart, $row);
-            }
+    if($result = mysqli_query($con, $query)) {
+        while($row = mysqli_fetch_assoc($result)) {
+            //echo mysqli_error($con);
+            array_push($books_on_cart, $row);
         }
+    }
 
-        // Free Result
-        mysqli_free_result($result);
+    // Free Result
+    mysqli_free_result($result);
 
-        // Close Connection
-        //mysqli_close($con);
+    // Close Connection
+    //mysqli_close($con);
+
+
+    // set gloval variable for books in for checkout. I need to move this query to checkout_ajax.php
+    $_SESSION['checkout_books'] = $books_on_cart;
+
+
 
 
     // get cart subtotal, not working, needs to be fixed
@@ -312,10 +318,7 @@
             </div>      
         </div>
     </div>
-
-    <div id="change_address" class="container border border-primary mt-5 pt-5 pb-5">
-             
-    </div>   
+  
 
 </body>
 
@@ -482,7 +485,7 @@
 
     function updateAddress(){
 
-        var selection = $('#card_selector input:radio:checked').val();
+        var selection = $('#address_selector input:radio:checked').val();
 
         $.post("includes/checkout_ajax.php",
         {
