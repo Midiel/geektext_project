@@ -40,6 +40,12 @@
         //print_r($info);
     endforeach;
 
+    // set gloval variable for address
+    if(!isset($_SESSION['shipping_address'])){
+        $_SESSION['shipping_address'] = $info[0];
+    }
+    
+
 
     //print_r($info[0]['street_address']);
 
@@ -79,11 +85,17 @@
     // save list of cards to global variable
     $_SESSION['cards'] = $card;
 
+    
+
+    // set gloval variable for checkout card
+    if(!isset($_SESSION['chechout_card'])){
+        $_SESSION['chechout_card'] = $_SESSION['cards'][0];
+    }
+
+
     //print_r($card[0]);
 
     
-
-
     // gets all items in the cart. Move to checkout_ajax.php
 
     $books_on_cart = array();
