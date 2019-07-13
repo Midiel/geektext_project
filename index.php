@@ -1,7 +1,6 @@
 <?php
     //squelch undefined index error
     error_reporting( error_reporting() & ~E_NOTICE);
-
     require_once('includes/connect.inc.php');
     //flag to detect user's credentials
     $logged_in = false;
@@ -11,8 +10,6 @@
     $sorting = false;
     $order == false;
     $temp_author_array = array();
-
-
     //sorting value
     if (isset($_GET['sort_by']) && !empty($_GET['sort_by']))
     {
@@ -23,7 +20,6 @@
     {
       $order = true;
     }
-
     //Pagination Code
     if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] != 1)
     {
@@ -33,21 +29,16 @@
     {
       $page = 1;
     }
-
     //top sellers
     if ($_GET['top_sellers'] == 'true' || $_SESSION['top_sellers'] == 'true')
     {
       $top_sellers = true;
     }
-
-
-
     //Displaying books
     $book = array(array());
     $counter = 0;
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
-
     //Search code
     if (isset($_POST['search']) && !empty($_POST['search']))
     {
@@ -77,7 +68,6 @@
     }
     else
     {
-
         //determine query
         if ($top_sellers == true && $sorting == false)
         {
@@ -104,8 +94,6 @@
           $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY average_rating DESC LIMIT $display_from, $display_to";
         }
     }
-
-
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {
@@ -122,7 +110,6 @@
               $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
             }
           }
-
           $book[$counter]['rating'] = set_stars($row['average_rating']);
           $book[$counter]['image_url']= $row['image_url'];
           $book[$counter]['bio']= $row['bio'];
@@ -133,7 +120,6 @@
           $book[$counter]['category']= $row['category'];
           $counter++;
       }
-
       //Pagination algorithm
   $path = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
   //appending or replacing path
@@ -172,7 +158,6 @@
       $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page='.($page + 1).'">'.($page + 1).'</a></li>';
       $pagination .= '<li class="page-item"><a class="page-link" href="'.$path.'page='.($page + 1).'">Next</a></li>';
   }
-
   //updating pagination when reach the end of the books
   $last_page = false;
   if($counter < ($DISPLAY_PER_PAGE + 1))
@@ -200,16 +185,14 @@
     }
     $last_page = true;
   }
-
   function set_stars($start_double)
   {
     $result = '';
-
     for($i = 0; $i < 5; $i++)
     {
       if($i <= ($start_double - 1))
       {
-        $result .= '<i class="fa fa-star" style="color:yellow;"></i>';
+        $result .= '<i class="fa fa-star" style="color:yellow;" onclick="window.location.href=cart.php"></i>';
       }
       else if($start_double > $i)
       {
@@ -220,259 +203,238 @@
         $result .= '<i class="fa fa-star-o" style="color:yellow;"></i>';
       }
     }
-
     return $result.' '.$start_double;
   }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Book Details Grid View</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php include("includes/navbar_libs.php"); ?>
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="stylesheet" type="text/css" href="css/rating.css">
+  <title>Book Details Grid View</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?php include("includes/navbar_libs.php"); ?>
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link rel="stylesheet" type="text/css" href="css/rating.css">
+  <script src="js/indexThumbnails.js"></script>
 </head>
 
 <body>
-    <?php include_once("includes/navbar.php"); ?>
-    <div class="container text-left" id="books">
-        <div class="row">
-            <?php if($last_page != true){
+  <?php include_once("includes/navbar.php"); ?>
+  <div class="container text-left" id="books">
+    <div class="row">
+      <?php if($last_page != true){
               $looping = $DISPLAY_PER_PAGE;
             }else {
               $looping = sizeof($book);
             }
               for($i = 0; $i < $looping; $i++): ?>
 
-            <div id="parent-card" class="col-xs col-sm-6 col-md-4 col-lg-3 col-xl-3 flex-container mb-3">
-                <section class="card">
-                    <article class="image-section">
-                        <a class="img-thumbnail">
-                            <img src="<?php echo $book[$i]['image_url'];?>">
-                        </a>
-                        <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                        <img src="" class="imagepreview" style="width: 100%;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article>
-                        <div class="star-rating">
-                            <div class="star-rating-stars">
-                                <?php echo $book[$i]['rating'];?>
-                            </div>
-
-                            <div class="text-right" style="font-size:12px;">
-                              <?php echo '$'.$book[$i]['price'];?>
-                            </div>
-                        </div>
-                        <!--end star-rating -->
-                    </article>
-
-                    <article class="info-section">
-                        <div class="title-container">
-                            <h2 class="title"><?php echo $book[$i]['title'];?></h2>
-                        </div>
-                        <div class="author-container">
-                            <h2 class="author"><?php echo $book[$i]['author'];?></h2>
-                        </div>
-                        <div class="category-container">
-                            <h3 class="category"><?php echo $book[$i]['category'];?></h3>
-                        </div>
-                    </article> <!-- "info-section" -->
-
-                    <article class="button-section">
-                        <button id="description-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#description<?php echo $i ?>ModalLong">
-                            Book Description
-                        </button>
-                        <div class="modal fade" id="description<?php echo $i ?>ModalLong" tabindex="-1" role="dialog" aria-labelledby="description<?php echo $i ?>ModalLongTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document" id="description<?php echo $i ?>ModalLong">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="descriptionModalLongTitle"><?php echo $book[$i]['title'] ?> by <?php echo $book[$i]['author']?></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php echo $book[$i]['description'];?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button id="authorbio-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#authorbioModalLong">
-                            Author Bio
-                        </button>
-                        <div class="modal fade" id="authorbioModalLong" tabindex="-1" role="dialog" aria-labelledby="authorbioModalLongTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="authorbioModalLongTitle">Author Bio</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php echo $book[$i]['bio'];?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                         <!-- Midiel: Add to cart button -->
-						  <form id="<?php echo $book[$i]['book_id'];?>" onsubmit="addToCart(); return false;">
-							<div class="form-group mt-2">
-							<input type="hidden" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
-								<select class="form-control" id="qty" name="qty">
-									<option value="1" selected="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-									<option value="5">5</option>
-									<option value="6">6</option>
-									<option value="7">7</option>
-									<option value="8">8</option>
-									<option value="9">9</option>
-								</select>
-                                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-success btn-sm mt-1">ADD TO CART </button>
-							</div>
-						</form>
-                        <!-- end add to cart -->
-
-                    </article> <!-- "button-section" -->
-                </section> <!-- "card" -->
-            </div> <!-- column end -->
-            <?php endfor; ?>
-        </div> <!-- row end -->
-    </div> <!-- section end -->
-
-    <!--page navegation-->
-    <div class="container">
-        <ul class="pagination justify-content-center">
-
-            <?php echo $pagination; ?>
-
-        </ul>
-    </div>
-
-
-    <!-- Modal to show item was added to cart-->
-    <div class="modal fade" id="addedToCartModal" tabindex="-1" role="dialog" aria-labelledby="addedToCartModalTitle" aria-hidden="true">
-
-    </div>
-
-
-    <!-- Modal for not logged in-->
-    <div class="modal fade" id="notLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="notLoggedInModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="notLoggedInModalTitle">Not Logged In</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+      <div class="col-xs col-sm-4 col-md-3 col-lg-2 col-xl-2">
+        <section class="card">
+          <article class="image-section">
+            <a class="img-thumbnail">
+              <img src="<?php echo $book[$i]['image_url'];?>">
+            </a>
+            <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <img src="" class="imagepreview" style="width: 100%;">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="modal-body" id="modales">
-                You need to be logged in to be able to add items to the shopping cart.
+          </article>
+
+          <article>
+            <div class="star-rating">
+              <div class="star-rating-stars">
+                <?php echo $book[$i]['rating'];?>
+              </div>
+
+              <div class="text-right" style="font-size:12px;">
+                <?php echo '$'.$book[$i]['price'];?>
+              </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-dismiss="modal" onclick="javascript:window.location='login.php'">Log in</button>
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="javascript:window.location='register.php'">Register</button>
+            <!--end star-rating -->
+          </article>
+
+          <article class="info-section">
+            <div class="title-container">
+              <h2 class="title"><?php echo $book[$i]['title'];?></h2>
             </div>
+            <div class="author-container">
+              <h2 class="author"><?php echo $book[$i]['author'];?></h2>
             </div>
+            <div class="category-container">
+              <h3 class="category"><?php echo $book[$i]['category'];?></h3>
+            </div>
+          </article> <!-- "info-section" -->
+
+          <article class="button-section">
+            <button id="description-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#description<?php echo $i ?>ModalLong">
+              Book Description
+            </button>
+            <div class="modal fade" id="description<?php echo $i ?>ModalLong" tabindex="-1" role="dialog" aria-labelledby="description<?php echo $i ?>ModalLongTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document" id="description<?php echo $i ?>ModalLong">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="descriptionModalLongTitle"><?php echo $book[$i]['title'] ?> by <?php echo $book[$i]['author']?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <?php echo $book[$i]['description'];?>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button id="authorbio-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#authorbioModalLong">
+              Author Bio
+            </button>
+            <div class="modal fade" id="authorbioModalLong" tabindex="-1" role="dialog" aria-labelledby="authorbioModalLongTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="authorbioModalLongTitle">Author Bio</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <?php echo $book[$i]['bio'];?>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Midiel: Add to cart button -->
+            <form id="<?php echo $book[$i]['book_id'];?>" onsubmit="addToCart(); return false;">
+              <div class="form-group mt-2">
+                <input type="hidden" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
+                <select class="form-control" id="qty" name="qty">
+                  <option value="1" selected="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-success btn-sm mt-1">ADD TO CART </button>
+              </div>
+            </form>
+            <!-- end add to cart -->
+
+          </article> <!-- "button-section" -->
+        </section> <!-- "card" -->
+      </div> <!-- column end -->
+      <?php endfor; ?>
+    </div> <!-- row end -->
+  </div> <!-- section end -->
+
+  <!--page navegation-->
+  <div class="container">
+    <ul class="pagination justify-content-center">
+
+      <?php echo $pagination; ?>
+
+    </ul>
+  </div>
+
+
+  <!-- Modal to show item was added to cart-->
+  <div class="modal fade" id="addedToCartModal" tabindex="-1" role="dialog" aria-labelledby="addedToCartModalTitle" aria-hidden="true">
+
+  </div>
+
+
+  <!-- Modal for not logged in-->
+  <div class="modal fade" id="notLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="notLoggedInModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notLoggedInModalTitle">Not Logged In</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body" id="modales">
+          You need to be logged in to be able to add items to the shopping cart.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal" onclick="javascript:window.location='login.php'">Log in</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" onclick="javascript:window.location='register.php'">Register</button>
+        </div>
+      </div>
     </div>
+  </div>
 
 
 
-    <!--hidden post -->
-    <form id="hidden_form" method="POST" action="index.php">
-      <input type="hidden" name="search" id="hidden_search" value="">
-    </form>
-    <p id="test"></p>
-<script>
-
+  <!--hidden post -->
+  <form id="hidden_form" method="POST" action="index.php">
+    <input type="hidden" name="search" id="hidden_search" value="">
+  </form>
+  <p id="test"></p>
+  <script>
     // add items to the cart
-    function addToCart(){
-
-        <?php if(!isset($_SESSION['token'])) { ?>
-
-            $("#notLoggedInModal").modal('show');
-
-        <?php } else { ?>
-
-            var thisid = event.target.id;
-
-            //window.alert(thisid);
-            var values = $("#"+thisid).serializeArray();
-
-            var inputs = {};
-            $.each(values, function(k, v){
-                inputs[v.name]= v.value;
-                //window.alert(v.name + " " + v.value);
-            });
-
-            $.post("includes/cart_ajax.php",
-            {
-                add_to_cart: true,
-                book_id: inputs['book_id'],
-                qty: inputs['qty']
-            })
-            .done(function (result, status, xhr) {
-                $("#"+thisid).html(result)
-                updateCartCounter();                        // it's in the navbar
-                addToCartModal(inputs);
-                //$("#addedToCartModal").modal('show');
-
-            })
-            .fail(function (xhr, status, error) {
-                $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-            });
-
-        <?php } ?>
+    function addToCart() {
+      <?php if(!isset($_SESSION['token'])) { ?>
+      $("#notLoggedInModal").modal('show');
+      <?php } else { ?>
+      var thisid = event.target.id;
+      //window.alert(thisid);
+      var values = $("#" + thisid).serializeArray();
+      var inputs = {};
+      $.each(values, function(k, v) {
+        inputs[v.name] = v.value;
+        //window.alert(v.name + " " + v.value);
+      });
+      $.post("includes/cart_ajax.php", {
+          add_to_cart: true,
+          book_id: inputs['book_id'],
+          qty: inputs['qty']
+        })
+        .done(function(result, status, xhr) {
+          $("#" + thisid).html(result)
+          updateCartCounter(); // it's in the navbar
+          addToCartModal(inputs);
+          //$("#addedToCartModal").modal('show');
+        })
+        .fail(function(xhr, status, error) {
+          $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+      <?php } ?>
     }
-
-
     // show modal for add to cart
     function addToCartModal(inputs) {
-
-        $.post("includes/cart_ajax.php",
-            {
-                add_to_cart_modal: true,
-                book_id: inputs['book_id'],
-                qty: inputs['qty']
-            })
-            .done(function (result, status, xhr) {
-                $("#addedToCartModal").html(result);
-                $("#addedToCartModal").modal('show');
-
-            })
-            .fail(function (xhr, status, error) {
-                $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-            });
-
+      $.post("includes/cart_ajax.php", {
+          add_to_cart_modal: true,
+          book_id: inputs['book_id'],
+          qty: inputs['qty']
+        })
+        .done(function(result, status, xhr) {
+          $("#addedToCartModal").html(result);
+          $("#addedToCartModal").modal('show');
+        })
+        .fail(function(xhr, status, error) {
+          $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
     }
-
-
     //hidden author's Code
-    function get_author(author)
-    {
+    function get_author(author) {
       document.getElementById('hidden_search').value = author;
       document.getElementById('hidden_form').submit();
     }
-</script>
+  </script>
 
 </body>
 
