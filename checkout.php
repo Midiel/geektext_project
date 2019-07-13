@@ -76,6 +76,9 @@
         //print_r($card);
     endforeach;
 
+    // save list of cards to global variable
+    $_SESSION['cards'] = $card;
+
     //print_r($card[0]);
 
     
@@ -180,12 +183,10 @@
                                 <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
                                 <?php echo $info[0]['street_address'];?> <br>
                                 <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
-
-                                
+          
                             </div>
                             <div class="border border-info col-sm-3 pt-1 pb-1">
-                                <input type="submit" class="btn btn-link" onclick="changeAddress(); return false" value="Change">
-                                
+                                <input type="submit" class="btn btn-link" onclick="changeAddress(); return false" name="change_shipping" value="Change">                   
                             </div>
                         </div>
                     </div>
@@ -198,16 +199,18 @@
                     <div class="border border-info col-sm-3">
                         <h5>Payment method</h5>
                     </div>
-                    <div class="border border-info col-sm-6 pt-1 pb-1">
-                        
-                        <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
-                        <strong>Nickname</strong>: <?php echo $card[0]['nickname'];?> <br>
-
+                    <div id="card_field" class="border border-danger col-8">
+                        <div class="row borader">
+                            <div id="selected_card" class="border border-info col-sm-9 ">
+                                <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
+                                <strong>Nickname</strong>: <?php echo $card[0]['nickname'];?> <br>
+                            </div>
+                            <div class="border border-info col-sm-3 pt-1 pb-1">
+                                <input type="submit" class="btn btn-link" onclick="changeCard(); return false" value="Change">
+                                
+                            </div>
+                        </div>
                     </div>
-                    <div class="border border-info col-sm-2 pt-1 pb-1">
-                        <strong>Change</strong>
-                    </div>
-
                 </div>
 
                 <div class="row border">        <!-- row 3 begins -->
@@ -345,8 +348,6 @@
 
         getNumItems();
         //changeAddress();
-
-
     
     });
 
@@ -462,6 +463,7 @@
 
 
     function changeAddress(){
+
         $.post("includes/checkout_ajax.php",
         {
             change_shipping_address: true
@@ -480,7 +482,7 @@
 
     function updateAddress(){
 
-        var selection = $('#address_selector input:radio:checked').val();
+        var selection = $('#card_selector input:radio:checked').val();
 
         $.post("includes/checkout_ajax.php",
         {
@@ -490,6 +492,48 @@
         })
         .done(function (result, status, xhr) {
             $("#address_field").html(result)
+            //$("#selected_address").html(result)
+            //$("#change_address").html(result)
+            
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+
+
+    }
+
+    function changeCard(){
+
+        $.post("includes/checkout_ajax.php",
+        {
+            change_payment_card: true
+
+        })
+        .done(function (result, status, xhr) {
+            $("#card_field").html(result)
+            //$("#change_address").html(result)
+            
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+
+
+    }
+
+    function updateCard(){
+
+        var selection = $('#card_selector input:radio:checked').val();
+
+        $.post("includes/checkout_ajax.php",
+        {
+            update_card: true,
+            card: selection
+
+        })
+        .done(function (result, status, xhr) {
+            $("#card_field").html(result)
             //$("#selected_address").html(result)
             //$("#change_address").html(result)
             

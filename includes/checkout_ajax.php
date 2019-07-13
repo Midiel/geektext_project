@@ -201,9 +201,87 @@ if(isset($_SESSION['token'])) {
         
         ";
 
+    } else if(isset($_POST['change_payment_card'])) {
+
+        $cards = $_SESSION['cards'];
+
+
+        echo "
+            <form id=\"card_selector\">
+                <div class=\"form-group\">
+                    <label class=\"control-label\">
+                        <p class=\"text-center\"><h6>Select a card</h6></p>
+                    </label>
+      
+        ";
+
+
+        $counter = 0;
+        foreach($cards as $book) :
+            $card[$counter] = $book;
+            $card[$counter]['number'] = $card[$counter]['number'] % 10000;
+            //echo "last 4: " .$card[$counter2]['number'];
+
+
+            echo "
+                <div class=\"row border p-2\" id=\"card_selector\">
+                    <div class=\"form-check\">
+                        <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . ">
+                        <label>
+                            
+                            <p>
+
+                            ". $card[$counter]['type'] . " ending in ". $card[$counter]['number'] . "<br>
+                            <strong>Nickname</strong>: ". $card[$counter]['nickname'] . "<br>
+                            
+                            </p>
+                        </label>
+                    </div>
+                </div>
+
+                ";
+
+            $counter++;
+            //print_r($card);
+        endforeach;
+
+        echo "
+            <div class=\"form-group\"> <!-- Submit button !-->
+                <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateCard(); return false\">Use this card</button>
+            </div>
+        </form>
+        
+        
+        ";
+
+    } else if(isset($_POST['update_card'])) {
+
+        $selection = $_POST['card'];
+        //$cards = $_SESSION['cards'];
+
+        echo "
+        <div class=\"row borader\">
+            <div id=\"selected_card\" class=\"border border-info col-sm-9 \">
+            <p>
+
+                ". $_SESSION['cards'][$selection]['type'] . " ending in ". $_SESSION['cards'][$selection]['number'] . "<br>
+                <strong>Nickname</strong>: ". $_SESSION['cards'][$selection]['nickname'] . "<br>
+            
+            </p>
+            </div>
+            <div class=\"border border-info col-sm-3 pt-1 pb-1\">
+                <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeCard(); return false\" value=\"Change\">
+                
+            </div>
+        </div>
+    
+        ";
+
     }
 
 }
+
+
 
 
 
