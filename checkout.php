@@ -169,49 +169,49 @@
 
 
 
-    <div id="main_div" class="container border border-primary mt-5 pt-5 pb-5">
-        <div class="row border">       <!-- only one row -->
+    <div id="main_div" class="container mt-5 pt-5 pb-5">
+        <div class="row">       <!-- only one row -->
            
-            <div class="border border-info col-sm-8">         <!-- left column begins -->
+            <div class=" col-sm-8">         <!-- left column begins -->
              
 
-                <div class="row border">        <!-- row 1 begins -->
-                    <div class="border border-info col-1">
+                <div class="row border-info border-bottom">        <!-- row 1 begins -->
+                    <div class=" pt-2 col-1">
                         <h5>1</h5>
                     </div>
-                    <div class="border border-info col-3">
+                    <div class=" pt-2 col-3">
                         <h5>Shipping address</h5>
                     </div>
-                    <div id="address_field" class="border border-danger col-8">
+                    <div id="address_field" class=" col-8 pt-2 pb-2">
                         <div class="row borader">
-                            <div id="selected_address" class="border border-info col-sm-9 ">
+                            <div id="selected_address" class=" col-sm-9 ">
                                 
                                 <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
                                 <?php echo $info[0]['street_address'];?> <br>
                                 <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
           
                             </div>
-                            <div class="border border-info col-sm-3 pt-1 pb-1">
+                            <div class=" col-sm-3 pt-1 pb-1">
                                 <input type="submit" class="btn btn-link" onclick="changeAddress(); return false" name="change_shipping" value="Change">                   
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row border">        <!-- row 2 begins, payment method -->
-                    <div class="border border-info col-sm-1">
+                <div class="row border-info border-bottom">        <!-- row 2 begins, payment method -->
+                    <div class=" pt-2 col-sm-1">
                         <h5>2</h5>
                     </div>
-                    <div class="border border-info col-sm-3">
+                    <div class=" pt-2 col-sm-3">
                         <h5>Payment method</h5>
                     </div>
-                    <div id="card_field" class="border border-danger col-8">
-                        <div class="row borader">
-                            <div id="selected_card" class="border border-info col-sm-9 ">
+                    <div id="card_field" class=" col-sm-8">
+                        <div class="row  pt-2 pb-2">
+                            <div id="selected_card" class=" col-sm-9 ">
                                 <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
                                 <strong>Nickname</strong>: <?php echo $card[0]['nickname'];?> <br>
                             </div>
-                            <div class="border border-info col-sm-3 pt-1 pb-1">
+                            <div class=" col-sm-3 pt-1 pb-1">
                                 <input type="submit" class="btn btn-link" onclick="changeCard(); return false" value="Change">
                                 
                             </div>
@@ -219,31 +219,31 @@
                     </div>
                 </div>
 
-                <div class="row border">        <!-- row 3 begins -->
-                    <div class="border border-info col-1">
+                <div class="row ">        <!-- row 3 begins -->
+                    <div class=" pt-2 col-1">
                         <h5>3</h5>
                     </div>
-                    <div class="border border-info col-11">
+                    <div class=" pt-2 col-11">
                         <h5>Review items</h5>
 
                         <!-- start of list of items needs to be looped-->
                         <?php foreach($books_on_cart as $book) :
 			                if(!$book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
 
-                            <div class="row border m-1 mt-3">
-                                <div class="border border-info col-sm-3">
-                                    <img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive"/>
+                            <div class="row border border-info rounded m-1 mt-3">
+                                <div class=" col-sm-3">
+                                    <img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive m-2"/>
 
                                 </div>
-                                <div class="border border-info col-sm-9">
+                                <div class=" col-sm-9 mt-2">
                                     <strong>Title</strong>: <?php echo $book['title']; ?><br>
 									<strong>Author</strong>: <?php echo $book['authors']; ?><br><br>
 
-                                    <div class="row border border-info">
-                                        <div class="border border-info pt-2 col-2">
+                                    <div class="row ">
+                                        <div class=" pt-2 col-2">
                                             <strong>Quantity</strong>:
                                         </div>
-                                        <div class="border border-info col-3">
+                                        <div class=" col-3">
                                         <form>
                                             <div class="form-group">
                                             <input type="hidden" id="custId" name="book_id" value="<?php echo $book['book_id']; ?>">
@@ -271,8 +271,9 @@
                     </div>
                 </div>
             </div>     <!-- end of left column -->
+            
 
-            <div id="num_items" class="border border-info col-sm-4">         <!-- right column -->
+            <div id="num_items" class=" col-sm-4">         <!-- right column -->
                 Order Summary here
 
                 <div class="row">
