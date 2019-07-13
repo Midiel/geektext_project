@@ -10,6 +10,7 @@
     $top_sellers = false;
     $sorting = false;
     $order == false;
+    $temp_author_array = array();
 
 
     //sorting value
@@ -110,7 +111,19 @@
     {
           $book[$counter]['book_id']= $row['book_id'];
           $book[$counter]['title']= $row['title'];
-          $book[$counter]['author']= $row['authors'];
+          $temp_author_array = explode(',', $row['authors']);
+          $book[$counter]['author'] = '';
+          for($i = 0; $i < count($temp_author_array); $i++)
+          {
+            if($i == (count($temp_author_array) - 1))
+            {
+              $book[$counter]['author'] .= '<a href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
+            }else {
+              $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
+            }
+          }
+
+          $book[$counter]['rating'] = set_stars($row['average_rating']);
           $book[$counter]['image_url']= $row['image_url'];
           $book[$counter]['bio']= $row['bio'];
           $book[$counter]['description']= $row['description'];
@@ -188,6 +201,29 @@
     $last_page = true;
   }
 
+  function set_stars($start_double)
+  {
+    $result = '';
+
+    for($i = 0; $i < 5; $i++)
+    {
+      if($i <= ($start_double - 1))
+      {
+        $result .= '<i class="fa fa-star" style="color:yellow;"></i>';
+      }
+      else if($start_double > $i)
+      {
+        $result .= '<i class="fa fa-star-half-full" style="color:yellow;"></i>';
+      }
+      else
+      {
+        $result .= '<i class="fa fa-star-o" style="color:yellow;"></i>';
+      }
+    }
+
+    return $result.' '.$start_double;
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -234,16 +270,9 @@
                     <article>
                         <div class="star-rating">
                             <div class="star-rating-stars">
-                                <div class="star-rating-star s1">☆</div>
-                                <div class="star-rating-star s2">☆</div>
-                                <div class="star-rating-star s3">☆</div>
-                                <div class="star-rating-star s4">☆</div>
-                                <div class="star-rating-star s5">☆</div>
+                                <?php echo $book[$i]['rating'];?>
                             </div>
-                            <!--end star-rating-stars -->
-                            <div class="star-rating-aside">
-                                (&thinsp;5&thinsp;)
-                            </div>
+
                             <div class="text-right" style="font-size:12px;">
                               <?php echo '$'.$book[$i]['price'];?>
                             </div>
@@ -366,6 +395,13 @@
         </div>
     </div>
 
+
+
+    <!--hidden post -->
+    <form id="hidden_form" method="POST" action="index.php">
+      <input type="hidden" name="search" id="hidden_search" value="">
+    </form>
+    <p id="test"></p>
 <script>
 
     // add items to the cart
@@ -430,6 +466,12 @@
     }
 
 
+    //hidden author's Code
+    function get_author(author)
+    {
+      document.getElementById('hidden_search').value = author;
+      document.getElementById('hidden_form').submit();
+    }
 </script>
 
 </body>
