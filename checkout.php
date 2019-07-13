@@ -3,13 +3,15 @@
 
     session_start();
 
-    If(!isset($_SESSION['token'])){
+    require_once('includes/connect.inc.php');
+
+    if(!isset($_SESSION['token'])){
         header("Location: login.php");
         exit;
-    }
+    } 
 
 
-    require_once('includes/connect.inc.php');
+
 
     $shippingInfo = array();
 
@@ -74,29 +76,38 @@
         //print_r($card);
     endforeach;
 
+    // save list of cards to global variable
+    $_SESSION['cards'] = $card;
+
     //print_r($card[0]);
 
     
 
 
-    // gets all items in the cart
+    // gets all items in the cart. Move to checkout_ajax.php
 
     $books_on_cart = array();
 
     $query = "CALL getCart('" . $_SESSION['token'] . "')";
 
-        if($result = mysqli_query($con, $query)) {
-            while($row = mysqli_fetch_assoc($result)) {
-                //echo mysqli_error($con);
-                array_push($books_on_cart, $row);
-            }
+    if($result = mysqli_query($con, $query)) {
+        while($row = mysqli_fetch_assoc($result)) {
+            //echo mysqli_error($con);
+            array_push($books_on_cart, $row);
         }
+    }
 
-        // Free Result
-        mysqli_free_result($result);
+    // Free Result
+    mysqli_free_result($result);
 
-        // Close Connection
-        //mysqli_close($con);
+    // Close Connection
+    //mysqli_close($con);
+
+
+    // set gloval variable for books in for checkout. I need to move this query to checkout_ajax.php
+    $_SESSION['checkout_books'] = $books_on_cart;
+
+
 
 
     // get cart subtotal, not working, needs to be fixed
@@ -158,7 +169,7 @@
 
 
 
-    <div class="container border border-primary mt-5 pt-5 pb-5">
+    <div id="main_div" class="container border border-primary mt-5 pt-5 pb-5">
         <div class="row border">       <!-- only one row -->
            
             <div class="border border-info col-sm-8">         <!-- left column begins -->
@@ -171,37 +182,41 @@
                     <div class="border border-info col-3">
                         <h5>Shipping address</h5>
                     </div>
-                    <div class="border border-info col-sm-6 pt-1 pb-1">
-                        
-                        <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
-                        <?php echo $info[0]['street_address'];?> <br>
-                        <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
-
-                        
+                    <div id="address_field" class="border border-danger col-8">
+                        <div class="row borader">
+                            <div id="selected_address" class="border border-info col-sm-9 ">
+                                
+                                <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
+                                <?php echo $info[0]['street_address'];?> <br>
+                                <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
+          
+                            </div>
+                            <div class="border border-info col-sm-3 pt-1 pb-1">
+                                <input type="submit" class="btn btn-link" onclick="changeAddress(); return false" name="change_shipping" value="Change">                   
+                            </div>
+                        </div>
                     </div>
-                    <div class="border border-info col-sm-2 pt-1 pb-1">
-                        <strong>Change</strong>
-                    </div>
-
                 </div>
 
-                <div class="row border">        <!-- row 2 begins -->
+                <div class="row border">        <!-- row 2 begins, payment method -->
                     <div class="border border-info col-sm-1">
                         <h5>2</h5>
                     </div>
                     <div class="border border-info col-sm-3">
                         <h5>Payment method</h5>
                     </div>
-                    <div class="border border-info col-sm-6 pt-1 pb-1">
-                        
-                        <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
-                        <strong>Nickname</strong>: <?php echo $card[0]['nickname'];?> <br>
-
+                    <div id="card_field" class="border border-danger col-8">
+                        <div class="row borader">
+                            <div id="selected_card" class="border border-info col-sm-9 ">
+                                <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
+                                <strong>Nickname</strong>: <?php echo $card[0]['nickname'];?> <br>
+                            </div>
+                            <div class="border border-info col-sm-3 pt-1 pb-1">
+                                <input type="submit" class="btn btn-link" onclick="changeCard(); return false" value="Change">
+                                
+                            </div>
+                        </div>
                     </div>
-                    <div class="border border-info col-sm-2 pt-1 pb-1">
-                        <strong>Change</strong>
-                    </div>
-
                 </div>
 
                 <div class="row border">        <!-- row 3 begins -->
@@ -248,23 +263,13 @@
                                             <input type="hidden" name="change_qty" value="true">
                                         </form>
                                         </div>
-
                                     </div>
-
                                 </div>
-
-
                             </div>
-
                         <?php } endforeach; ?>
 
-
                     </div>
-                   
-
                 </div>
-
-
             </div>     <!-- end of left column -->
 
             <div id="num_items" class="border border-info col-sm-4">         <!-- right column -->
@@ -306,34 +311,70 @@
                 <div class="border border-info row">
                     <div class="border border-info col-sm align-self-end">
 
-                        <a href="checkout.php" class="btn btn-default btn-block btn-warning mt-2 mb-2">
-                            Checkout
-                        </a>
-                        
+                        <button id="submit_order" class="btn btn-default btn-block btn-warning mt-2 mb-2" onclick="orderConfirmation(); return false;" type="submit">Checkout</button>
+                   
                     </div>
                 </div>
-
-
-            </div>
-        
+            </div>      
         </div>
-            
-
     </div>
-        
+  
 
 </body>
 
 <script>
 
-    $(document).ready(function() {
+    document.getElementById("submit_order").addEventListener("click", function(){
 
-        getNumItems();
+        document.getElementById("main_div").innerHTML = trigered;
+
+        $.post("includes/checkout_ajax.php",
+        {
+            order_confirmation: true
+            
+        })
+        .done(function (result, status, xhr) {
+            $("#main_div").html(result)
+            //updateSubtotal();
+            //getNumItems();
+
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
 
 
 
     });
 
+    $(document).ready(function() {
+
+        getNumItems();
+        //changeAddress();
+    
+    });
+
+
+
+
+    // order confirmation
+    function orderConfirmation(e){
+
+        $.post("includes/checkout_ajax.php",
+        {
+            order_confirmation: true
+            
+        })
+        .done(function (result, status, xhr) {
+            $("#main_div").html(result)
+            //updateSubtotal();
+            //getNumItems();
+
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+    }
 
     
 	// change number of items/qty
@@ -421,6 +462,90 @@
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
+    }
+
+
+    function changeAddress(){
+
+        $.post("includes/checkout_ajax.php",
+        {
+            change_shipping_address: true
+
+        })
+        .done(function (result, status, xhr) {
+            $("#address_field").html(result)
+            //$("#change_address").html(result)
+            
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+    }
+
+
+    function updateAddress(){
+
+        var selection = $('#address_selector input:radio:checked').val();
+
+        $.post("includes/checkout_ajax.php",
+        {
+            update_address: true,
+            address: selection
+
+        })
+        .done(function (result, status, xhr) {
+            $("#address_field").html(result)
+            //$("#selected_address").html(result)
+            //$("#change_address").html(result)
+            
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+
+
+    }
+
+    function changeCard(){
+
+        $.post("includes/checkout_ajax.php",
+        {
+            change_payment_card: true
+
+        })
+        .done(function (result, status, xhr) {
+            $("#card_field").html(result)
+            //$("#change_address").html(result)
+            
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+
+
+    }
+
+    function updateCard(){
+
+        var selection = $('#card_selector input:radio:checked').val();
+
+        $.post("includes/checkout_ajax.php",
+        {
+            update_card: true,
+            card: selection
+
+        })
+        .done(function (result, status, xhr) {
+            $("#card_field").html(result)
+            //$("#selected_address").html(result)
+            //$("#change_address").html(result)
+            
+        })
+        .fail(function (xhr, status, error) {
+            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        });
+
+
     }
 	
 

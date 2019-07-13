@@ -1,156 +1,142 @@
 body {
-    font-size: 100%;
-    background: #262626;
-}
-
-#books {
-    padding-top: 20px;
-}
-
-.row {
-    /*        background-color: aqua;*/
+  font-size: 100%;
+  background: #262626;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+  margin-top: 50px;
 }
 
 .card {
-    display: flex;
-    flex-direction: column;
-    /*    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .3);*/
-    height: 560px;
-    width: 100%;
-    background: #aaa;
-    color: #ffffff;
-    /*    background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, 1));*/
-
-}
-
-.card:hover {
-    top: -3px;
-    box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 1);
-
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 200px;
+  color: #fff;
+  border: #262626;
+  background-image: linear-gradient(rgba(38, 38, 38, .5), rgba(38, 38, 38, 1));
 }
 
 .image-section {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-
-    /*    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(200, 200, 200, .2));*/
-    min-height: 48%;
-
-    /*
-    border-width: 1px;
-    border-style: dashed;
-    border-color: red;
-*/
-    background: red;
-
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 35%;
+  background-image: linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38, 0));
 }
 
 .img-thumbnail {
-    background-color: #744774;
-    border: #262626;
+  background-color: #31b4fa;
+  border: #262626;
 
 }
 
 img {
-    width: auto;
-    height: auto;
+  width: 100px;
+  height: auto;
+}
+
+.star-rating {
+  display: flex;
+  flex-basis: auto;
+  flex-direction: column;
+  flex: initial;
+  margin: 10px 40px;
+  letter-spacing: .01em;
+}
+
+.stars {
+  color: gold;
+  font-size: .8em;
+}
+
+.price {
+  font-size: .8em;
 }
 
 .info-section {
-    display: flex;
-    flex-basis: auto;
-    flex-direction: column;
-    justify-content: space-between;
-    flex: auto;
-
-    /*    color: #000;*/
-
-    /*    padding: 0px 20px;*/
-    /*    padding-top: 10px;*/
-    margin: 10px 40px;
-    letter-spacing: .01em;
-
-    background: #fff;
-
-    /*    background-image: linear-gradient(rgba(200, 200, 200, .2), rgba(0, 0, 0, 0));*/
-
-
-    /*
-    background-color: chartreuse;
-    border-width: 1px;
-    border-style: dashed;
-    border-color: blue;
-*/
+  display: flex;
+  flex-basis: auto;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: auto;
+  margin: 10px 40px;
+  letter-spacing: .01em;
 }
 
 .title {
-    font-size: .8em;
-    font-weight: 600;
-    line-height: 1.1em;
+  font-size: .7em;
+  font-weight: 600;
+  line-height: 1.1em;
+  color: #fff;
 }
 
 .author {
-    font-size: .7em;
-    font-weight: 500;
-    line-height: 1.1em;
-    letter-spacing: .04em;
+  font-size: .7em;
+  font-weight: 500;
+  line-height: 1.1em;
+  letter-spacing: .04em;
+  color: #fff;
 }
 
 .category {
-    display: flex;
-    justify-content: flex-start;
-    font-size: .6em;
-    font-weight: 400;
-    line-height: 1.1em;
-    letter-spacing: .04em;
-
-
-    /*    background-color: darkorange;*/
+  display: flex;
+  justify-content: flex-start;
+  font-size: .6em;
+  font-weight: 400;
+  line-height: 1.1em;
+  letter-spacing: .04em;
+  color: #fff;
 }
 
 .button-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    flex: 0 0 auto;
-
-    /*
-    padding-bottom: 10px;
-padding-top: 10px;
-*/
-
-    /*
-    border-width: 1px;
-    border-style: dashed;
-    border-color: red;
-*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
 
 }
 
 #description-button {
-    margin-bottom: 6px;
-    width: 60%;
-    font-size: .7em;
-    font-weight: 800;
-    /*    letter-spacing: .04em;*/
+  margin-bottom: 6px;
+  width: 60%;
+  font-size: .7em;
+  font-weight: 800;
 }
 
 #authorbio-button {
-    width: 60%;
-    font-size: .7em;
-    font-weight: 800;
+  width: 60%;
+  font-size: .7em;
+  font-weight: 800;
 }
 
-.cart-button {
-    width: 60%;
-    font-size: .7em;
-    font-weight: 800;
+.btn-quantity {
+  font-size: .7em;
+  font-weight: 800;
+  margin-top: 10px;
+}
+
+.btn-default {
+  font-size: .7em;
+  font-weight: 800;
+  margin-top: 10px;
+  background-color: #31b4fa;
+  color: #FFF;
+  border-color: #2F3E48;
+
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+
+  background-color: #005eff;
+  color: #FFF;
+  border-color: #262626;
 }
