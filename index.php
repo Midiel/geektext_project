@@ -122,7 +122,7 @@
               $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
             }
           }
-
+          $book[$counter]['count'] = $row['rating_count'];
           $book[$counter]['rating'] = set_stars($row['average_rating']);
           $book[$counter]['image_url']= $row['image_url'];
           $book[$counter]['bio']= $row['bio'];
@@ -205,23 +205,23 @@
   {
     $result = '';
 
-    for($i = 0; $i < 5; $i++)
+    for ($i = 0; $i < 5; $i++)
     {
       if($i <= ($start_double - 1))
       {
-        $result .= '<i class="fa fa-star" style="color:yellow;" onclick="window.location.href=cart.php"></i>';
+        $result .= '<i class="fa fa-star"></i>';
       }
       else if($start_double > $i)
       {
-        $result .= '<i class="fa fa-star-half-full" style="color:yellow;"></i>';
-      }
-      else
+        $result .= '<i class="fa fa-star-half-full"></i>';
+      } else
       {
-        $result .= '<i class="fa fa-star-o" style="color:yellow;"></i>';
+        $result .= '<i class="fa fa-star-o"></i>';
       }
+
     }
 
-    return $result.' '.$start_double;
+    return $result;
   }
 
 ?>
@@ -270,12 +270,11 @@
 
           <article>
             <div class="star-rating">
-              <div class="star-rating-stars">
-                <?php echo $book[$i]['rating'];?>
-              </div>
-
-              <div class="text-right" style="font-size:12px;">
+              <div class="price">
                 <?php echo '$'.$book[$i]['price'];?>
+              </div>
+              <div class="stars">
+                <?php echo $book[$i]['rating'].' ('.$book[$i]['count'].')';?>
               </div>
             </div>
             <!--end star-rating -->

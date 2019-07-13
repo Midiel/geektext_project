@@ -17,7 +17,7 @@ body {
   width: 200px;
   color: #fff;
   border: #262626;
-  background-image: linear-gradient(rgba(38, 38, 38, .5), rgba(38, 38, 38, 1));
+  background-image: linear-gradient(rgba(38, 38, 38, .8), rgba(38, 38, 38, 1));
 }
 
 .image-section {
