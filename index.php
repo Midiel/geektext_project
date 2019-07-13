@@ -122,6 +122,7 @@
               $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
             }
           }
+          $book[$counter]['bio'] = $row['authorbio'];
           $book[$counter]['count'] = $row['rating_count'];
           $book[$counter]['rating'] = set_stars($row['average_rating']);
           $book[$counter]['image_url']= $row['image_url'];
