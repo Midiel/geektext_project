@@ -341,8 +341,8 @@ if(isset($_SESSION['token'])) {
         $_SESSION['chechout_card'] = $_SESSION['cards'][$selection];
 
         echo "
-        <div class=\"row borader\">
-            <div id=\"selected_card\" class=\"border border-info col-sm-9 \">
+        <div class=\"row pt-2 pb-2\">
+            <div id=\"selected_card\" class=\" col-sm-9 \">
             <p>
 
                 ". $_SESSION['cards'][$selection]['type'] . " ending in ". $_SESSION['cards'][$selection]['number'] . "<br>
@@ -350,7 +350,7 @@ if(isset($_SESSION['token'])) {
             
             </p>
             </div>
-            <div class=\"border border-info col-sm-3 pt-1 pb-1\">
+            <div class=\" col-sm-3 pt-1 pb-1\">
                 <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeCard(); return false\" value=\"Change\">
                 
             </div>
