@@ -32,6 +32,7 @@ if(isset($_SESSION['token'])) {
                 $tax = floor($tax * 100) / 100;
                 //$tax = number_format((float)$tax, 2, '.', '');
                 $total = $subtotal + $tax;
+                $total = number_format((float)$total, 2, '.', '');
 
 
                     
