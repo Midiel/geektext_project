@@ -260,7 +260,7 @@ if(isset($_SESSION['token'])) {
 
         echo "
             <div class=\"row borader\">
-                <div id=\"selected_address\" class=\"border border-info col-sm-9 \">
+                <div id=\"selected_address\" class=\"col-sm-9 \">
 
                 <p>
                     
@@ -270,7 +270,7 @@ if(isset($_SESSION['token'])) {
 
                    </p> 
                 </div>
-                <div class=\"border border-info col-sm-3 pt-1 pb-1\">
+                <div class=\" col-sm-3 pt-1 pb-1\">
                     <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeAddress(); return false\" value=\"Change\">
                     
                 </div>
@@ -301,7 +301,7 @@ if(isset($_SESSION['token'])) {
 
 
             echo "
-                <div class=\"row border p-2\" id=\"card_selector\">
+                <div class=\"row border mt-1 p-2\" id=\"card_selector\">
                     <div class=\"form-check\">
                         <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . ">
                         <label>

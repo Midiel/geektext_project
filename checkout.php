@@ -197,11 +197,11 @@
                     <div id="address_field" class=" col-8 pt-2 pb-2">
                         <div class="row borader">
                             <div id="selected_address" class=" col-sm-9 ">
-                                
+                                <p>
                                 <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
                                 <?php echo $info[0]['street_address'];?> <br>
                                 <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
-          
+                                </p>
                             </div>
                             <div class=" col-sm-3 pt-1 pb-1">
                                 <input type="submit" class="btn btn-link" onclick="changeAddress(); return false" name="change_shipping" value="Change">                   
@@ -220,8 +220,10 @@
                     <div id="card_field" class=" col-sm-8">
                         <div class="row  pt-2 pb-2">
                             <div id="selected_card" class=" col-sm-9 ">
+                                <p>
                                 <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
                                 <strong>Nickname</strong>: <?php echo $card[0]['nickname'];?> <br>
+                                </p>
                             </div>
                             <div class=" col-sm-3 pt-1 pb-1">
                                 <input type="submit" class="btn btn-link" onclick="changeCard(); return false" value="Change">
