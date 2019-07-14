@@ -1,6 +1,7 @@
 <?php
     //squelch undefined index error
     error_reporting( error_reporting() & ~E_NOTICE);
+
     require_once('includes/connect.inc.php');
     //flag to detect user's credentials
     $logged_in = false;
@@ -20,6 +21,7 @@
     {
       $order = true;
     }
+
     //Pagination Code
     if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] != 1)
     {
@@ -190,12 +192,7 @@
   function set_stars($start_double)
   {
     $result = '';
-<<<<<<< HEAD
-
-    for ($i = 0; $i < 5; $i++)
-=======
     for($i = 0; $i < 5; $i++)
->>>>>>> ceda6f36f4bac6751ef0e1ba987111a9039754a0
     {
       if($i <= ($start_double - 1))
       {
@@ -296,7 +293,7 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <?php echo $book[$i]['description'];?>
+                    <?php echo $book[$i]['description']?>
                   </div>
                 </div>
               </div>
@@ -315,7 +312,7 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <?php echo $book[$i]['bio'];?>
+                    <?php echo $book[$i]['bio']?>
                   </div>
                 </div>
               </div>
@@ -398,6 +395,7 @@
       <?php if(!isset($_SESSION['token'])) { ?>
       $("#notLoggedInModal").modal('show');
       <?php } else { ?>
+
       var thisid = event.target.id;
       //window.alert(thisid);
       var values = $("#" + thisid).serializeArray();
