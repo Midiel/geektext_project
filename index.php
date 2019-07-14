@@ -116,7 +116,6 @@
           $book[$counter]['count'] = $row['rating_count'];
           $book[$counter]['rating'] = set_stars($row['average_rating']);
           $book[$counter]['image_url']= $row['image_url'];
-          $book[$counter]['bio']= $row['bio'];
           $book[$counter]['description']= $row['description'];
           $book[$counter]['price']= $row['price'];
           $book[$counter]['published_date']= $row['published_date'];
@@ -238,8 +237,8 @@
               for($i = 0; $i < $looping; $i++): ?>
 
       <div class="col-xs col-sm-4 col-md-3 col-lg-2 col-xl-2">
-        <section class="card">
-          <article class="image-section">
+        <div class="card flex-container">
+          <div class="image-section">
             <a class="img-thumbnail">
               <img src="<?php echo $book[$i]['image_url'];?>">
             </a>
@@ -253,9 +252,9 @@
                 </div>
               </div>
             </div>
-          </article>
+          </div>
 
-          <article>
+          <div>
             <div class="star-rating">
               <div class="price">
                 <?php echo '$'.$book[$i]['price'];?>
@@ -265,9 +264,9 @@
               </div>
             </div>
             <!--end star-rating -->
-          </article>
+          </div>
 
-          <article class="info-section">
+          <div class="info-section">
             <div class="title-container">
               <h2 class="title"><?php echo $book[$i]['title'];?></h2>
             </div>
@@ -277,9 +276,9 @@
             <div class="category-container">
               <h3 class="category"><?php echo $book[$i]['category'];?></h3>
             </div>
-          </article> <!-- "info-section" -->
+          </div> <!-- "info-section" -->
 
-          <article class="button-section">
+          <div class="button-section">
             <button id="description-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#description<?php echo $i ?>ModalLong">
               Book Description
             </button>
@@ -287,13 +286,13 @@
               <div class="modal-dialog modal-dialog-centered" role="document" id="description<?php echo $i ?>ModalLong">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="descriptionModalLongTitle"><?php echo $book[$i]['title'] ?> by <?php echo $book[$i]['author']?></h5>
+                    <h5><?php echo $book[$i]['title'] ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <?php echo $book[$i]['description']?>
+                    <h5><?php echo $book[$i]['description'];?></h5>
                   </div>
                 </div>
               </div>
@@ -306,13 +305,13 @@
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="authorbioModalLongTitle">Author Bio</h5>
+                    <h5 class="modal-title" id="authorbioModalLongTitle"><?php echo $book[$i]['author']?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <?php echo $book[$i]['bio']?>
+                    <h5><?php echo $book[$i]['bio'];?></h5>
                   </div>
                 </div>
               </div>
@@ -320,7 +319,7 @@
 
             <!-- Midiel: Add to cart button -->
             <form id="<?php echo $book[$i]['book_id'];?>" onsubmit="addToCart(); return false;">
-              <div class="form-group mt-2">
+              <div class="form-group btn-quantity">
                 <input type="hidden" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
                 <select class="form-control" id="qty" name="qty">
                   <option value="1" selected="1">1</option>
@@ -333,13 +332,13 @@
                   <option value="8">8</option>
                   <option value="9">9</option>
                 </select>
-                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-success btn-sm mt-1">ADD TO CART </button>
+                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-default btn-sm">ADD TO CART </button>
               </div>
             </form>
             <!-- end add to cart -->
 
-          </article> <!-- "button-section" -->
-        </section> <!-- "card" -->
+          </div> <!-- "button-section" -->
+        </div> <!-- "card" -->
       </div> <!-- column end -->
       <?php endfor; ?>
     </div> <!-- row end -->
