@@ -1,7 +1,6 @@
 <?php
     //squelch undefined index error
     error_reporting( error_reporting() & ~E_NOTICE);
-
     require_once('includes/connect.inc.php');
     //flag to detect user's credentials
     $logged_in = false;
@@ -11,8 +10,6 @@
     $sorting = false;
     $order == false;
     $temp_author_array = array();
-
-
     //sorting value
     if (isset($_GET['sort_by']) && !empty($_GET['sort_by']))
     {
@@ -23,7 +20,6 @@
     {
       $order = true;
     }
-
     //Pagination Code
     if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] != 1)
     {
@@ -33,21 +29,16 @@
     {
       $page = 1;
     }
-
     //top sellers
     if ($_GET['top_sellers'] == 'true' || $_SESSION['top_sellers'] == 'true')
     {
       $top_sellers = true;
     }
-
-
-
     //Displaying books
     $book = array(array());
     $counter = 0;
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
-
     //Search code
     if (isset($_POST['search']) && !empty($_POST['search']))
     {
@@ -77,7 +68,6 @@
     }
     else
     {
-
         //determine query
         if ($top_sellers == true && $sorting == false)
         {
@@ -104,8 +94,6 @@
           $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY average_rating DESC LIMIT $display_from, $display_to";
         }
     }
-
-
     $run = mysqli_query($con, $query);
     while($row = mysqli_fetch_assoc($run))
     {
@@ -134,7 +122,6 @@
           $book[$counter]['category']= $row['category'];
           $counter++;
       }
-
       //Pagination algorithm
   $path = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
   //appending or replacing path
@@ -173,7 +160,6 @@
       $pagination .= '<li class="page-item "><a class="page-link" href="'.$path.'page='.($page + 1).'">'.($page + 1).'</a></li>';
       $pagination .= '<li class="page-item"><a class="page-link" href="'.$path.'page='.($page + 1).'">Next</a></li>';
   }
-
   //updating pagination when reach the end of the books
   $last_page = false;
   if($counter < ($DISPLAY_PER_PAGE + 1))
@@ -201,12 +187,15 @@
     }
     $last_page = true;
   }
-
   function set_stars($start_double)
   {
     $result = '';
+<<<<<<< HEAD
 
     for ($i = 0; $i < 5; $i++)
+=======
+    for($i = 0; $i < 5; $i++)
+>>>>>>> ceda6f36f4bac6751ef0e1ba987111a9039754a0
     {
       if($i <= ($start_double - 1))
       {
@@ -406,24 +395,17 @@
   <script>
     // add items to the cart
     function addToCart() {
-
       <?php if(!isset($_SESSION['token'])) { ?>
-
       $("#notLoggedInModal").modal('show');
-
       <?php } else { ?>
-
       var thisid = event.target.id;
-
       //window.alert(thisid);
       var values = $("#" + thisid).serializeArray();
-
       var inputs = {};
       $.each(values, function(k, v) {
         inputs[v.name] = v.value;
         //window.alert(v.name + " " + v.value);
       });
-
       $.post("includes/cart_ajax.php", {
           add_to_cart: true,
           book_id: inputs['book_id'],
@@ -434,19 +416,14 @@
           updateCartCounter(); // it's in the navbar
           addToCartModal(inputs);
           //$("#addedToCartModal").modal('show');
-
         })
         .fail(function(xhr, status, error) {
           $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
-
       <?php } ?>
     }
-
-
     // show modal for add to cart
     function addToCartModal(inputs) {
-
       $.post("includes/cart_ajax.php", {
           add_to_cart_modal: true,
           book_id: inputs['book_id'],
@@ -455,21 +432,16 @@
         .done(function(result, status, xhr) {
           $("#addedToCartModal").html(result);
           $("#addedToCartModal").modal('show');
-
         })
         .fail(function(xhr, status, error) {
           $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
-
     }
-
-
     //hidden author's Code
     function get_author(author) {
       document.getElementById('hidden_search').value = author;
       document.getElementById('hidden_form').submit();
     }
-
   </script>
 
 </body>

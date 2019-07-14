@@ -16,18 +16,23 @@ if(isset($_SESSION['token'])) {
 
         $num_items = 0;
         $subtotal = 0;
-        
+        $tax = 0;
+        $total = 0;
+
         if($result = mysqli_query($con, $query)) {
             while($row = mysqli_fetch_assoc($result)) {
     
                 //echo " ".$row['number_of_items'] . " ";
                 $num_items = $row['NumItems'];
-                $subtotal = number_format((float)$row['Subtotal'], 2, '.', '');
+                $subtotal = floor((float)$row['Subtotal'] * 100) / 100;
+                //$subtotal = number_format((float)$row['Subtotal'], 2, '.', '');
 
 
                 $tax = 0.07 * $subtotal;
-                $tax = number_format((float)$tax, 2, '.', '');
+                $tax = floor($tax * 100) / 100;
+                //$tax = number_format((float)$tax, 2, '.', '');
                 $total = $subtotal + $tax;
+                $total = number_format((float)$total, 2, '.', '');
 
 
                     
@@ -85,6 +90,15 @@ if(isset($_SESSION['token'])) {
 
 
             }
+
+            //  gloval variable for order summary
+            $_SESSION['num_items'] = $num_items;
+            $_SESSION['subtotal'] = $subtotal;
+            $_SESSION['tax'] = $tax;
+            $_SESSION['total'] = $total;
+
+
+
         }
     
 
@@ -96,16 +110,76 @@ if(isset($_SESSION['token'])) {
 		$query->execute();
 		$query->close();
         
-        echo "
-            <div class=\"border border-warning row\">
-                <h5>Order Confirmation</h5>
-            </div>
+        
 
-            <div class=\"border border-info row\">
-                <p>Your order is confirmed!!!<br>Please sit tight and wait for it ;)</p><br>
+        echo "
+            <div class=\"border border-danger row\">      <!-- first row -->
+                <p class=\"font-weight-bold pl-3\"><h5>Order Details</h5></p><br>
+            </div>
+            <div class=\"border border-danger row p-3\">
+                Ordered on: " . date("l jS \of F Y h:i:s A") . "<br>
+            </div>
+            <div class=\"border border-danger row\">      <!-- first row -->
+                <div class=\"border border-danger col-4\"> <!-- address column -->
+                    <p class=\"font-weight-bold\">Shipping Address</p>
+                
+                    ". $_SESSION['shipping_address']['f_name'] . ", ". $_SESSION['shipping_address']['l_name'] . "<br>
+                    ". $_SESSION['shipping_address']['street_address'] . "<br>
+                    ". $_SESSION['shipping_address']['city'] . ", ". $_SESSION['shipping_address']['state'] . " ". $_SESSION['shipping_address']['zip_code'] . "<br>
+                        
+
+                </div>
+                <div class=\"border border-info col-4\">
+                    <p class=\"font-weight-bold\">Payment Method</p>
+                                    
+                    ". $_SESSION['chechout_card']['type'] . " ending in ". $_SESSION['chechout_card']['number'] . "<br>
+                    <strong>Nickname</strong>: ". $_SESSION['chechout_card']['nickname'] . "<br>
+
+                </div>
+                <div class=\"border border-info col-4\">
+                    <div class=\"border border-danger row\">
+                        <p class=\"font-weight-bold ml-3\">Order Summary</p>    
+                    </div>
+                    <div class=\"border border-danger row\">
+                        <div class=\"border border-info col-8\">
+                            Number of items:<br>
+                            Subtotal:<br>
+                            Shipping:<br>
+                            Tax:<br>
+                            <p class=\"text-right\">
+                                <p class=\"font-weight-bold\">Total:</p>
+                            </P>
+
+                        </div>
+                        <div class=\" border border-info col-4\">
+
+                            <p class=\"text-right\">
+                                ". $_SESSION['num_items'] ."<br>
+                                $". $_SESSION['subtotal'] ."<br>
+                                $0.00<br>
+                                $". $_SESSION['tax'] ."<br>
+                                <p class=\"font-weight-bold text-right\">$". $_SESSION['total'] ."</p>
+                            </p>         
+        
+                        </div>
+                    </div>   
+                </div>
+            </div>
+            <div class=\" row pt-3\">
+                <div class=\" col-4\">
+                    <p class=\"font-weight-bold pl-3\">Thank you!!!</p>
+                </div>
+                <div class=\" col-md-4 ml-auto\">
+                    <button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\" onclick=\"javascript:window.location='index.php'\">Return to homepage</button>
+                </div>
+                
                 
             </div>
-            ";
+        
+        ";
+
+
+
 
     } else if(isset($_POST['change_shipping_address'])) {
 
@@ -162,6 +236,7 @@ if(isset($_SESSION['token'])) {
 
         // save list of addresses to gloaval variable to be used later
         $_SESSION['addresses'] = $info;
+        $_SESSION['shipping_address'] = $_SESSION['addresses'][0];
 
 
         echo "
@@ -180,10 +255,13 @@ if(isset($_SESSION['token'])) {
 
         $selection = $_POST['address'];
 
+        //set gloval variable for shipping used shipping address
+        $_SESSION['shipping_address'] = $_SESSION['addresses'][$selection];
+
 
         echo "
             <div class=\"row borader\">
-                <div id=\"selected_address\" class=\"border border-info col-sm-9 \">
+                <div id=\"selected_address\" class=\"col-sm-9 \">
 
                 <p>
                     
@@ -193,7 +271,7 @@ if(isset($_SESSION['token'])) {
 
                    </p> 
                 </div>
-                <div class=\"border border-info col-sm-3 pt-1 pb-1\">
+                <div class=\" col-sm-3 pt-1 pb-1\">
                     <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeAddress(); return false\" value=\"Change\">
                     
                 </div>
@@ -224,7 +302,7 @@ if(isset($_SESSION['token'])) {
 
 
             echo "
-                <div class=\"row border p-2\" id=\"card_selector\">
+                <div class=\"row border mt-1 p-2\" id=\"card_selector\">
                     <div class=\"form-check\">
                         <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . ">
                         <label>
@@ -259,9 +337,12 @@ if(isset($_SESSION['token'])) {
         $selection = $_POST['card'];
         //$cards = $_SESSION['cards'];
 
+        // set gloval variable for card used
+        $_SESSION['chechout_card'] = $_SESSION['cards'][$selection];
+
         echo "
-        <div class=\"row borader\">
-            <div id=\"selected_card\" class=\"border border-info col-sm-9 \">
+        <div class=\"row pt-2 pb-2\">
+            <div id=\"selected_card\" class=\" col-sm-9 \">
             <p>
 
                 ". $_SESSION['cards'][$selection]['type'] . " ending in ". $_SESSION['cards'][$selection]['number'] . "<br>
@@ -269,7 +350,7 @@ if(isset($_SESSION['token'])) {
             
             </p>
             </div>
-            <div class=\"border border-info col-sm-3 pt-1 pb-1\">
+            <div class=\" col-sm-3 pt-1 pb-1\">
                 <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeCard(); return false\" value=\"Change\">
                 
             </div>
