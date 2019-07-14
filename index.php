@@ -107,9 +107,9 @@
           {
             if($i == (count($temp_author_array) - 1))
             {
-              $book[$counter]['author'] .= '<a href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
+            $book[$counter]['author'] .= '<a id="author" style="color:white" href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
             }else {
-              $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
+            $book[$counter]['author'] .= '<a style="color:white" href="#" onmouseover="" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
             }
           }
           $book[$counter]['bio'] = $row['authorbio'];
