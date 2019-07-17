@@ -5,8 +5,8 @@
 
 
     # Handle Front Controller...
-    # RewriteCond %{REQUEST_FILENAME} !-f
-    # RewriteRule ^ index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.html
 
     # RewriteCond %{REQUEST_FILENAME}/cart.php -d
     # RewriteRule ^ cart.php
