@@ -35,6 +35,7 @@ if (!empty($_POST['address_id']))
 	$edit = false;
 	$new = false;
 	$delete = false;
+	$API_validated = true; // accepts foreign addresses, but must validate US
 
 	if (!empty($_POST['name']) && !empty($_POST['street_address']) 
 		&& !empty($_POST['state']) && !empty($_POST['city']) 
@@ -44,6 +45,27 @@ if (!empty($_POST['address_id']))
 		// remove non-numeric characters from phone #
 		$_POST['primary_phone'] = preg_replace("/[^0-9]/", "", $_POST['primary_phone']);
 		
+		// if US address, validate against USPS API
+		if ($_POST['country'] === "US")
+		{
+			$API_validated = false;
+			// prep for API req
+			$req_string = '<?xml version="1.0"?><AddressValidateRequest USERID=""><Revision>1</Revision><Address ID="0"><Address1></Address1><Address2>' . $_POST["street_address"] . '</Address2><City>' . $_POST["city"] . '</City><State>' . $_POST["state"] . '</State><Zip5>' . $_POST["zip_code"] . '</Zip5><Zip4/></Address></AddressValidateRequest>';
+			$url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" . urlencode($req_string);
+
+			// perform req
+			$xml = simplexml_load_string(file_get_contents($url)) or die("ERROR: Cannot load obj");
+			if (empty($xml->Address->Error) && !empty($xml->Address->Address2))
+			{
+				// populate db with accurate postal data
+				$API_validated = true;
+				$_POST['street_address'] = (string)$xml->Address->Address2;
+				$_POST['city'] = (string)$xml->Address->City;
+				$_POST['state'] = (string)$xml->Address->State;
+				$_POST['zip_code'] = (string)$xml->Address->Zip5;
+			}
+		}
+
 		if ($_POST['address_id'] === "new")
 		{
 			// insert new address
@@ -71,7 +93,7 @@ if (!empty($_POST['address_id']))
 	$error = "";
 
 	// produce dialog messages depending on action
-	if (mysqli_stmt_execute($stmt))
+	if ($API_validated && mysqli_stmt_execute($stmt))
 	{
 		if ($edit)
 		{
@@ -90,11 +112,11 @@ if (!empty($_POST['address_id']))
 	{
 		if ($edit)
 		{
-			$error = "The selected address could not be updated";
+			$error = "The new fields in the selected address are not valid";
 		}
 		else if ($new)
 		{
-			$error = "The new address could not be added to your records";
+			$error = "The new address entered is not valid";
 		}
 		else if ($delete)
 		{
@@ -164,7 +186,7 @@ include('includes/countries.php');
 					<div class="font-weight-bold">State/Province/Region:</div>
 					<input type="text" class="form-control" name="state" value="<?php echo $address['state']; ?>" maxlength="40" required>
 					<div class="font-weight-bold">ZIP:</div>
-					<input type="text" class="form-control" name="zip_code" value="<?php echo $address['zip_code']; ?>" maxlength="10" required>
+					<input type="text" class="form-control" name="zip_code" value="<?php echo $address['zip_code']; ?>" maxlength="10" pattern="[0-9.]+" required>
 					<div class="font-weight-bold">Country/Region:</div>
 					<select class="form-control" name="country">
 					<?php 
@@ -202,13 +224,20 @@ include('includes/countries.php');
 					<div class="font-weight-bold">State/Province/Region:</div>
 					<input type="text" class="form-control" name="state" maxlength="40" required>
 					<div class="font-weight-bold">ZIP:</div>
-					<input type="text" class="form-control" name="zip_code" maxlength="10" required>
+					<input type="text" class="form-control" name="zip_code" maxlength="10" pattern="[0-9.]+" required>
 					<div class="font-weight-bold">Country/Region:</div>
 					<select class="form-control" name="country">
 					<?php 
 					foreach ($countries as $code => $country)
 					{
-						echo '<option value="' . $code . '">' . $country . '</option>';
+						if ($code === "US")
+						{
+							echo '<option value="' . $code . '" selected="selected">' . $country . '</option>';
+						}
+						else
+						{
+							echo '<option value="' . $code . '">' . $country . '</option>';
+						}
 					}
 					?>
 					</select>
