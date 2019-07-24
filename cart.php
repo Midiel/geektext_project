@@ -1,86 +1,79 @@
 
 <?php
 
-    //include('includes/header.php');
-	require_once('includes/connect.inc.php');
-	//include_once('includes/cart_ajax.php');
-    include_once("includes/navbar_libs.php"); 
-    include_once("includes/navbar.php");
+	// start session
+	session_start();
 
-	// hard code session token to 123 (user1) if session is not set, user not logged in
-	// if(!(isset($_SESSION['token']))) {
-	// 	$_SESSION['token'] = 'c6734b5d94fdf74db73175ba5429ec11';
-	// };
-	//$_SESSION['token'] = '456';		//user2
+	// if user not logged in, redirect to login page
+	if(!isset($_SESSION['token'])){
 
-    //echo "session: ".$_SESSION['token']."<br>";
-    
+		header("Location: login.php");
+		exit;
 
-	//print_r($_POST);
-	//echo "<br>";
+	} else {
 
+		// to connect to the database
+		require_once('includes/connect.inc.php');
+		//include_once('includes/cart_ajax.php');
+		include_once("includes/navbar_libs.php"); 
+		include_once("includes/navbar.php");
 
-	if(isset($_POST['add_to_cart'])) {
+		if(isset($_POST['add_to_cart'])) {
 
-		// (token, book_id, qty)
-		$query = $con->prepare('CALL addToCart(?,?,?)');
-		$query->bind_param('sii', $_SESSION['token'], $_POST['book_id'], $_POST['qty']);
-		$query->execute();
-		$query->close();
-
-	} else if(isset($_POST['delete'])) {
-
-		$query = $con->prepare('CALL deleteFromCart(?,?)');
-		$query->bind_param('si', $_SESSION['token'], $_POST['book_id']);
-		$query->execute();
-		$query->close();
-
-	} else if(isset($_POST['save_for_later'])) {
-
-		$query = $con->prepare('CALL saveForLater(?,?)');
-		$query->bind_param('si', $_SESSION['token'], $_POST['book_id']);
-		$query->execute();
-		$query->close();
-
-	} else if(isset($_POST['move_to_cart'])) {
-
-		$query = $con->prepare('CALL moveToCart(?,?)');
-		$query->bind_param('si', $_SESSION['token'], $_POST['book_id']);
-		$query->execute();
-		$query->close();
-
-
-	} else if(isset($_POST['change_qty'])) {
-
-		$query = $con->prepare('CALL changeQty(?,?,?)');
-		$query->bind_param('sii', $_SESSION['token'], $_POST['book_id'], $_POST['qty']);
-		$query->execute();
-		$query->close();
-	}
-
-
-	//echo "token type: " . gettype($_SESSION['token']);
-
+			$query = $con->prepare('CALL addToCart(?,?,?)');
+			$query->bind_param('sii', $_SESSION['token'], $_POST['book_id'], $_POST['qty']);
+			$query->execute();
+			$query->close();
 	
-    $books_on_cart = array();
-    
-    if(isset($_SESSION['token'])) {
-        $query = "CALL getCart('" . $_SESSION['token'] . "')";
+		} else if(isset($_POST['delete'])) {
+	
+			$query = $con->prepare('CALL deleteFromCart(?,?)');
+			$query->bind_param('si', $_SESSION['token'], $_POST['book_id']);
+			$query->execute();
+			$query->close();
+	
+		} else if(isset($_POST['save_for_later'])) {
+	
+			$query = $con->prepare('CALL saveForLater(?,?)');
+			$query->bind_param('si', $_SESSION['token'], $_POST['book_id']);
+			$query->execute();
+			$query->close();
+	
+		} else if(isset($_POST['move_to_cart'])) {
+	
+			$query = $con->prepare('CALL moveToCart(?,?)');
+			$query->bind_param('si', $_SESSION['token'], $_POST['book_id']);
+			$query->execute();
+			$query->close();
+	
+		} else if(isset($_POST['change_qty'])) {
+	
+			$query = $con->prepare('CALL changeQty(?,?,?)');
+			$query->bind_param('sii', $_SESSION['token'], $_POST['book_id'], $_POST['qty']);
+			$query->execute();
+			$query->close();
+		}
+	
 
-        if($result = mysqli_query($con, $query)) {
-            while($row = mysqli_fetch_assoc($result)) {
-                echo mysqli_error($con);
-                array_push($books_on_cart, $row);
-            }
-        }
+		// to store all books from the shopping cart
+		$books_on_cart = array();
+	
+		// get shooping cart from database
+		$query = "CALL getCart('" . $_SESSION['token'] . "')";
 
-        // Free Result
-        mysqli_free_result($result);
+		if($result = mysqli_query($con, $query)) {
+			while($row = mysqli_fetch_assoc($result)) {
+				array_push($books_on_cart, $row);
+			}
+		}
 
-        // Close Connection
-        mysqli_close($con);
-    }
+		// Free Result
+		mysqli_free_result($result);
 
+		// Close Connection
+		mysqli_close($con);
+
+	}
 	
 
 	// temporary variables for subtotal
@@ -94,23 +87,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php 
-        include("includes/navbar_libs.php"); 
-        include_once("includes/navbar.php");
-    ?>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shopping Cart</title>
-	
-    
-			
+		
 </head>
-
 
 <body>
     
-
 <div class="container">
 
 <!-- Display the shopping cart -->
@@ -180,20 +166,20 @@
 							</div>
 							<input type="hidden" name="change_qty" value="true">
 						</form>
-							<?php $num_items += $book['qty'];
+
+						<?php 
+							$num_items += $book['qty'];
 							$temp = $book['qty'] * $book['price'];
 							$subtotal += $temp;
 						?>
 
 					</td>
-				</tr>
-				
+				</tr>	
 			</tbody>
 		<?php } endforeach; ?>
 	</table>
 
 	
-
 	<!-- Continue shopping and subtotal line -->
 	<div class="row justify-content-between">
 		<div class="col-4">
