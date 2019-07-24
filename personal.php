@@ -79,6 +79,12 @@ if (!empty($_POST['action']))
 
 		// update user detail view
 		$user[$_POST['action']] = $_POST[$_POST['action']];
+
+		// if nickname changes, update session var for navbar
+		if ($_POST['action'] === "nickname")
+		{
+			$_SESSION['nickname'] = $_POST['nickname'];
+		}
 	}
 	else // else bad insert
 	{

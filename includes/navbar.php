@@ -7,7 +7,6 @@
   if (session_status() === PHP_SESSION_NONE) {
     session_start();
     $logged_in = false;
-
   }
 
   $logged_in = false;
@@ -16,6 +15,7 @@
     $email = $_SESSION['email'];
     $token = $_SESSION['token'];
     $user_id = $_SESSION['user_id'];
+    $nav_nickname = $_SESSION['nickname'];
     $logged_in = true;
   }
 
@@ -79,7 +79,7 @@ if (isset($token) && !empty($token))
     $top_seller_link = "";
   }
 
-  if (empty($items_in_cart)) { $items_in_cart = ""; }// For debugging, delete later
+  if (empty($items_in_cart)) { $items_in_cart = ""; }
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -129,10 +129,25 @@ if (isset($token) && !empty($token))
 
     </ul>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a class="nav-link" href="account.php"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
+      <li class="nav-item">
+        <span class="nav-link" style="padding-right: 24px">
+          <?php echo (empty($nav_nickname) ? "" : "Hi, " . $nav_nickname . "!"); ?>
+        </span>
+      </li>
+      <li class="nav-item">
+      <?php
+      if ($logged_in)
+      {
+        echo '<a class="nav-link" href="account.php"><span class="fa fa-user"></span> My Account</a>';
+      }
+      ?>
+      </li>
       <?php echo $glyphicon_log_in;?>
-      <li class="nav-item" id="nav-counter"><a class="nav-link disabled" href="cart.php"><span class="fa fa-shopping-cart"> </span></a> </li>
-
+      <li class="nav-item" id="nav-counter">
+        <a class="nav-link disabled" href="cart.php">
+          <span class="fa fa-shopping-cart"></span>
+        </a>
+      </li>
     </ul>
 
   </div>

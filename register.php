@@ -78,7 +78,7 @@
 </head>
 
 <body>
-    <h1 style="text-align: center;" alt="logo placeholder">GeekText</h1>
+    <div class="geektext-title-container"><a class="geektext-title" href="index.php">GeekText</a></div>
     <div class="geektext-lr geektext-error geektext-dialog" style="display: <?php echo ($email_exists) ? 'block' : 'none'; ?>;">
         <i class="fa fa-exclamation-triangle fa-2x geektext-dialog-icon" aria-hidden="true"></i>
         <h4>There was a problem</h4>
@@ -88,15 +88,15 @@
         <h3 style="padding-bottom: 5px">Create account</h3>
         <div class="form-group">
             <label>Your name</label>
-            <input class="form-control" name="name">
+            <input class="form-control" name="name" required>
         </div>
         <div class="form-group">
             <label>Email</label>
-            <input class="form-control" type="email" name="email">
+            <input class="form-control" type="email" name="email" required>
         </div>
         <div class="form-group" style="margin-bottom: 10px;">
             <label>Password</label>
-            <input id="password1" type="password" class="form-control">
+            <input id="password1" type="password" class="form-control" required>
         </div>
         <div class="form-group">
             <div><i id="sixlen-check" class="fa fa-circle geektext-icon"></i>At least 6 characters</div>
@@ -105,7 +105,7 @@
         </div>
         <div class="form-group" style="margin-bottom: 10px;">
             <label>Re-enter password</label>
-            <input id="password2" type="password" class="form-control" name="password">
+            <input id="password2" type="password" class="form-control" name="password" required>
         </div>
         <div class="form-group">
             <div><i id="passmatch-check" class="fa fa-circle geektext-icon"></i>Passwords match</div>
