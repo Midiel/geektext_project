@@ -1,4 +1,7 @@
 <?php 
+// USPS Key
+$POSTAL_API_KEY = "";
+
 session_start();
 
 // check if session properly initialized
@@ -45,15 +48,15 @@ if (!empty($_POST['address_id']))
 		// remove non-numeric characters from phone #
 		$_POST['primary_phone'] = preg_replace("/[^0-9]/", "", $_POST['primary_phone']);
 		
-		// if US address, validate against USPS API
-		if ($_POST['country'] === "US")
+		// if US address, validate against postal API
+		if ($_POST['country'] === "US" && !empty($POSTAL_API_KEY))
 		{
 			$API_validated = false;
-			// prep for API req
-			$req_string = '<?xml version="1.0"?><AddressValidateRequest USERID=""><Revision>1</Revision><Address ID="0"><Address1></Address1><Address2>' . $_POST["street_address"] . '</Address2><City>' . $_POST["city"] . '</City><State>' . $_POST["state"] . '</State><Zip5>' . $_POST["zip_code"] . '</Zip5><Zip4/></Address></AddressValidateRequest>';
+			// prep for API request
+			$req_string = '<?xml version="1.0"?><AddressValidateRequest USERID="' . $POSTAL_API_KEY . '"><Revision>1</Revision><Address ID="0"><Address1></Address1><Address2>' . $_POST["street_address"] . '</Address2><City>' . $_POST["city"] . '</City><State>' . $_POST["state"] . '</State><Zip5>' . $_POST["zip_code"] . '</Zip5><Zip4/></Address></AddressValidateRequest>';
 			$url = "http://production.shippingapis.com/ShippingAPI.dll?API=Verify&XML=" . urlencode($req_string);
 
-			// perform req
+			// perform request
 			$xml = simplexml_load_string(file_get_contents($url)) or die("ERROR: Cannot load obj");
 			if (empty($xml->Address->Error) && !empty($xml->Address->Address2))
 			{

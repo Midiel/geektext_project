@@ -46,6 +46,10 @@
     border: 1px #c40000 solid;
 }
 
+.fa-exclamation-circle {
+    color: #c40000;
+}
+
 .geektext-dialog div {
     color: #495057;
 }
