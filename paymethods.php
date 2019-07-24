@@ -36,13 +36,19 @@ if (!empty($_POST['card_id']))
 	$delete = false;
 
 	if ($_POST['card_id'] === "new" && !empty($_POST['number']) 
-		&& !empty($_POST['nickname']) && !empty($_POST['exp_month']) 
-		&& !empty($_POST['exp_year']) && !empty($_POST['security_code'])) // && type eventually
+		&& !empty($_POST['cardholder']) && !empty($_POST['exp_month']) 
+		&& !empty($_POST['exp_year']) && !empty($_POST['security_code'])
+		&& !empty($_POST['type']))
 	{	
 		// insert new card
 		$new = true;
-		$stmt = mysqli_prepare($con, "INSERT INTO credit_card (user_id, number, nickname, exp_month, exp_year, security_code, type) VALUES (" . $db_user_id . ", ?, ?, ?, ?, ?, 'Card')");
-	    mysqli_stmt_bind_param($stmt, "sssss", $_POST['number'], $_POST['nickname'], $_POST['exp_month'], $_POST['exp_year'], $_POST['security_code']);
+		if (empty($_POST['nickname']))
+		{ 
+			$_POST['nickname'] = "";
+		}
+		
+		$stmt = mysqli_prepare($con, "INSERT INTO credit_card (user_id, number, nickname, exp_month, exp_year, security_code, type, cardholder) VALUES (" . $db_user_id . ", ?, ?, ?, ?, ?, ?, ?)");
+	    mysqli_stmt_bind_param($stmt, "sssssss", $_POST['number'], $_POST['nickname'], $_POST['exp_month'], $_POST['exp_year'], $_POST['security_code'], $_POST['type'], $_POST['cardholder']);
 	}
 	else if (!empty($_POST['action']) && $_POST['action'] === "delete")
 	{
@@ -85,6 +91,17 @@ if (!empty($_POST['card_id']))
 $stmt = mysqli_query($con, "SELECT * FROM credit_card WHERE user_id = '$db_user_id'");
 $cards = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
 mysqli_free_result($stmt);
+
+// card icon array
+$card_icon_arr = [
+	"Amex" => "fa-cc-amex",
+	"Visa" => "fa-cc-visa",
+	"MasterCard" => "fa-cc-mastercard",
+	"Discover" => "fa-cc-discover",
+	"Diner's Club" => "fa-cc-diners-club",
+	"JCB" => "fa-cc-jcb",
+	"Card" => "fa-credit-card"
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -122,8 +139,16 @@ mysqli_free_result($stmt);
 		<div class="card">
 			<div class="row">
 				<div class="col-md-8">
-					<h4><i class="fa fa-credit-card" aria-hidden="true"></i> <?php echo $card['type'] . " " . substr($card['number'], -4); ?></h4>
-					<div class="card-element">Name on card: <?php echo $card['nickname']; ?></div>
+					<h4><i class="fa <?php echo $card_icon_arr[$card['type']]; ?>" aria-hidden="true"></i><?php
+						$nickname = "";
+						if (!empty($card['nickname']))
+						{
+							$nickname = " \"" . $card['nickname'] . "\"";
+						}
+
+						echo " " . $card['type'] . " " . substr($card['number'], -4) . $nickname; 
+						?></h4>
+					<div class="card-element">Cardholder Name: <?php echo $card['cardholder']; ?></div>
 					<div class="card-element">Exp. Date: <?php echo $card['exp_month']. "/" . substr($card['exp_year'], -2); ?></div>
 				</div>
 				<form class="col-md-4 d-flex align-items-start justify-content-start justify-content-md-end" method="post">
@@ -138,14 +163,17 @@ mysqli_free_result($stmt);
 			<div class="font-weight-bold">Card Number:</div>
 			<div class="row">
 				<div class="col-11">
-					<input type="text" class="form-control" name="number" maxlength="100" required>
+					<input id="card-number" type="text" class="form-control" name="number" maxlength="30" pattern="[0-9.]+" required>
 				</div>
 				<div class="col-1">
-					<i class="fa fa-credit-card fa-2x" aria-hidden="true"></i>
+					<i id="card-icon" class="fa fa-2x" aria-hidden="true"></i>
+					<input id="card-type" type="hidden" name="type" value="">
 				</div>
 			</div>
-			<div class="font-weight-bold">Name on card:</div>
-			<input type="text" class="form-control" name="nickname" maxlength="100" required>
+			<div class="font-weight-bold">Cardholder Name:</div>
+			<input type="text" class="form-control" name="cardholder" maxlength="100" required>
+			<div class="font-weight-bold">Card Nickname (Optional):</div>
+			<input type="text" class="form-control" name="nickname" maxlength="100">
 			<div class="row">
 				<div class="col-sm-8">
 					<div class="font-weight-bold">Exp. Month:</div>
@@ -177,7 +205,7 @@ mysqli_free_result($stmt);
 				</div>
 				<div class="col-sm-2">
 					<div class="font-weight-bold">Security Code:</div>
-					<input type="text" class="form-control" name="security_code" maxlength="10" required>
+					<input type="text" class="form-control" name="security_code" pattern="[0-9.]+" maxlength="5" required>
 				</div>
 			</div>
 			<div>
