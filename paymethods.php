@@ -163,7 +163,7 @@ $card_icon_arr = [
 			<div class="font-weight-bold">Card Number:</div>
 			<div class="row">
 				<div class="col-11">
-					<input id="card-number" type="text" class="form-control" name="number" maxlength="30" pattern="[0-9.]+" required>
+					<input id="card-number" type="text" class="form-control" name="number" maxlength="30" pattern="[0-9.]+" autocomplete="off" required>
 				</div>
 				<div class="col-1">
 					<i id="card-icon" class="fa fa-2x" aria-hidden="true"></i>
@@ -205,7 +205,7 @@ $card_icon_arr = [
 				</div>
 				<div class="col-sm-2">
 					<div class="font-weight-bold">Security Code:</div>
-					<input type="text" class="form-control" name="security_code" pattern="[0-9.]+" maxlength="5" required>
+					<input type="text" class="form-control" name="security_code" pattern="[0-9.]+" maxlength="5" autocomplete="off" required>
 				</div>
 			</div>
 			<div>
