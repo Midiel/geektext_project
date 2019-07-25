@@ -41,13 +41,13 @@ if(isset($_SESSION['token'])) {
 
                 // return html string for order summary section
                 echo "
-                <div class=\"row border\">
+                <div class=\"row\">
                     <h5>Order Summary</h5>
 
                 </div>
 
-                <div class=\"row\">
-                    <div class=\"d-flex border border-info col-8\">
+                <div class=\"row border border-info rounded-top\">
+                    <div class=\"d-flex col-8\">
                         Items (".$row['NumItems'] ."):<br>
                         Shipping:<br>
                         Subtotal:<br>
@@ -55,7 +55,7 @@ if(isset($_SESSION['token'])) {
 
                     </div>
 
-                    <div class=\" border border-info col-4\">
+                    <div class=\"col-4\">
                         <p class=\"text-right\">
                             $". $subtotal ."<br>
                             $0.00<br>
@@ -66,12 +66,12 @@ if(isset($_SESSION['token'])) {
                     </div>
                 </div>
 
-                <div class=\"border border-warning row\">
-                    <div class=\"d-flex border border-info col-8\">
+                <div class=\"row border border-info\">
+                    <div class=\"d-flex col-8\">
                         <h5 class=\"mt-3\">Order total:</h5>
                     </div>
 
-                    <div class=\" border border-info col-4\">
+                    <div class=\"col-4\">
                         <p>
                             <h5 class=\"mt-3 text-right\">$". $total ."</h5>
                         </p>
@@ -79,8 +79,8 @@ if(isset($_SESSION['token'])) {
 
                 </div>
 
-                <div class=\"border border-info row\">
-                    <div class=\"border border-info col-sm align-self-end\">
+                <div class=\"row\">
+                    <div class=\"border rounded-bottom border-info col-sm align-self-end\">
 
                         <button id=\"submit_order\" class=\"btn btn-default btn-block btn-warning mt-2 mb-2\" onclick=\"submitOrder(); return false;\" type=\"submit\">Checkout</button>
                         
@@ -200,7 +200,7 @@ if(isset($_SESSION['token'])) {
             $info[$counter] = $book;
 
             echo "
-                <div class=\"row border p-2\" id=\"address_selector\">
+                <div class=\"row border rounded shadow-sm mt-1 pl-2 pt-2\" id=\"address_selector\">
                     <div class=\"form-check\">
                         <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . ">
                         <label>
@@ -226,7 +226,7 @@ if(isset($_SESSION['token'])) {
         $_SESSION['shipping_address'] = $_SESSION['addresses'][0];
 
         echo "
-            <div class=\"form-group\"> <!-- Submit button !-->
+            <div class=\"form-group mt-2\"> <!-- Submit button !-->
                 <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateAddress(); return false\">Use this address</button>
             </div>
         </form>
@@ -282,7 +282,7 @@ if(isset($_SESSION['token'])) {
             //echo "last 4: " .$card[$counter2]['number'];
 
             echo "
-                <div class=\"row border mt-1 p-2\" id=\"card_selector\">
+                <div class=\"row border rounded shadow-sm mt-1 pl-2 pt-2\" id=\"card_selector\">
                     <div class=\"form-check\">
                         <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . ">
                         <label>
@@ -303,7 +303,7 @@ if(isset($_SESSION['token'])) {
         endforeach;
 
         echo "
-            <div class=\"form-group\"> <!-- Submit button !-->
+            <div class=\"form-group mt-2\"> <!-- Submit button !-->
                 <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateCard(); return false\">Use this card</button>
             </div>
         </form>
@@ -338,8 +338,4 @@ if(isset($_SESSION['token'])) {
 
 }
 
-
 ?>
-
-
-

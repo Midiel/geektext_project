@@ -145,8 +145,8 @@
 
     <div id="main_div" class="container mt-5 pt-5 pb-5">
         <div class="row">       <!-- only one row -->          
-            <div class=" col-sm-8">         <!-- left column begins -->  
-                <div class="row border-info border-bottom">        <!-- row 1 begins -->
+            <div class="col-sm-8">         <!-- left column begins -->  
+                <div class="row border-info border-bottom mr-2">        <!-- row 1 begins -->
                     <div class=" pt-2 col-1">
                         <h5>1</h5>
                     </div>
@@ -154,7 +154,7 @@
                         <h5>Shipping address</h5>
                     </div>
                     <div id="address_field" class=" col-8 pt-2 pb-2">
-                        <div class="row borader">
+                        <div class="row">
                             <div id="selected_address" class=" col-sm-9 ">
                                 <p>
                                 <?php echo $shippingInfo[0]['f_name'] . ", " . $shippingInfo[0]['l_name'];?> <br>
@@ -169,7 +169,7 @@
                     </div>
                 </div>
 
-                <div class="row border-info border-bottom">        <!-- row 2 begins, payment method -->
+                <div class="row border-info border-bottom mr-2">        <!-- row 2 begins, payment method -->
                     <div class=" pt-2 col-sm-1">
                         <h5>2</h5>
                     </div>
@@ -202,7 +202,7 @@
                         <?php foreach($books_on_cart as $book) :
 			                if(!$book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
 
-                            <div class="row border border-info rounded m-1 mt-3">
+                            <div class="row border border-info rounded shadow m-1 mt-3">
                                 <div class=" col-sm-3">
                                     <img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive m-2"/>
 
@@ -244,7 +244,7 @@
                 </div>
             </div>     <!-- end of left column -->
             
-            <div id="order_summary" class=" col-sm-4">         <!-- right column, order summary rendered from checkout_ajax.php-->
+            <div id="order_summary" class="col-sm-4">         <!-- right column, order summary rendered from checkout_ajax.php-->
                 
             </div>      
         </div>
