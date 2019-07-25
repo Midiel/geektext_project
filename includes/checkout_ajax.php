@@ -10,7 +10,7 @@ if(isset($_SESSION['token'])) {
 
 
 
-    if(isset($_POST['get_num_items'])) {
+    if(isset($_POST['get_summary'])) {
 
         $query = "CALL getCartSubtotal('" . $_SESSION['token'] . "')";
 
@@ -27,18 +27,13 @@ if(isset($_SESSION['token'])) {
                 $subtotal = floor((float)$row['Subtotal'] * 100) / 100;
                 //$subtotal = number_format((float)$row['Subtotal'], 2, '.', '');
 
-
                 $tax = 0.07 * $subtotal;
                 $tax = floor($tax * 100) / 100;
                 //$tax = number_format((float)$tax, 2, '.', '');
                 $total = $subtotal + $tax;
                 $total = number_format((float)$total, 2, '.', '');
 
-
-                    
-                //echo "<a class=\"nav-link\" href=\"cart.php\"><span class=\"fa fa-shopping-cart\"> ". $row['number_of_items'] . "</span></a>";
-                //echo " " . $row['number_of_items'];
-
+                // return html string for order summary section
                 echo "
                 <div class=\"row border\">
                     <h5>Order Summary</h5>
@@ -81,28 +76,24 @@ if(isset($_SESSION['token'])) {
                 <div class=\"border border-info row\">
                     <div class=\"border border-info col-sm align-self-end\">
 
-                        <button id=\"submit_order\" class=\"btn btn-default btn-block btn-warning mt-2 mb-2\" onclick=\"orderConfirmation(); return false;\" type=\"submit\">Checkout</button>
+                        <button id=\"submit_order\" class=\"btn btn-default btn-block btn-warning mt-2 mb-2\" onclick=\"submitOrder(); return false;\" type=\"submit\">Checkout</button>
                         
                     </div>
                 </div>
                 ";
 
-
-
             }
 
-            //  gloval variable for order summary
+            // gloval variables for order summary
             $_SESSION['num_items'] = $num_items;
             $_SESSION['subtotal'] = $subtotal;
             $_SESSION['tax'] = $tax;
             $_SESSION['total'] = $total;
 
-
-
         }
     
 
-    } else if(isset($_POST['order_confirmation'])){
+    } else if(isset($_POST['submit_order'])){
 
         
         $query = $con->prepare('CALL emptyCart(?)');
@@ -133,7 +124,7 @@ if(isset($_SESSION['token'])) {
                     <p class=\"font-weight-bold\">Payment Method</p>
                                     
                     ". $_SESSION['chechout_card']['type'] . " ending in ". $_SESSION['chechout_card']['number'] . "<br>
-                    <strong>Nickname</strong>: ". $_SESSION['chechout_card']['nickname'] . "<br>
+                    <strong>Name on card</strong>: ". $_SESSION['chechout_card']['cardholder'] . "<br>
 
                 </div>
                 <div class=\"border border-info col-4\">
@@ -310,7 +301,7 @@ if(isset($_SESSION['token'])) {
                             <p>
 
                             ". $card[$counter]['type'] . " ending in ". $card[$counter]['number'] . "<br>
-                            <strong>Nickname</strong>: ". $card[$counter]['nickname'] . "<br>
+                            <strong>Name on card</strong>: ". $card[$counter]['cardholder'] . "<br>
                             
                             </p>
                         </label>
@@ -346,7 +337,7 @@ if(isset($_SESSION['token'])) {
             <p>
 
                 ". $_SESSION['cards'][$selection]['type'] . " ending in ". $_SESSION['cards'][$selection]['number'] . "<br>
-                <strong>Nickname</strong>: ". $_SESSION['cards'][$selection]['nickname'] . "<br>
+                <strong>Name on card</strong>: ". $_SESSION['cards'][$selection]['cardholder'] . "<br>
             
             </p>
             </div>

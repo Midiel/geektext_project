@@ -1,21 +1,27 @@
-
 <?php
-session_start();
-//require_once('connect.inc.php');
-//print_r($_POST);
 
-//echo $_POST;
+/*
+*   File to handle ajax requests from index.php and cart.php
+*/
+
+session_start();
+
+// if user not logged in, redirect to login page
+if(!isset($_SESSION['token'])){
+
+    header("Location: login.php");
+    exit;
+
+}
+
     
 if(isset($_SESSION['token'])) {
 
+    // to cinnect to the database
     require_once('connect.inc.php');
-
 
     // get book image, title and authors
     function getBookInfo($book_id, $con) {
-
-        //print_r($book_id);
-        //echo $_POST['book_id'];
 
         $bookInfo = array();
 
@@ -29,13 +35,11 @@ if(isset($_SESSION['token'])) {
             }
         }
 
-        //print_r($bookInfo);
-
         // Free Result
         mysqli_free_result($result);
 
         // Close Connection
-        //mysqli_close($con);
+        mysqli_close($con);
 
         $info = array();
 
@@ -49,14 +53,15 @@ if(isset($_SESSION['token'])) {
 
     if(isset($_POST['add_to_cart'])) {
 
-        // (token, book_id, qty)
+        // add item to cart
         $query = $con->prepare('CALL addToCart(?,?,?)');
         $query->bind_param('sii', $_SESSION['token'], $_POST['book_id'], $_POST['qty']);
         $query->execute();
         $query->close();
 
+        // return html to reset the quantity selector
         echo "
-            <div class=\"form-group\">
+            <div class=\"form-group btn-quantity\">
                 <input type=\"hidden\" name=\"book_id\" value=" . $_POST['book_id'] . ">
                     <select class=\"form-control\" id=\"qty\" name=\"qty\">
                         <option value=\"1\" selected=\"1\">1</option>
@@ -69,35 +74,31 @@ if(isset($_SESSION['token'])) {
                         <option value=\"8\">8</option>
                         <option value=\"9\">9</option>
                     </select>
-                    <button type=\"submit\" id=\"test\" name=\"add_to_cart\" value=\"true\" class=\"btn btn-success btn-sm mt-1\" >ADD TO CART </button>                             
+                    <button type=\"submit\" id=\"test\" name=\"add_to_cart\" value=\"true\" class=\"btn btn-default btn-sm\" >ADD TO CART </button>                             
                 </div>";
 
     } else if(isset($_POST['changeQty'])) {
 
-        echo "\nbook id: " . $_POST['book_id'];
-        
-        echo "\nbook qty: " . $_POST['changeQty'];
-        echo "\ntoken: " . $_SESSION['token'];
-
+        // change quantity of items
         $query = $con->prepare('CALL changeQty(?,?,?)');
         $query->bind_param('sii', $_SESSION['token'], $_POST['book_id'], $_POST['changeQty']);
         $query->execute();
         $query->close();
 
+        // return html to reset the quantity selector
+        $result = "<option value=\"\" selected disabled hidden>". $_POST['changeQty'] . "</option>
+                            <option value=\"1\">1</option>
+                            <option value=\"2\">2</option>
+                            <option value=\"3\">3</option>
+                            <option value=\"4\">4</option>
+                            <option value=\"5\">5</option>
+                            <option value=\"6\">6</option>
+                            <option value=\"7\">7</option>
+                            <option value=\"8\">8</option>
+                            <option value=\"9\">9</option>
+                        </select>";
 
-    $result = "<option value=\"\" selected disabled hidden>". $_POST['changeQty'] . "</option>
-                        <option value=\"1\">1</option>
-                        <option value=\"2\">2</option>
-                        <option value=\"3\">3</option>
-                        <option value=\"4\">4</option>
-                        <option value=\"5\">5</option>
-                        <option value=\"6\">6</option>
-                        <option value=\"7\">7</option>
-                        <option value=\"8\">8</option>
-                        <option value=\"9\">9</option>
-                    </select>";
-
-    echo $result;
+        echo $result;
         
     } else if(isset($_POST['get_subtotal'])) {
 
@@ -130,22 +131,18 @@ if(isset($_SESSION['token'])) {
          
     } else if(isset($_POST['update_nav'])) {
 
-        //echo "\ntoken: " . $_POST['update_nav'];
-        //$_SESSION['token'] = "7854c8701c5da6d80d602a20133d2bf8";
-       
+        // get number of items in the cart
         $query = "CALL getCartQty('" . $_SESSION['token'] . "')";
     
         if($result = mysqli_query($con, $query)) {
             while($row = mysqli_fetch_assoc($result)) {
-
                 echo "<a class=\"nav-link\" href=\"cart.php\"><span class=\"fa fa-shopping-cart\"> ". $row['number_of_items'] . "</span></a>";
-                //echo " " . $row['number_of_items'];
             }
         }
         
     } else if(isset($_POST['verify_delete'])) {
 
-
+        // get book information and return html string to display on modal
         if($bookInfo = getBookInfo($_POST['book_id'], $con)) {
 
             echo "
@@ -158,8 +155,6 @@ if(isset($_SESSION['token'])) {
                         </button>
                     </div>
                     <div class=\"modal-body\" id=\"verify_delete_modal\">
-
-
                         <div class=\"container\">
                             <div class=\"row\">
                                 <div class=\"col-sm-3\">
@@ -189,6 +184,7 @@ if(isset($_SESSION['token'])) {
 
     } else if(isset($_POST['add_to_cart_modal'])) {
 
+        // get book information and return html string to display in modal
         if($bookInfo = getBookInfo($_POST['book_id'], $con)) {
 
             echo "
@@ -220,7 +216,6 @@ if(isset($_SESSION['token'])) {
                         </div>
                     </div>
                 </div>";
-
         }
     }
 }

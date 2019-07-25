@@ -356,9 +356,7 @@
 
   <!-- Modal to show item was added to cart-->
   <div class="modal fade" id="addedToCartModal" tabindex="-1" role="dialog" aria-labelledby="addedToCartModalTitle" aria-hidden="true">
-
   </div>
-
 
   <!-- Modal for not logged in-->
   <div class="modal fade" id="notLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="notLoggedInModalTitle" aria-hidden="true">
@@ -371,7 +369,7 @@
           </button>
         </div>
         <div class="modal-body" id="modales">
-          You need to be logged in to be able to add items to the shopping cart.
+          You need to be logged in to add items to the shopping cart.
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal" onclick="javascript:window.location='login.php'">Log in</button>

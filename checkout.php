@@ -1,151 +1,115 @@
+<?php
 
-<?php 
+    /*
+    *   To handle the chechout page.
+    */
 
+    // start session protocol
     session_start();
+  
 
-    require_once('includes/connect.inc.php');
-
+    // if user not logged in, redirect to login page
     if(!isset($_SESSION['token'])){
         header("Location: login.php");
         exit;
-    } 
 
+    } else {
 
+        // to connect to the database
+        require_once('includes/connect.inc.php');
 
+        // to store the shipping address information of the logged in user
+        $userInfo = array();
 
-    $shippingInfo = array();
+        $query = "SELECT f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
 
-    //print_r("token" . $_SESSION['token']);
-
-    $query = "SELECT f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
-
-    if($result = mysqli_query($con, $query)) {
-        while($row = mysqli_fetch_assoc($result)) {
-            //echo mysqli_error($con);
-            array_push($shippingInfo, $row);
+        if($result = mysqli_query($con, $query)) {
+            while($row = mysqli_fetch_assoc($result)) {
+                array_push($userInfo, $row);
+            }
         }
-    }
 
-    // Free Result
-    mysqli_free_result($result);
+        // Free Result
+        mysqli_free_result($result);
 
-    // Close Connection
-    //mysqli_close($con);
+        // to store the shipping address information of the logged in user
+        $shippingInfo = array();
 
-    $info = array();
-    $counter = 0;
-    foreach($shippingInfo as $book) :
-        $info[$counter] = $book;
-        $counter++;
-        //print_r($info);
-    endforeach;
+        $counter = 0;
+        foreach($userInfo as $record) :
+            $shippingInfo[$counter] = $record;
+            $counter++;
+            //print_r($info);
+        endforeach;
 
-    // set gloval variable for address
-    if(!isset($_SESSION['shipping_address'])){
-        $_SESSION['shipping_address'] = $info[0];
-    }
-    
+        // save list of addresses to global variable
+        $_SESSION['addresses'] = $shippingInfo;
 
-
-    //print_r($info[0]['street_address']);
-
-
-    // get card info
-    $cards = array();
-    $query = "SELECT type, credit_card.nickname, number FROM credit_card, user WHERE credit_card.user_id = user.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
-
-    if($result = mysqli_query($con, $query)) {
-        while($row = mysqli_fetch_assoc($result)) {
-            //echo mysqli_error($con);
-            array_push($cards, $row);
+        // set gloval variable for address
+        if(!isset($_SESSION['shipping_address'])){
+            $_SESSION['shipping_address'] = $shippingInfo[0];
         }
-    }
+        
 
-    //print_r($bookInfo);
+        // get credid cards information
+        $cards = array();
 
-    // Free Result
-    mysqli_free_result($result);
+        $query = "SELECT type, credit_card.cardholder, number FROM credit_card, user WHERE credit_card.user_id = user.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
 
-    // Close Connection
-    //mysqli_close($con);
-
-
-    
-
-    $card = array();
-    $counter2 = 0;
-    foreach($cards as $book) :
-        $card[$counter2] = $book;
-        $card[$counter2]['number'] = $card[$counter2]['number'] % 10000;
-        //echo "last 4: " .$card[$counter2]['number'];
-        $counter2++;
-        //print_r($card);
-    endforeach;
-
-    // save list of cards to global variable
-    $_SESSION['cards'] = $card;
-
-    
-
-    // set gloval variable for checkout card
-    if(!isset($_SESSION['chechout_card'])){
-        $_SESSION['chechout_card'] = $_SESSION['cards'][0];
-    }
-
-
-    //print_r($card[0]);
-
-    
-    // gets all items in the cart. Move to checkout_ajax.php
-
-    $books_on_cart = array();
-
-    $query = "CALL getCart('" . $_SESSION['token'] . "')";
-
-    if($result = mysqli_query($con, $query)) {
-        while($row = mysqli_fetch_assoc($result)) {
-            //echo mysqli_error($con);
-            array_push($books_on_cart, $row);
+        if($result = mysqli_query($con, $query)) {
+            while($row = mysqli_fetch_assoc($result)) {
+                //echo mysqli_error($con);
+                array_push($cards, $row);
+            }
         }
-    }
 
-    // Free Result
-    mysqli_free_result($result);
-
-    // Close Connection
-    //mysqli_close($con);
+        // Free Result
+        mysqli_free_result($result);
 
 
-    // set gloval variable for books in for checkout. I need to move this query to checkout_ajax.php
-    $_SESSION['checkout_books'] = $books_on_cart;
+        $card = array();
+        $counter = 0;
 
+        foreach($cards as $record) :
+            $card[$counter] = $record;
+            $card[$counter]['number'] = $card[$counter]['number'] % 10000;
+            //echo "last 4: " .$card[$counter2]['number'];
+            $counter++;
+            //print_r($card);
+        endforeach;
 
+        // save list of cards to global variable
+        $_SESSION['cards'] = $card;
 
-
-    // get cart subtotal, not working, needs to be fixed
-    $query = "CALL getCartQty('" . $_SESSION['token'] . "')";
-    //print_r(" \ntoken2" . $_SESSION['token']);
-
-    //print_r("session qty: " . $_SESSION['cart_qty']);
-
-    //$query = "SELECT SUM(qty) as number_of_items FROM cart WHERE saved_for_later = 0 AND cart.user_id IN (SELECT user_id FROM user WHERE user.token = 'f6fb5f43c0789a732e94555ff64bff3e'";
     
-    $num_items = 0;
-    if($result = mysqli_query($con, $query)) {
-        print_r("here");
-        while($row = mysqli_fetch_assoc($result)) {
-            $num_items = $row['number_of_items'];
-            //print_r("lets see " . $row['number_of_items']);
-            //echo "<a class=\"nav-link\" href=\"cart.php\"><span class=\"fa fa-shopping-cart\"> ". $row['number_of_items'] . "</span></a>";
-            //echo " " . $row['number_of_items'];
+        // set gloval variable for checkout card
+        if(!isset($_SESSION['chechout_card'])){
+            $_SESSION['chechout_card'] = $_SESSION['cards'][0];
         }
+
+        
+        // gets all items in the cart. Move to checkout_ajax.php
+        $books_on_cart = array();
+
+        $query = "CALL getCart('" . $_SESSION['token'] . "')";
+
+        if($result = mysqli_query($con, $query)) {
+            while($row = mysqli_fetch_assoc($result)) {
+                //echo mysqli_error($con);
+                array_push($books_on_cart, $row);
+            }
+        }
+
+        // Free Result
+        mysqli_free_result($result);
+
+        // Close Connection
+        mysqli_close($con);
+
+        // set gloval variable for books in for checkout. I need to move this query to checkout_ajax.php
+        $_SESSION['checkout_books'] = $books_on_cart;
+
     }
-
-    // Close Connection
-    mysqli_close($con);
-
-    //print_r("token3" . $_SESSION['token']);
-
 
 ?>
 
@@ -179,8 +143,6 @@
         </div>
     </nav>
 
-
-
     <div id="main_div" class="container mt-5 pt-5 pb-5">
         <div class="row">       <!-- only one row -->
            
@@ -198,9 +160,9 @@
                         <div class="row borader">
                             <div id="selected_address" class=" col-sm-9 ">
                                 <p>
-                                <?php echo $info[0]['f_name'] . ", " . $info[0]['l_name'];?> <br>
-                                <?php echo $info[0]['street_address'];?> <br>
-                                <?php echo $info[0]['city'] . ", " . $info[0]['state'] ." " . $info[0]['zip_code'];?> <br>
+                                <?php echo $shippingInfo[0]['f_name'] . ", " . $shippingInfo[0]['l_name'];?> <br>
+                                <?php echo $shippingInfo[0]['street_address'];?> <br>
+                                <?php echo $shippingInfo[0]['city'] . ", " . $shippingInfo[0]['state'] ." " . $shippingInfo[0]['zip_code'];?> <br>
                                 </p>
                             </div>
                             <div class=" col-sm-3 pt-1 pb-1">
@@ -222,7 +184,7 @@
                             <div id="selected_card" class=" col-sm-9 ">
                                 <p>
                                 <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
-                                <strong>Nickname</strong>: <?php echo $card[0]['nickname'];?> <br>
+                                <strong>Name on card</strong>: <?php echo $card[0]['cardholder'];?> <br>
                                 </p>
                             </div>
                             <div class=" col-sm-3 pt-1 pb-1">
@@ -261,7 +223,7 @@
                                         <form>
                                             <div class="form-group">
                                             <input type="hidden" id="custId" name="book_id" value="<?php echo $book['book_id']; ?>">
-                                                <select class="form-control" name="qty" id="<?php echo $book['book_id']; ?>" onchange="changeqty()">
+                                                <select class="form-control" name="qty" id="<?php echo $book['book_id']; ?>" onchange="changeQty()">
                                                     <option value="" selected disabled hidden><?php echo $book['qty']; ?></option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -286,50 +248,8 @@
                 </div>
             </div>     <!-- end of left column -->
             
-
-            <div id="num_items" class=" col-sm-4">         <!-- right column -->
-                Order Summary here
-
-                <div class="row">
-                    <div id="num_items" class="d-flex border border-info col-7">
-                        Items ():<br>
-                        Shipping:<br>
-                        Subtotal:<br>
-                        Tax:<br>
-
-                    </div>
-
-                    <div class="d-flex border border-info col-5">
-                        <p class="text-right">
-                            $90.00<br>
-                            $0.00<br>
-                            $90.00<br>
-                            $6.22<br>
-                        </p>
-                        
-                    </div>
-                </div>
-
-                <div class="border border-warning row">
-                    <div class="d-flex border border-info col-8">
-                        <h5 class="mt-3">Order total:</h5>
-                    </div>
-
-                    <div class="d-flex border border-info col-4">
-                        <p>
-                            <h5 class="mt-3 text-right">$96.22</h5>
-                        </p>
-                    </div>
-
-                </div>
-
-                <div class="border border-info row">
-                    <div class="border border-info col-sm align-self-end">
-
-                        <button id="submit_order" class="btn btn-default btn-block btn-warning mt-2 mb-2" onclick="orderConfirmation(); return false;" type="submit">Checkout</button>
-                   
-                    </div>
-                </div>
+            <div id="order_summary" class=" col-sm-4">         <!-- right column, order summary rendered from checkout_ajax.php-->
+                
             </div>      
         </div>
     </div>
@@ -339,52 +259,37 @@
 
 <script>
 
-    document.getElementById("submit_order").addEventListener("click", function(){
-
-        document.getElementById("main_div").innerHTML = trigered;
+    // call checkout_ajax.php to get the cart subtotal
+    function getOrderSummary() {
 
         $.post("includes/checkout_ajax.php",
         {
-            order_confirmation: true
-            
+            get_summary: true
+
         })
         .done(function (result, status, xhr) {
-            $("#main_div").html(result)
-            //updateSubtotal();
-            //getNumItems();
-
+            $("#order_summary").html(result)
         })
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
+    }
 
-
-
-    });
-
+    // populate order summary after page load
     $(document).ready(function() {
-
-        getNumItems();
-        //changeAddress();
-    
+        getOrderSummary();
     });
-
-
 
 
     // order confirmation
-    function orderConfirmation(e){
+    function submitOrder(e){
 
         $.post("includes/checkout_ajax.php",
         {
-            order_confirmation: true
-            
+            submit_order: true    
         })
-        .done(function (result, status, xhr) {
+        .done(function (result, status, xhr) { 
             $("#main_div").html(result)
-            //updateSubtotal();
-            //getNumItems();
-
         })
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
@@ -393,7 +298,7 @@
 
     
 	// change number of items/qty
-	function changeqty(e) {
+	function changeQty(e) {
 		var thisid = event.target.id;
 		
 		$.post("includes/cart_ajax.php",
@@ -403,23 +308,8 @@
 		})
 		.done(function (result, status, xhr) {
 			$("#"+thisid).html(result)
-			//updateSubtotal();
-            getNumItems();
-
-		})
-		.fail(function (xhr, status, error) {
-			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-		});
-	};
-
-	function updateSubtotal(e) {
-		$.post("includes/cart_ajax.php",
-		{
-			get_subtotal: true
-		})
-		.done(function (result, status, xhr) {
-			$("#subtotal").html(result)
-			updateNavbar();
+            getOrderSummary();
+            //updateNavbar();                   // not including the navbar, so disabled
 		})
 		.fail(function (xhr, status, error) {
 			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
@@ -427,14 +317,12 @@
 	};
 
 
-	// update cart counter
+	// update navbar, not been used
 	function updateNavbar(e) {
 
 		$.post("includes/cart_ajax.php",
 			{
-				update_nav: true,
-				damn: true
-				
+				update_nav: true			
 			})
 			.done(function (result, status, xhr) {
 				$("#nav-counter").html(result)
@@ -444,60 +332,22 @@
 			});
 	};
 
-	function verifyDeletion(e) {
-
-		var thisid = event.target.id;
-
-		$.post("includes/cart_ajax.php",
-		{
-			book_id: thisid,
-			verify_delete: true
-		})
-		.done(function (result, status, xhr) {
-			$("#verifyDeleteModal").html(result);
-			$("#verifyDeleteModal").modal('show');
-			//updateSubtotal();
-		})
-		.fail(function (xhr, status, error) {
-			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-		});
-	}
-
-
-    function getNumItems() {
-
-        $.post("includes/checkout_ajax.php",
-        {
-            get_num_items: true
-
-        })
-        .done(function (result, status, xhr) {
-            $("#num_items").html(result)
-        })
-        .fail(function (xhr, status, error) {
-            $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-        });
-    }
-
-
+    // to change shipping address
     function changeAddress(){
 
         $.post("includes/checkout_ajax.php",
         {
             change_shipping_address: true
-
         })
         .done(function (result, status, xhr) {
-            $("#address_field").html(result)
-            //$("#change_address").html(result)
-            
+            $("#address_field").html(result)            
         })
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
     }
 
-
+    // to update the shipping address with the selected one
     function updateAddress(){
 
         var selection = $('#address_selector input:radio:checked').val();
@@ -506,21 +356,16 @@
         {
             update_address: true,
             address: selection
-
         })
         .done(function (result, status, xhr) {
-            $("#address_field").html(result)
-            //$("#selected_address").html(result)
-            //$("#change_address").html(result)
-            
+            $("#address_field").html(result)            
         })
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
-
-
     }
 
+    // to change the payment card
     function changeCard(){
 
         $.post("includes/checkout_ajax.php",
@@ -530,16 +375,14 @@
         })
         .done(function (result, status, xhr) {
             $("#card_field").html(result)
-            //$("#change_address").html(result)
             
         })
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
-
-
     }
 
+    // update the payment card with selected card
     function updateCard(){
 
         var selection = $('#card_selector input:radio:checked').val();
@@ -552,19 +395,14 @@
         })
         .done(function (result, status, xhr) {
             $("#card_field").html(result)
-            //$("#selected_address").html(result)
-            //$("#change_address").html(result)
             
         })
         .fail(function (xhr, status, error) {
             $("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
         });
 
-
     }
 	
-
-
 </script>
 
 </html>

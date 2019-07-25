@@ -1,5 +1,8 @@
-
 <?php
+
+	/*
+	*	To handle the shopping cart page.
+	*/
 
 	// start session
 	session_start();
@@ -151,7 +154,7 @@
 						<form>
 							<div class="form-group">
 							<input type="hidden" id="custId" name="book_id" value="<?php echo $book['book_id']; ?>">
-								<select class="form-control" name="qty" id="<?php echo $book['book_id']; ?>" onchange="changeqty()">
+								<select class="form-control" name="qty" id="<?php echo $book['book_id']; ?>" onchange="changeQty()">
 									<option value="" selected disabled hidden><?php echo $book['qty']; ?></option>
 									<option value="1">1</option>
 									<option value="2">2</option>
@@ -197,23 +200,20 @@
 									} else {
 										echo " items):";
 									}
-									?></strong> $<?php echo $subtotal;?>
+								?>
+			</strong> $<?php echo $subtotal;?>
 		</div>
   	</div>
 	
 	<!-- Go to checkout button -->
 	<div class="row justify-content-end">
 		<div class="col-3">
-		<td>
-				<a href="checkout.php" class="btn btn-warning btn-sm">
-					 Proceed to checkout
-				</a>
+			<td>
+				<a href="checkout.php" class="btn btn-warning btn-sm">Proceed to checkout</a>
 			</td>
 		</div>
 	</div>
 </div>
-
-
 
 
 <!-- Start of Saved for Later list -->
@@ -229,63 +229,60 @@
 	</thead>
 
 	<?php foreach($books_on_cart as $book) :
-			if($book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
+			if($book['saved_for_later']) {?>					<!-- only display saved books, aka saved for later -->
 
-	<tbody>
-		<tr>
-			<th scope="row">
-				<div class="col-sm-3 hidden-xs"><img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive"/></div>
-			</th>
-			<td>
-				<div class="container" >
-					<div class="row">
-						<div class="col">
-							<strong>Title</strong>: <?php echo $book['title']; ?><br>
-							<strong>Author</strong>: <?php echo $book['authors']; ?><br><br>
+		<tbody>
+			<tr>
+				<th scope="row">
+					<div class="col-sm-3 hidden-xs"><img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive"/></div>
+				</th>
+				<td>
+					<div class="container" >
+						<div class="row">
+							<div class="col">
+								<strong>Title</strong>: <?php echo $book['title']; ?><br>
+								<strong>Author</strong>: <?php echo $book['authors']; ?><br><br>
+							</div>
 						</div>
-					</div>
-					<div class="row d-flex justify-content-start">
-						<div class="p-2">
-							<form name="deleteForm" method="POST" action="cart.php">
-								<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
-								<input type="hidden" name="delete" value="true">
-								<input type="submit" class="btn btn-outline-danger btn-sm" value="Delete">
-							</form>
-						</div>
-						<div class="p-1">
-							<form name="deleteForm" method="POST" action="cart.php">
+						<div class="row d-flex justify-content-start">
+							<div class="p-2">
+								<form name="deleteForm" method="POST" action="cart.php">
 									<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
-									<input type="hidden" name="move_to_cart" value="true">
-									<input type="submit" class="btn btn-link" value="Move to Cart">
-							</form>
+									<input type="hidden" name="delete" value="true">
+									<input type="submit" class="btn btn-outline-danger btn-sm" value="Delete">
+								</form>
+							</div>
+							<div class="p-1">
+								<form name="deleteForm" method="POST" action="cart.php">
+										<input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
+										<input type="hidden" name="move_to_cart" value="true">
+										<input type="submit" class="btn btn-link" value="Move to Cart">
+								</form>
+							</div>
 						</div>
 					</div>
-				</div>
-			</td>
-			<td>
-				$<?php echo $book['price']; ?>
-			</td>
-		</tr>
-	</tbody>
+				</td>
+				<td>
+					$<?php echo $book['price']; ?>
+				</td>
+			</tr>
+		</tbody>
 	<?php } endforeach; ?>
 	</table>
 </div>
 
+
+<!-- Modal to verify deletion-->
+<div class="modal fade" id="verifyDeleteModal" tabindex="-1" role="dialog" aria-labelledby="verifyDeleteModalTitle" aria-hidden="true">
 </div>
-
-
-	<!-- Modal to verify deletion-->
-	<div class="modal fade" id="verifyDeleteModal" tabindex="-1" role="dialog" aria-labelledby="verifyDeleteModalTitle" aria-hidden="true">
-
-    </div>
 
 
 <script>
 
-	// change number of items/qty
-	function changeqty(e) {
+	// change number/qty of items
+	function changeQty(e) {
 		var thisid = event.target.id;
-		
+
 		$.post("includes/cart_ajax.php",
 		{
 			book_id: thisid,
@@ -293,6 +290,8 @@
 		})
 		.done(function (result, status, xhr) {
 			$("#"+thisid).html(result)
+
+			// update subtotal field
 			updateSubtotal();
 		})
 		.fail(function (xhr, status, error) {
@@ -300,13 +299,17 @@
 		});
 	};
 
+	// updates the navbar counter with the number of items in the shopping cart
 	function updateSubtotal(e) {
+
 		$.post("includes/cart_ajax.php",
 		{
 			get_subtotal: true
 		})
 		.done(function (result, status, xhr) {
 			$("#subtotal").html(result)
+
+			// update the navbar counter
 			updateNavbar();
 		})
 		.fail(function (xhr, status, error) {
@@ -314,15 +317,12 @@
 		});
 	};
 
-
-	// update cart counter
+	// update navbar cart counter
 	function updateNavbar(e) {
 
 		$.post("includes/cart_ajax.php",
 			{
-				update_nav: true,
-				damn: true
-				
+				update_nav: true	
 			})
 			.done(function (result, status, xhr) {
 				$("#nav-counter").html(result)
@@ -332,6 +332,7 @@
 			});
 	};
 
+	// confirm before deleting an item
 	function verifyDeletion(e) {
 
 		var thisid = event.target.id;
@@ -344,19 +345,14 @@
 		.done(function (result, status, xhr) {
 			$("#verifyDeleteModal").html(result);
 			$("#verifyDeleteModal").modal('show');
-			//updateSubtotal();
 		})
 		.fail(function (xhr, status, error) {
 			$("#message").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
 		});
 	}
 	
-
-
 </script>
     
-   
-
 </body>
 
 </html>
