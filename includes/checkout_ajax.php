@@ -1,15 +1,21 @@
-
 <?php
-session_start();
-require_once('connect.inc.php');
-//print_r($_POST);
 
-//echo $_POST;
-    
+/*
+*   File to handle ajax requests from checkout.php
+*/
+
+// start session
+session_start();
+
+
+
+// if user is logged in
 if(isset($_SESSION['token'])) {
 
+    // to connect to the database
+    require_once('connect.inc.php');
 
-
+    // handle order summary request
     if(isset($_POST['get_summary'])) {
 
         $query = "CALL getCartSubtotal('" . $_SESSION['token'] . "')";
@@ -93,7 +99,7 @@ if(isset($_SESSION['token'])) {
         }
     
 
-    } else if(isset($_POST['submit_order'])){
+    } else if(isset($_POST['submit_order'])){           // handle order summission 
 
         
         $query = $con->prepare('CALL emptyCart(?)');
@@ -101,8 +107,7 @@ if(isset($_SESSION['token'])) {
 		$query->execute();
 		$query->close();
         
-        
-
+        // return html string for order receipt
         echo "
             <div class=\"border border-danger row\">      <!-- first row -->
                 <p class=\"font-weight-bold pl-3\"><h5>Order Details</h5></p><br>
@@ -162,21 +167,13 @@ if(isset($_SESSION['token'])) {
                 </div>
                 <div class=\" col-md-4 ml-auto\">
                     <button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\" onclick=\"javascript:window.location='index.php'\">Return to homepage</button>
-                </div>
-                
-                
+                </div>     
             </div>
-        
-        ";
+            ";
 
-
-
-
-    } else if(isset($_POST['change_shipping_address'])) {
+    } else if(isset($_POST['change_shipping_address'])) {           // handle change of shipping address selector
 
         $shippingInfo = array();
-
-        //print_r("token" . $_SESSION['token']);
 
         $query = "SELECT f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
 
@@ -222,13 +219,11 @@ if(isset($_SESSION['token'])) {
                 ";
 
             $counter++;
-            //print_r($info);
         endforeach;
 
         // save list of addresses to gloaval variable to be used later
         $_SESSION['addresses'] = $info;
         $_SESSION['shipping_address'] = $_SESSION['addresses'][0];
-
 
         echo "
             <div class=\"form-group\"> <!-- Submit button !-->
@@ -236,15 +231,12 @@ if(isset($_SESSION['token'])) {
             </div>
         </form>
         
-        
         ";
 
 
-    } else if(isset($_POST['update_address'])) {
+    } else if(isset($_POST['update_address'])) {            // handle update shipping address
 
-        //print_r($_POST);
-
-        $selection = $_POST['address'];
+         $selection = $_POST['address'];
 
         //set gloval variable for shipping used shipping address
         $_SESSION['shipping_address'] = $_SESSION['addresses'][$selection];
@@ -270,10 +262,9 @@ if(isset($_SESSION['token'])) {
         
         ";
 
-    } else if(isset($_POST['change_payment_card'])) {
+    } else if(isset($_POST['change_payment_card'])) {           // handle change of payment card selector
 
         $cards = $_SESSION['cards'];
-
 
         echo "
             <form id=\"card_selector\">
@@ -284,13 +275,11 @@ if(isset($_SESSION['token'])) {
       
         ";
 
-
         $counter = 0;
         foreach($cards as $book) :
             $card[$counter] = $book;
             $card[$counter]['number'] = $card[$counter]['number'] % 10000;
             //echo "last 4: " .$card[$counter2]['number'];
-
 
             echo "
                 <div class=\"row border mt-1 p-2\" id=\"card_selector\">
@@ -311,7 +300,6 @@ if(isset($_SESSION['token'])) {
                 ";
 
             $counter++;
-            //print_r($card);
         endforeach;
 
         echo "
@@ -320,42 +308,35 @@ if(isset($_SESSION['token'])) {
             </div>
         </form>
         
-        
-        ";
+            ";
 
-    } else if(isset($_POST['update_card'])) {
+    } else if(isset($_POST['update_card'])) {               // handle set new selected card as payment method
 
         $selection = $_POST['card'];
-        //$cards = $_SESSION['cards'];
-
+  
         // set gloval variable for card used
         $_SESSION['chechout_card'] = $_SESSION['cards'][$selection];
 
         echo "
-        <div class=\"row pt-2 pb-2\">
-            <div id=\"selected_card\" class=\" col-sm-9 \">
-            <p>
+            <div class=\"row pt-2 pb-2\">
+                <div id=\"selected_card\" class=\" col-sm-9 \">
+                <p>
 
-                ". $_SESSION['cards'][$selection]['type'] . " ending in ". $_SESSION['cards'][$selection]['number'] . "<br>
-                <strong>Name on card</strong>: ". $_SESSION['cards'][$selection]['cardholder'] . "<br>
-            
-            </p>
-            </div>
-            <div class=\" col-sm-3 pt-1 pb-1\">
-                <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeCard(); return false\" value=\"Change\">
+                    ". $_SESSION['cards'][$selection]['type'] . " ending in ". $_SESSION['cards'][$selection]['number'] . "<br>
+                    <strong>Name on card</strong>: ". $_SESSION['cards'][$selection]['cardholder'] . "<br>
                 
+                </p>
+                </div>
+                <div class=\" col-sm-3 pt-1 pb-1\">
+                    <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeCard(); return false\" value=\"Change\">
+                    
+                </div>
             </div>
-        </div>
-    
-        ";
+            ";
 
     }
 
 }
-
-
-
-
 
 
 ?>

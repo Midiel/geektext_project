@@ -144,11 +144,8 @@
     </nav>
 
     <div id="main_div" class="container mt-5 pt-5 pb-5">
-        <div class="row">       <!-- only one row -->
-           
-            <div class=" col-sm-8">         <!-- left column begins -->
-             
-
+        <div class="row">       <!-- only one row -->          
+            <div class=" col-sm-8">         <!-- left column begins -->  
                 <div class="row border-info border-bottom">        <!-- row 1 begins -->
                     <div class=" pt-2 col-1">
                         <h5>1</h5>
@@ -188,8 +185,7 @@
                                 </p>
                             </div>
                             <div class=" col-sm-3 pt-1 pb-1">
-                                <input type="submit" class="btn btn-link" onclick="changeCard(); return false" value="Change">
-                                
+                                <input type="submit" class="btn btn-link" onclick="changeCard(); return false" value="Change">           
                             </div>
                         </div>
                     </div>
