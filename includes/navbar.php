@@ -19,7 +19,27 @@
     $logged_in = true;
   }
 
+//Keeping sorting values visible after reloead
+$sort_display = 'Sort by';
+if (isset($_GET['sort_by']) && !empty($_GET['sort_by']))
+{
+  $sort_display = $_GET['sort_by'];
 
+  if ($sort_display == 'title'){
+    $sort_display =  'Sorted by Title';
+  } else if ($sort_display == 'authors'){
+    $sort_display =  'Sorted by Author';
+  } else if ($sort_display == 'price'){
+    $sort_display =  'Sorted by Price';
+  } else if ($sort_display == 'published_date'){
+    $sort_display =  'Sorted by Release Date';
+  } else if ($sort_display == 'average_rating'){
+    $sort_display =  'Sorted by Rating in Ascending Order';
+  } else if ($sort_display == 'average_rating_des'){
+    $sort_display =  'Sorted by Rating in Descending Order';
+  }
+
+}
 
 
 
@@ -114,7 +134,7 @@ if (isset($token) && !empty($token))
       <li class="nav-item">
         <div class="dropdown">
           <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            Sort by
+            <?php echo $sort_display; ?>
           </button>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="<?php echo $path.'sort_by=title';?>">Title</a>
