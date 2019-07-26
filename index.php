@@ -1,6 +1,7 @@
 <?php
     //squelch undefined index error
     error_reporting( error_reporting() & ~E_NOTICE);
+
     require_once('includes/connect.inc.php');
     //flag to detect user's credentials
     $logged_in = false;
@@ -20,6 +21,7 @@
     {
       $order = true;
     }
+
     //Pagination Code
     if (isset($_GET['page']) && !empty($_GET['page']) && $_GET['page'] != 1)
     {
@@ -105,14 +107,15 @@
           {
             if($i == (count($temp_author_array) - 1))
             {
-              $book[$counter]['author'] .= '<a href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
+            $book[$counter]['author'] .= '<a id="author" style="color:blue" href="#" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].'</a>';
             }else {
-              $book[$counter]['author'] .= '<a href="#"  onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
+            $book[$counter]['author'] .= '<a style="color:blue" href="#" onmouseover="" onclick="get_author(\''.$temp_author_array[$i].'\')" >'.$temp_author_array[$i].',</a>';
             }
           }
+          $book[$counter]['bio'] = $row['authorbio'];
+          $book[$counter]['count'] = $row['rating_count'];
           $book[$counter]['rating'] = set_stars($row['average_rating']);
           $book[$counter]['image_url']= $row['image_url'];
-          $book[$counter]['bio']= $row['bio'];
           $book[$counter]['description']= $row['description'];
           $book[$counter]['price']= $row['price'];
           $book[$counter]['published_date']= $row['published_date'];
@@ -192,19 +195,21 @@
     {
       if($i <= ($start_double - 1))
       {
-        $result .= '<i class="fa fa-star" style="color:yellow;" onclick="window.location.href=cart.php"></i>';
+        $result .= '<i class="fa fa-star"></i>';
       }
       else if($start_double > $i)
       {
-        $result .= '<i class="fa fa-star-half-full" style="color:yellow;"></i>';
-      }
-      else
+        $result .= '<i class="fa fa-star-half-full"></i>';
+      } else
       {
-        $result .= '<i class="fa fa-star-o" style="color:yellow;"></i>';
+        $result .= '<i class="fa fa-star-o"></i>';
       }
+
     }
-    return $result.' '.$start_double;
+
+    return $result;
   }
+
 ?>
 
 <!DOCTYPE html>
@@ -232,8 +237,8 @@
               for($i = 0; $i < $looping; $i++): ?>
 
       <div class="col-xs col-sm-4 col-md-3 col-lg-2 col-xl-2">
-        <section class="card">
-          <article class="image-section">
+        <div class="card flex-container">
+          <div class="image-section">
             <a class="img-thumbnail">
               <img src="<?php echo $book[$i]['image_url'];?>">
             </a>
@@ -247,22 +252,21 @@
                 </div>
               </div>
             </div>
-          </article>
+          </div>
 
-          <article>
+          <div>
             <div class="star-rating">
-              <div class="star-rating-stars">
-                <?php echo $book[$i]['rating'];?>
-              </div>
-
-              <div class="text-right" style="font-size:12px;">
+              <div class="price">
                 <?php echo '$'.$book[$i]['price'];?>
+              </div>
+              <div class="stars">
+                <?php echo $book[$i]['rating'].' ('.$book[$i]['count'].')';?>
               </div>
             </div>
             <!--end star-rating -->
-          </article>
+          </div>
 
-          <article class="info-section">
+          <div class="info-section">
             <div class="title-container">
               <h2 class="title"><?php echo $book[$i]['title'];?></h2>
             </div>
@@ -272,42 +276,42 @@
             <div class="category-container">
               <h3 class="category"><?php echo $book[$i]['category'];?></h3>
             </div>
-          </article> <!-- "info-section" -->
+          </div> <!-- "info-section" -->
 
-          <article class="button-section">
+          <div class="button-section">
             <button id="description-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#description<?php echo $i ?>ModalLong">
               Book Description
             </button>
-            <div class="modal fade" id="description<?php echo $i ?>ModalLong" tabindex="-1" role="dialog" aria-labelledby="description<?php echo $i ?>ModalLongTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document" id="description<?php echo $i ?>ModalLong">
+            <div class="modal fade" id="description<?php echo $i; ?>ModalLong" tabindex="-1" role="dialog" aria-labelledby="description<?php echo $i ?>ModalLongTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document" id="description<?php echo $i; ?>ModalLong">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="descriptionModalLongTitle"><?php echo $book[$i]['title'] ?> by <?php echo $book[$i]['author']?></h5>
+                    <h5><?php echo $book[$i]['title'] ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <?php echo $book[$i]['description'];?>
+                    <h5><?php echo $book[$i]['description'];?></h5>
                   </div>
                 </div>
               </div>
             </div>
 
-            <button id="authorbio-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#authorbioModalLong">
+            <button id="authorbio-button" type="button" class="btn btn-outline-secondary btn-block btn-sm" data-toggle="modal" data-target="#authorbio<?php echo $i ?>ModalLong">
               Author Bio
             </button>
-            <div class="modal fade" id="authorbioModalLong" tabindex="-1" role="dialog" aria-labelledby="authorbioModalLongTitle" aria-hidden="true">
+            <div class="modal fade" id="authorbio<?php echo $i ?>ModalLong" tabindex="-1" role="dialog" aria-labelledby="authorbio<?php echo $i ?>ModalLongTitle" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="authorbioModalLongTitle">Author Bio</h5>
+                    <h5 class="modal-title" id="authorbio<?php echo $i ?>ModalLongTitle"><?php echo $book[$i]['author'];?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <?php echo $book[$i]['bio'];?>
+                    <h5><?php echo $book[$i]['bio'];?></h5>
                   </div>
                 </div>
               </div>
@@ -315,7 +319,7 @@
 
             <!-- Midiel: Add to cart button -->
             <form id="<?php echo $book[$i]['book_id'];?>" onsubmit="addToCart(); return false;">
-              <div class="form-group mt-2">
+              <div class="form-group btn-quantity">
                 <input type="hidden" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
                 <select class="form-control" id="qty" name="qty">
                   <option value="1" selected="1">1</option>
@@ -328,13 +332,13 @@
                   <option value="8">8</option>
                   <option value="9">9</option>
                 </select>
-                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-success btn-sm mt-1">ADD TO CART </button>
+                <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-default btn-sm">ADD TO CART </button>
               </div>
             </form>
             <!-- end add to cart -->
 
-          </article> <!-- "button-section" -->
-        </section> <!-- "card" -->
+          </div> <!-- "button-section" -->
+        </div> <!-- "card" -->
       </div> <!-- column end -->
       <?php endfor; ?>
     </div> <!-- row end -->
@@ -352,9 +356,7 @@
 
   <!-- Modal to show item was added to cart-->
   <div class="modal fade" id="addedToCartModal" tabindex="-1" role="dialog" aria-labelledby="addedToCartModalTitle" aria-hidden="true">
-
   </div>
-
 
   <!-- Modal for not logged in-->
   <div class="modal fade" id="notLoggedInModal" tabindex="-1" role="dialog" aria-labelledby="notLoggedInModalTitle" aria-hidden="true">
@@ -367,7 +369,7 @@
           </button>
         </div>
         <div class="modal-body" id="modales">
-          You need to be logged in to be able to add items to the shopping cart.
+          You need to be logged in to add items to the shopping cart.
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal" onclick="javascript:window.location='login.php'">Log in</button>
@@ -390,6 +392,7 @@
       <?php if(!isset($_SESSION['token'])) { ?>
       $("#notLoggedInModal").modal('show');
       <?php } else { ?>
+
       var thisid = event.target.id;
       //window.alert(thisid);
       var values = $("#" + thisid).serializeArray();
