@@ -173,17 +173,6 @@ if(isset($_SESSION['token'])) {
 
     } else if(isset($_POST['change_shipping_address'])) {           // handle change of shipping address selector
 
-        $shippingInfo = array();
-
-        $query = "SELECT f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
-
-        if($result = mysqli_query($con, $query)) {
-            while($row = mysqli_fetch_assoc($result)) {
-                //echo mysqli_error($con);
-                array_push($shippingInfo, $row);
-            }
-        }
-
         echo "
             <form id=\"address_selector\">
                 <div class=\"form-group\">
@@ -194,36 +183,42 @@ if(isset($_SESSION['token'])) {
         ";
 
 
-        $info = array();
+        $address = array();
         $counter = 0;
-        foreach($shippingInfo as $book) :
-            $info[$counter] = $book;
+
+        foreach($_SESSION['addresses'] as $record) :
+            $address[$counter] = $record;
+
+            // to check the current default shippping address
+            if($address[$counter]['address_id'] == $_SESSION['shipping_address']['address_id']){
+                $checked = "checked";
+            } else {
+                $checked = "";
+            }
 
             echo "
                 <div class=\"row border rounded shadow-sm mt-1 pl-2 pt-2\" id=\"address_selector\">
                     <div class=\"form-check\">
-                        <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . ">
-                        <label>
-                            
+                        <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . " " . $checked . ">
+                        <label>                   
                             <p>
 
-                            ". $info[$counter]['f_name'] . ", ". $info[$counter]['l_name'] . "<br>
-                            ". $info[$counter]['street_address'] . "<br>
-                            ". $info[$counter]['city'] . ", ". $info[$counter]['state'] . " ". $info[$counter]['zip_code'] . "<br>
+                            ". $address[$counter]['f_name'] . ", ". $address[$counter]['l_name'] . "<br>
+                            ". $address[$counter]['street_address'] . "<br>
+                            ". $address[$counter]['city'] . ", ". $address[$counter]['state'] . " ". $address[$counter]['zip_code'] . "<br>
 
                             </p>
                         </label>
                     </div>
                 </div>
-
                 ";
 
             $counter++;
         endforeach;
 
         // save list of addresses to gloaval variable to be used later
-        $_SESSION['addresses'] = $info;
-        $_SESSION['shipping_address'] = $_SESSION['addresses'][0];
+        //$_SESSION['addresses'] = $info;
+        //$_SESSION['shipping_address'] = $_SESSION['addresses'][0];
 
         echo "
             <div class=\"form-group mt-2\"> <!-- Submit button !-->
@@ -272,19 +267,25 @@ if(isset($_SESSION['token'])) {
                     <label class=\"control-label\">
                         <p class=\"text-center\"><h6>Select a card</h6></p>
                     </label>
-      
         ";
-
+ 
         $counter = 0;
-        foreach($cards as $book) :
-            $card[$counter] = $book;
+        foreach($cards as $record) :
+            $card[$counter] = $record;
             $card[$counter]['number'] = $card[$counter]['number'] % 10000;
             //echo "last 4: " .$card[$counter2]['number'];
+
+            // to check the current default shippping address
+            if($card[$counter]['card_id'] == $_SESSION['chechout_card']['card_id']){
+                $checked = "checked";
+            } else {
+                $checked = "";
+            }
 
             echo "
                 <div class=\"row border rounded shadow-sm mt-1 pl-2 pt-2\" id=\"card_selector\">
                     <div class=\"form-check\">
-                        <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . ">
+                        <input class=\"form-check-input\" type=\"radio\" name=\"selection\" value=" . $counter . " " . $checked . ">
                         <label>
                             
                             <p>

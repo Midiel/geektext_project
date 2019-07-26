@@ -21,7 +21,7 @@
         // to store the shipping address information of the logged in user
         $userInfo = array();
 
-        $query = "SELECT f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
+        $query = "SELECT address_id, f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
 
         if($result = mysqli_query($con, $query)) {
             while($row = mysqli_fetch_assoc($result)) {
@@ -54,7 +54,7 @@
         // get credid cards information
         $cards = array();
 
-        $query = "SELECT type, credit_card.cardholder, number FROM credit_card, user WHERE credit_card.user_id = user.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
+        $query = "SELECT card_id, type, credit_card.cardholder, number FROM credit_card, user WHERE credit_card.user_id = user.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
 
         if($result = mysqli_query($con, $query)) {
             while($row = mysqli_fetch_assoc($result)) {
@@ -157,9 +157,9 @@
                         <div class="row">
                             <div id="selected_address" class=" col-sm-9 ">
                                 <p>
-                                <?php echo $shippingInfo[0]['f_name'] . ", " . $shippingInfo[0]['l_name'];?> <br>
-                                <?php echo $shippingInfo[0]['street_address'];?> <br>
-                                <?php echo $shippingInfo[0]['city'] . ", " . $shippingInfo[0]['state'] ." " . $shippingInfo[0]['zip_code'];?> <br>
+                                <?php echo $_SESSION['shipping_address']['f_name'] . ", " . $_SESSION['shipping_address']['l_name'];?> <br>
+                                <?php echo $_SESSION['shipping_address']['street_address'];?> <br>
+                                <?php echo $_SESSION['shipping_address']['city'] . ", " . $_SESSION['shipping_address']['state'] ." " . $_SESSION['shipping_address']['zip_code'];?> <br>
                                 </p>
                             </div>
                             <div class=" col-sm-3 pt-1 pb-1">
@@ -173,15 +173,15 @@
                     <div class=" pt-2 col-1">
                         <h5>2</h5>
                     </div>
-                    <div class=" pt-2 col-sm-3 col-11">
+                    <div class=" pt-2 col-3">
                         <h5>Payment method</h5>
                     </div>
-                    <div id="card_field" class=" col-sm-8">
+                    <div id="card_field" class="col-8">
                         <div class="row  pt-2 pb-2">
                             <div id="selected_card" class=" col-sm-9 ">
                                 <p>
-                                <?php echo $card[0]['type'];?> ending in <?php echo $card[0]['number'];?><br>
-                                <strong>Name on card</strong>: <?php echo $card[0]['cardholder'];?> <br>
+                                <?php echo $_SESSION['chechout_card']['type'];?> ending in <?php echo $_SESSION['chechout_card']['number'];?><br>
+                                <strong>Name on card</strong>: <?php echo $_SESSION['chechout_card']['cardholder'];?> <br>
                                 </p>
                             </div>
                             <div class=" col-sm-3 pt-1 pb-1">
