@@ -67,11 +67,11 @@ if(isset($_SESSION['token'])) {
                 </div>
 
                 <div class=\"row border border-info\">
-                    <div class=\"d-flex col-8\">
+                    <div class=\"col-md-7 col-8\">
                         <h5 class=\"mt-3\">Order total:</h5>
                     </div>
 
-                    <div class=\"col-4\">
+                    <div class=\"col-md-5 col-4\">
                         <p>
                             <h5 class=\"mt-3 text-right\">$". $total ."</h5>
                         </p>

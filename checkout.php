@@ -145,7 +145,7 @@
 
     <div id="main_div" class="container mt-5 pt-5 pb-5">
         <div class="row">       <!-- only one row -->          
-            <div class="col-sm-8">         <!-- left column begins -->  
+            <div class="col-md-8 col-sm-12 mb-3">         <!-- left column begins -->  
                 <div class="row border-info border-bottom mr-2">        <!-- row 1 begins -->
                     <div class=" pt-2 col-1">
                         <h5>1</h5>
@@ -170,10 +170,10 @@
                 </div>
 
                 <div class="row border-info border-bottom mr-2">        <!-- row 2 begins, payment method -->
-                    <div class=" pt-2 col-sm-1">
+                    <div class=" pt-2 col-1">
                         <h5>2</h5>
                     </div>
-                    <div class=" pt-2 col-sm-3">
+                    <div class=" pt-2 col-sm-3 col-11">
                         <h5>Payment method</h5>
                     </div>
                     <div id="card_field" class=" col-sm-8">
@@ -195,7 +195,7 @@
                     <div class=" pt-2 col-1">
                         <h5>3</h5>
                     </div>
-                    <div class=" pt-2 col-11">
+                    <div class="col-11 pt-2">         <!-- working here -->
                         <h5>Review items</h5>
 
                         <!-- start of list of items needs to be looped-->
@@ -203,19 +203,19 @@
 			                if(!$book['saved_for_later']) {?>					<!-- only display not saved books, aka not in saved list -->
 
                             <div class="row border border-info rounded shadow m-1 mt-3">
-                                <div class=" col-sm-3">
+                                <div class="col-xl-3 col-md-4 col-xs-12">
                                     <img src="<?php echo $book['image_url']; ?>" width="100" height="100" alt="..." class="img-responsive m-2"/>
 
                                 </div>
-                                <div class=" col-sm-9 mt-2">
+                                <div class="col-md-8 col-sm-12 mt-2">
                                     <strong>Title</strong>: <?php echo $book['title']; ?><br>
 									<strong>Author</strong>: <?php echo $book['authors']; ?><br><br>
 
                                     <div class="row ">
-                                        <div class=" pt-2 col-2">
+                                        <div class="col-lg-3 col-md-4 col-sm-4 col-3 pt-2">
                                             <strong>Quantity</strong>:
                                         </div>
-                                        <div class=" col-3">
+                                        <div class="col-lg-3 col-md-4 col-sm-4 col-3">
                                         <form>
                                             <div class="form-group">
                                             <input type="hidden" id="custId" name="book_id" value="<?php echo $book['book_id']; ?>">
@@ -244,7 +244,7 @@
                 </div>
             </div>     <!-- end of left column -->
             
-            <div id="order_summary" class="col-sm-4">         <!-- right column, order summary rendered from checkout_ajax.php-->
+            <div id="order_summary" class="col-md-4 col-sm-12">         <!-- right column, order summary rendered from checkout_ajax.php-->
                 
             </div>      
         </div>
