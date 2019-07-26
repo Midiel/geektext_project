@@ -46,3 +46,16 @@ div.geektext-lr p {
 .fa-check {
     color: #48a848;
 }
+
+a.geektext-title, a.geektext-title:hover {
+    font-family: Georgia, serif;
+    color: #1d9ce5;
+    text-decoration: none;
+    font-size: 45px;
+}
+
+.geektext-title-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}

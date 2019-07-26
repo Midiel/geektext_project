@@ -9,6 +9,12 @@ body {
   margin-bottom: 50px;
   margin-top: 50px;
 }
+.flex-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: stretch;
+}
 
 .card {
   display: flex;
@@ -17,7 +23,7 @@ body {
   width: 200px;
   color: #fff;
   border: #262626;
-  background-image: linear-gradient(rgba(38, 38, 38, .5), rgba(38, 38, 38, 1));
+  background-image: linear-gradient(rgba(38, 38, 38, .8), rgba(38, 38, 38, 1));
 }
 
 .image-section {
@@ -59,11 +65,10 @@ img {
 
 .info-section {
   display: flex;
-  flex-basis: auto;
+  flex: 1 90px;
   flex-direction: column;
   justify-content: space-between;
-  flex: auto;
-  margin: 10px 40px;
+  margin: 0px 40px 10px 40px;
   letter-spacing: .01em;
 }
 
@@ -107,6 +112,17 @@ img {
   font-size: .7em;
   font-weight: 800;
 }
+.modal-header h5 {
+  font-size: 2em;
+  font-weight: 500;
+  font-family: helvetica;
+}
+
+.modal-body   h5 {
+  font-size: 1em;
+  font-weight: 500;
+  font-family: helvetica;
+}
 
 #authorbio-button {
   width: 60%;
@@ -118,6 +134,7 @@ img {
   font-size: .7em;
   font-weight: 800;
   margin-top: 10px;
+  width: 100px;
 }
 
 .btn-default {
@@ -126,7 +143,8 @@ img {
   margin-top: 10px;
   background-color: #31b4fa;
   color: #FFF;
-  border-color: #2F3E48;
+  border-color: #397cee;
+  width: 100px;
 
 }
 
@@ -138,5 +156,5 @@ img {
 
   background-color: #005eff;
   color: #FFF;
-  border-color: #262626;
+  border-color: #FFF;
 }

@@ -16,7 +16,7 @@
 .geektext-btn {
     padding: 4px 16px;
     display: inline-block;
-    margin: 8px 0px;
+    margin-bottom: 6px;
 }
 
 .geektext-btn-submit {
@@ -46,12 +46,20 @@
     border: 1px #c40000 solid;
 }
 
-.geektext-dialog div {
-    color: black;
+.fa-exclamation-circle {
+    color: #c40000;
 }
 
-.password-check {
-    padding-top: 5px;
+.geektext-dialog div {
+    color: #495057;
+}
+
+.card-element {
+    margin-bottom: 6px;
+}
+
+.geektext-container .form-control {
+    margin-bottom: 8px;
 }
 
 input {
@@ -74,4 +82,8 @@ input {
 
 .fa-check {
     color: #48a848;
+}
+
+h3, h5 {
+    color: inherit;
 }

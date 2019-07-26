@@ -7,7 +7,6 @@
   if (session_status() === PHP_SESSION_NONE) {
     session_start();
     $logged_in = false;
-
   }
 
   $logged_in = false;
@@ -16,10 +15,31 @@
     $email = $_SESSION['email'];
     $token = $_SESSION['token'];
     $user_id = $_SESSION['user_id'];
+    $nav_nickname = $_SESSION['nickname'];
     $logged_in = true;
   }
 
+//Keeping sorting values visible after reloead
+$sort_display = 'Sort by';
+if (isset($_GET['sort_by']) && !empty($_GET['sort_by']))
+{
+  $sort_display = $_GET['sort_by'];
 
+  if ($sort_display == 'title'){
+    $sort_display =  'Sorted by Title';
+  } else if ($sort_display == 'authors'){
+    $sort_display =  'Sorted by Author';
+  } else if ($sort_display == 'price'){
+    $sort_display =  'Sorted by Price';
+  } else if ($sort_display == 'published_date'){
+    $sort_display =  'Sorted by Release Date';
+  } else if ($sort_display == 'average_rating'){
+    $sort_display =  'Sorted by Rating in Ascending Order';
+  } else if ($sort_display == 'average_rating_des'){
+    $sort_display =  'Sorted by Rating in Descending Order';
+  }
+
+}
 
 
 
@@ -79,7 +99,7 @@ if (isset($token) && !empty($token))
     $top_seller_link = "";
   }
 
-  if (empty($items_in_cart)) { $items_in_cart = ""; }// For debugging, delete later
+  if (empty($items_in_cart)) { $items_in_cart = ""; }
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -114,7 +134,7 @@ if (isset($token) && !empty($token))
       <li class="nav-item">
         <div class="dropdown">
           <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            Sort by
+            <?php echo $sort_display; ?>
           </button>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="<?php echo $path.'sort_by=title';?>">Title</a>
@@ -129,10 +149,25 @@ if (isset($token) && !empty($token))
 
     </ul>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault();"><span class="fa fa-user"></span> <?php echo $email;?> </a> </li>
+      <li class="nav-item">
+        <span class="nav-link" style="padding-right: 24px">
+          <?php echo (empty($nav_nickname) ? "" : "Hi, " . $nav_nickname . "!"); ?>
+        </span>
+      </li>
+      <li class="nav-item">
+      <?php
+      if ($logged_in)
+      {
+        echo '<a class="nav-link" href="account.php"><span class="fa fa-user"></span> My Account</a>';
+      }
+      ?>
+      </li>
       <?php echo $glyphicon_log_in;?>
-      <li class="nav-item" id="nav-counter"><a class="nav-link disabled" href="cart.php"><span class="fa fa-shopping-cart"> </span></a> </li>
-
+      <li class="nav-item" id="nav-counter">
+        <a class="nav-link disabled" href="cart.php">
+          <span class="fa fa-shopping-cart"></span>
+        </a>
+      </li>
     </ul>
 
   </div>
