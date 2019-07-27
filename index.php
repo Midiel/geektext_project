@@ -42,13 +42,20 @@
     $display_from = ($page - 1) * $DISPLAY_PER_PAGE;
     $display_to = $display_from + ($DISPLAY_PER_PAGE * 3);
     //Search code
-    if (isset($_POST['search']) && !empty($_POST['search']))
+    if (isset($_GET['search']) && !empty($_GET['search']))
     {
-      $search = $_POST['search'];
+      $search = $_GET['search'];
       $search_array = explode(': ', $search);
       if(count($search_array) == 1)
       {
-        $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' ORDER BY book_id DESC LIMIT $display_from, $display_to";
+        if($sorting == false)
+        {
+          $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' ORDER BY book_id DESC LIMIT $display_from, $display_to";
+        }
+        else
+        {
+          $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+        }
       }
       else
       {
@@ -56,15 +63,27 @@
         $search_for = $search_array[1];
         if ($search_by == 'Title')
         {
-          $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' ORDER BY title DESC LIMIT $display_from, $display_to";
+          if($sorting == false){
+            $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' ORDER BY title DESC LIMIT $display_from, $display_to";
+          }else {
+            $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+          }
         }
         else if ($search_by == 'Author')
         {
-          $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' ORDER BY authors DESC LIMIT $display_from, $display_to";
+          if($sorting == false){
+            $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' ORDER BY authors DESC LIMIT $display_from, $display_to";
+          }else {
+            $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+          }
         }
         else
         {
-          $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' ORDER BY category DESC LIMIT $display_from, $display_to";
+          if($sorting == false){
+            $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' ORDER BY category DESC LIMIT $display_from, $display_to";
+          }else {
+            $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+          }
         }
       }
     }
@@ -382,7 +401,7 @@
 
 
   <!--hidden post -->
-  <form id="hidden_form" method="POST" action="index.php">
+  <form id="hidden_form" method="GET" action="index.php">
     <input type="hidden" name="search" id="hidden_search" value="">
   </form>
   <p id="test"></p>
