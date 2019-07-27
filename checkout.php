@@ -7,6 +7,7 @@
     // start session protocol
     session_start();
   
+    //print_r ($_POST);
 
     // if user not logged in, redirect to login page
     if(!isset($_SESSION['token'])){
@@ -18,10 +19,43 @@
         // to connect to the database
         require_once('includes/connect.inc.php');
 
+        // saves new address to database
+        function saveAddress($address, $con) {
+
+            print_r ($address);
+            print_r ("name: " . $_SESSION['shipping_address']['name']);
+
+            $query = $con->prepare('CALL addAddress(?,?,?,?,?,?,?)');
+            $query->bind_param('sssssss', $_SESSION['token'], $_SESSION['shipping_address']['name'], $_SESSION['shipping_address']['street_address'], 
+                                        $_SESSION['shipping_address']['state'], $_SESSION['shipping_address']['city'], $_SESSION['shipping_address']['zip_code'], 
+                                        $_SESSION['shipping_address']['country']);
+            $query->execute();
+            $query->close();
+        }
+
+
+
+        // if shipping to new address
+        if(isset($_POST['new_address']) && ($_POST['street_address'] != $_SESSION['shipping_address']['street_address'])){
+
+            unset($_POST['new_address']);
+            
+            $_SESSION['shipping_address'] = $_POST;
+            $_SESSION['shipping_address']['name'] = $_SESSION['shipping_address']['f_name'] . " " . $_SESSION['shipping_address']['l_name'];
+            $_SESSION['shipping_address']['country'] = "US";
+            //print_r ($_SESSION['shipping_address']);
+
+            if(isset($_POST['saveAddress'])){
+                saveAddress($_SESSION['shipping_address'], $con);
+            }
+            
+        }
+
+
         // to store the shipping address information of the logged in user
         $userInfo = array();
 
-        $query = "SELECT address_id, f_name, l_name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
+        $query = "SELECT address_id, f_name, l_name, name, street_address, state, city, zip_code FROM user, address WHERE user.user_id = address.user_id AND user.user_id IN (SELECT user_id FROM user WHERE token = '" . $_SESSION['token'] . "')";
 
         if($result = mysqli_query($con, $query)) {
             while($row = mysqli_fetch_assoc($result)) {
@@ -244,9 +278,69 @@
                 </div>
             </div>     <!-- end of left column -->
             
-            <div id="order_summary" class="col-md-4 col-sm-12">         <!-- right column, order summary rendered from checkout_ajax.php-->
-                
+            <div id="order_summary" class="col-md-4 col-sm-12">         <!-- right column, order summary rendered from checkout_ajax.php-->        
             </div>      
+        </div>
+    </div>
+
+    
+    <!-- modal/form to add new shipping address -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notLoggedInModalTitle">Enter a new shipping address</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modales">
+                    <form name="delete-item" method="POST" action="checkout.php">
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="validationDefault01">First name</label>
+                                <input type="text" class="form-control" id="validationDefault01" name="f_name" placeholder="First name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="validationDefault02">Last name</label>
+                                <input type="text" class="form-control" id="validationDefault02" name="l_name" placeholder="Last name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="validationDefault022">Street Address</label>
+                                <input type="text" class="form-control" id="validationDefault22" name="street_address" placeholder="Street address" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="validationDefault03">City</label>
+                                <input type="text" class="form-control" id="validationDefault03" name="city" placeholder="City" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="validationDefault04">State</label>
+                                <input type="text" class="form-control" id="validationDefault04" name="state" placeholder="State" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="validationDefault05">Zip</label>
+                                <input type="text" class="form-control" id="validationDefault05" name="zip_code" placeholder="Zip" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="saveAddress" value="true" id="invalidCheck2">
+                                <label class="form-check-label" for="invalidCheck2">
+                                    Save address to account.
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="new_address" value="true">
+                        <input type="hidden" name="address_id" value="new">
+                        <button type="submit" class="btn btn-primary">Use this address</button>
+                        <button type="submit" class="btn btn-secondary ml-4" data-dismiss="modal">Cancel</button>
+                    </form>
+                </div>   
+            </div>
         </div>
     </div>
   
@@ -254,6 +348,11 @@
 </body>
 
 <script>
+
+    // show modal
+    function showModal(){
+        $("#addAddressModal").modal('show');
+    }
 
     // call checkout_ajax.php to get the cart subtotal
     function getOrderSummary() {

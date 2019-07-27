@@ -190,7 +190,7 @@ if(isset($_SESSION['token'])) {
             $address[$counter] = $record;
 
             // to check the current default shippping address
-            if($address[$counter]['address_id'] == $_SESSION['shipping_address']['address_id']){
+            if($address[$counter]['address_id'] == $_SESSION['shipping_address']['address_id'] || $_SESSION['shipping_address']['address_id'] == 'new'){
                 $checked = "checked";
             } else {
                 $checked = "";
@@ -223,6 +223,7 @@ if(isset($_SESSION['token'])) {
         echo "
             <div class=\"form-group mt-2\"> <!-- Submit button !-->
                 <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateAddress(); return false\">Use this address</button>
+                <button class=\"btn btn-link\" name=\"submit\" type=\"button\" onclick=\"newAddressModal(); return false\">Add a new address</button>
             </div>
         </form>
         
