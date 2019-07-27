@@ -179,7 +179,12 @@
 					</td>
 				</tr>	
 			</tbody>
-		<?php } endforeach; ?>
+		<?php } endforeach; 
+
+			// format subtotal
+			$subtotal = number_format((float)$subtotal, 2, '.', '');
+		
+		?>
 	</table>
 
 	
