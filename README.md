@@ -1,5 +1,5 @@
-#Geektext Project
-####Team 8's CEN4010 Final Project for Summer 2019
+# Geektext Project
+#### Team 8's CEN4010 Final Project for Summer 2019
 
 **To run:**
 
