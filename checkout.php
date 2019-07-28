@@ -61,6 +61,12 @@
         } else if(isset($_POST['new_card']) && ($_POST['number'] != $_SESSION['chechout_card']['number'])) {
 
             $_SESSION['chechout_card'] = $_POST;
+
+            // set default card type if user enters incorrect card number
+            if(strlen($_SESSION['chechout_card']['type']) < 1) {
+                $_SESSION['chechout_card']['type'] = 'Card';
+            }
+
             if(isset($_POST['saveCard'])){
                 saveCard($_SESSION['chechout_card'], $con);
             }
@@ -447,6 +453,7 @@
   
 </body>
 
+<!-- to use John's add new card form -->
 <script src="js/paymethods.js"></script>
 
 <script>
