@@ -20,9 +20,6 @@
         // saves new address to database
         function saveAddress($address, $con) {
 
-            print_r ($address);
-            print_r ("name: " . $_SESSION['shipping_address']['name']);
-
             $query = $con->prepare('CALL addAddress(?,?,?,?,?,?,?)');
             $query->bind_param('sssssss', $_SESSION['token'], $_SESSION['shipping_address']['name'], $_SESSION['shipping_address']['street_address'], 
                                         $_SESSION['shipping_address']['state'], $_SESSION['shipping_address']['city'], $_SESSION['shipping_address']['zip_code'], 
