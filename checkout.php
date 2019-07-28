@@ -7,8 +7,6 @@
     // start session protocol
     session_start();
   
-    print_r ($_POST);
-
     // if user not logged in, redirect to login page
     if(!isset($_SESSION['token'])){
         header("Location: login.php");

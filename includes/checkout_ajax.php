@@ -109,14 +109,14 @@ if(isset($_SESSION['token'])) {
         
         // return html string for order receipt
         echo "
-            <div class=\"border border-danger row\">      <!-- first row -->
+            <div class=\" row\">      <!-- first row -->
                 <p class=\"font-weight-bold pl-3\"><h5>Order Details</h5></p><br>
             </div>
-            <div class=\"border border-danger row p-3\">
+            <div class=\" row p-3\">
                 Ordered on: " . date("l jS \of F Y h:i:s A") . "<br>
             </div>
-            <div class=\"border border-danger row\">      <!-- first row -->
-                <div class=\"border border-danger col-4\"> <!-- address column -->
+            <div class=\" border border-info rounded shadow row\">      <!-- first row -->
+                <div class=\" border-right border-info col-4\"> <!-- address column -->
                     <p class=\"font-weight-bold\">Shipping Address</p>
                 
                     ". $_SESSION['shipping_address']['f_name'] . ", ". $_SESSION['shipping_address']['l_name'] . "<br>
@@ -125,19 +125,19 @@ if(isset($_SESSION['token'])) {
                         
 
                 </div>
-                <div class=\"border border-info col-4\">
+                <div class=\"border-right border-info col-4\">
                     <p class=\"font-weight-bold\">Payment Method</p>
                                     
                     ". $_SESSION['chechout_card']['type'] . " ending in ". $_SESSION['chechout_card']['number'] . "<br>
                     <strong>Name on card</strong>: ". $_SESSION['chechout_card']['cardholder'] . "<br>
 
                 </div>
-                <div class=\"border border-info col-4\">
-                    <div class=\"border border-danger row\">
+                <div class=\" col-4\">
+                    <div class=\"border-bottom border-info row\">
                         <p class=\"font-weight-bold ml-3\">Order Summary</p>    
                     </div>
-                    <div class=\"border border-danger row\">
-                        <div class=\"border border-info col-8\">
+                    <div class=\"row\">
+                        <div class=\" col-8\">
                             Number of items:<br>
                             Subtotal:<br>
                             Shipping:<br>
@@ -147,7 +147,7 @@ if(isset($_SESSION['token'])) {
                             </P>
 
                         </div>
-                        <div class=\" border border-info col-4\">
+                        <div class=\" col-4\">
 
                             <p class=\"text-right\">
                                 ". $_SESSION['num_items'] ."<br>
