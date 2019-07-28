@@ -65,7 +65,7 @@ if (isset($token) && !empty($token))
     $token = '';
     session_destroy();
     $glyphicon_log_in =
-      '<li class="nav-item"><a class="nav-link" href="#"  onclick="event.preventDefault();"><span class="fa fa-new-window"></span> Sign Up </a></li>
+      '<li class="nav-item"><a class="nav-link" href="register.php"><span class="fa fa-new-window"></span> Sign Up </a></li>
       <li class="nav-item"><a class="nav-link" href="login.php"><span class="fa fa-plus"></span> Log in </a></li>';
   }
 
@@ -150,7 +150,7 @@ if (isset($token) && !empty($token))
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <span class="nav-link" style="padding-right: 24px">
+        <span class="nav-link active" style="padding-right: 24px;">
           <?php echo (empty($nav_nickname) ? "" : "Hi, " . $nav_nickname . "!"); ?>
         </span>
       </li>
