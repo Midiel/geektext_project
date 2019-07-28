@@ -251,8 +251,7 @@ if(isset($_SESSION['token'])) {
                    </p> 
                 </div>
                 <div class=\" col-sm-3 pt-1 pb-1\">
-                    <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeAddress(); return false\" value=\"Change\">
-                    
+                    <input type=\"submit\" class=\"btn btn-link\" onclick=\"changeAddress(); return false\" value=\"Change\">                    
                 </div>
             </div>
         
@@ -277,7 +276,7 @@ if(isset($_SESSION['token'])) {
             //echo "last 4: " .$card[$counter2]['number'];
 
             // to check the current default shippping address
-            if($card[$counter]['card_id'] == $_SESSION['chechout_card']['card_id']){
+            if($card[$counter]['card_id'] == $_SESSION['chechout_card']['card_id'] || $_SESSION['chechout_card']['card_id'] == 'new'){
                 $checked = "checked";
             } else {
                 $checked = "";
@@ -307,6 +306,7 @@ if(isset($_SESSION['token'])) {
         echo "
             <div class=\"form-group mt-2\"> <!-- Submit button !-->
                 <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateCard(); return false\">Use this card</button>
+                <button class=\"btn btn-link\" name=\"submit\" type=\"button\" onclick=\"newCardModal(); return false\">Add a new credit card</button>
             </div>
         </form>
         

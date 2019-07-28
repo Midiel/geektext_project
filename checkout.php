@@ -7,7 +7,7 @@
     // start session protocol
     session_start();
   
-    //print_r ($_POST);
+    print_r ($_POST);
 
     // if user not logged in, redirect to login page
     if(!isset($_SESSION['token'])){
@@ -33,13 +33,20 @@
             $query->close();
         }
 
+        // save new card to database
+        function saveCard($card, $con) {
+
+            $query = $con->prepare('CALL addCard(?,?,?,?,?,?,?)');
+            $query->bind_param('sssssss', $_SESSION['token'], $card['cardholder'], $card['type'], $card['number'], $card['exp_month'], $card['exp_year'], $card['security_code']);
+            $query->execute();
+            $query->close();
+        }
+
 
 
         // if shipping to new address
         if(isset($_POST['new_address']) && ($_POST['street_address'] != $_SESSION['shipping_address']['street_address'])){
-
-            unset($_POST['new_address']);
-            
+          
             $_SESSION['shipping_address'] = $_POST;
             $_SESSION['shipping_address']['name'] = $_SESSION['shipping_address']['f_name'] . " " . $_SESSION['shipping_address']['l_name'];
             $_SESSION['shipping_address']['country'] = "US";
@@ -48,7 +55,20 @@
             if(isset($_POST['saveAddress'])){
                 saveAddress($_SESSION['shipping_address'], $con);
             }
+
+            unset($_POST['new_address']);
             
+        } else if(isset($_POST['new_card']) && ($_POST['number'] != $_SESSION['chechout_card']['number'])) {
+
+            $_SESSION['chechout_card'] = $_POST;
+            if(isset($_POST['saveCard'])){
+                saveCard($_SESSION['chechout_card'], $con);
+            }
+
+            // only keep the last 4 digits
+            $_SESSION['chechout_card']['number'] = $_SESSION['chechout_card']['number'] % 10000;
+            unset($_POST['new_card']);
+
         }
 
 
@@ -343,15 +363,103 @@
             </div>
         </div>
     </div>
-  
 
+    <!-- modal/form to enter new credit card --> 
+    <div class="modal fade" id="addCardModal" tabindex="-1" role="dialog" aria-labelledby="addCardModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notLoggedInModalTitle">Enter a new credit/debit card</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modales">
+                    <form name="delete-item" method="POST" action="checkout.php">
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="validationDefault01">Cardholder Name</label>
+                                <input type="text" class="form-control" id="validationDefault01" name="cardholder" placeholder="Cardholder name" maxlength="100" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-10 mb-3">
+                                <label for="validationDefault022">Card Number</label>
+                                <input type="text" class="form-control" id="card-number" name="number" placeholder="Card number" maxlength="30" pattern="[0-9.]+" autocomplete="off" required>
+                            </div>
+                            <div class="col-1 mt-1">
+                                <i id="card-icon" class="fa fa-2x" aria-hidden="true"></i>
+                                <input id="card-type" type="hidden" name="type" value="">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label for="validationDefault03">Exp. Month</label>
+                                <select class="form-control" name="exp_month">
+                                    <option value="1">01 - January</option>
+                                    <option value="2">02 - February</option>
+                                    <option value="3">03 - March</option>
+                                    <option value="4">04 - April</option>
+                                    <option value="5">05 - May</option>
+                                    <option value="6">06 - June</option>
+                                    <option value="7">07 - July</option>
+                                    <option value="8">08 - August</option>
+                                    <option value="9">09 - September</option>
+                                    <option value="10">10 - October</option>
+                                    <option value="11">11 - November</option>
+                                    <option value="12">12 - December</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 ml-1">
+                                <label for="expYear">Exp. Year</label>
+                                <select class="form-control" id="expYear" name="exp_year">
+                                    <?php 
+                                    for ($year = (int)date("Y"); $year < ((int)date("Y") + 12); $year++)
+                                    {
+                                        echo '<option value="' . $year . '">' . $year . '</option>';
+                                    } 
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 ml-1">
+                                <label for="secCode">Security Code</label>
+                                <input type="text" class="form-control" id="secCode" name="security_code" pattern="[0-9.]+" maxlength="5" autocomplete="off" required>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="saveCard" value="true" id="invalidCheck2">
+                                <label class="form-check-label" for="invalidCheck2">
+                                    Save credit card to account.
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="new_card" value="true">
+                        <input type="hidden" name="card_id" value="new">
+                        <button type="submit" class="btn btn-primary">Use this credit card</button>
+                        <button type="submit" class="btn btn-secondary ml-4" data-dismiss="modal">Cancel</button>
+                    </form>
+                </div>   
+            </div>
+        </div>
+    </div>
+  
 </body>
+
+<script src="js/paymethods.js"></script>
 
 <script>
 
     // show modal
-    function showModal(){
+    function newAddressModal(){
         $("#addAddressModal").modal('show');
+    }
+
+    // enter new credit card modal/form 
+    function newCardModal(){
+      
+        $("#addCardModal").modal('show');
     }
 
     // call checkout_ajax.php to get the cart subtotal
