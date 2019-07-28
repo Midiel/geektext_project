@@ -220,14 +220,27 @@ if(isset($_SESSION['token'])) {
         //$_SESSION['addresses'] = $info;
         //$_SESSION['shipping_address'] = $_SESSION['addresses'][0];
 
-        echo "
-            <div class=\"form-group mt-2\"> <!-- Submit button !-->
-                <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateAddress(); return false\">Use this address</button>
-                <button class=\"btn btn-link\" name=\"submit\" type=\"button\" onclick=\"newAddressModal(); return false\">Add a new address</button>
-            </div>
-        </form>
-        
-        ";
+        if($counter < 1) {
+
+            echo "
+                <div class=\"form-group mt-2\"> <!-- Submit button !-->
+                    <button class=\"btn btn-link\" name=\"submit\" type=\"button\" onclick=\"newAddressModal(); return false\">Add a new address</button>
+                </div>
+            </form>
+            
+            ";
+
+        } else {
+            echo "
+                <div class=\"form-group mt-2\"> <!-- Submit button !-->
+                    <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateAddress(); return false\">Use this address</button>
+                    <button class=\"btn btn-link\" name=\"submit\" type=\"button\" onclick=\"newAddressModal(); return false\">Add a new address</button>
+                </div>
+            </form>
+            
+            ";
+        }
+
 
 
     } else if(isset($_POST['update_address'])) {            // handle update shipping address
@@ -303,14 +316,27 @@ if(isset($_SESSION['token'])) {
             $counter++;
         endforeach;
 
-        echo "
-            <div class=\"form-group mt-2\"> <!-- Submit button !-->
-                <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateCard(); return false\">Use this card</button>
-                <button class=\"btn btn-link\" name=\"submit\" type=\"button\" onclick=\"newCardModal(); return false\">Add a new credit card</button>
-            </div>
-        </form>
-        
-            ";
+        if($counter < 1) {
+
+            echo "
+                <div class=\"form-group mt-2\"> <!-- Submit button !-->
+                    <button class=\"btn btn-link\" name=\"submit\" type=\"button\" onclick=\"newCardModal(); return false\">Add a new credit card</button>
+                </div>
+            </form>
+            
+                ";
+
+        } else {
+            echo "
+                <div class=\"form-group mt-2\"> <!-- Submit button !-->
+                    <button class=\"btn btn-primary\" name=\"submit\" type=\"button\" onclick=\"updateCard(); return false\">Use this card</button>
+                    <button class=\"btn btn-link\" name=\"submit\" type=\"button\" onclick=\"newCardModal(); return false\">Add a new credit card</button>
+                </div>
+            </form>
+            
+                ";
+        }
+
 
     } else if(isset($_POST['update_card'])) {               // handle set new selected card as payment method
 
