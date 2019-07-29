@@ -1,6 +1,3 @@
-# avoid uploading/downloading images
-images/*
-
 # removing IDE files
 .vs/
 .gitattributes
