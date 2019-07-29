@@ -11,6 +11,10 @@
     $sorting = false;
     $order == false;
     $temp_author_array = array();
+    $browse_by_rating = false;
+    $rating_value = 0;
+    $rating_direction = '';
+
     //sorting value
     if (isset($_GET['sort_by']) && !empty($_GET['sort_by']))
     {
@@ -20,6 +24,14 @@
     if ($sort_by == 'average_rating_des')
     {
       $order = true;
+    }
+
+    //browse by rating code
+    if (isset($_GET['browse_by_rating']) && !empty($_GET['browse_by_rating']))
+    {
+      $rating_value = $_GET['browse_by_rating'];
+      $rating_direction = $_GET['direction'];
+      $browse_by_rating = true;
     }
 
     //Pagination Code
@@ -48,13 +60,29 @@
       $search_array = explode(': ', $search);
       if(count($search_array) == 1)
       {
-        if($sorting == false)
+        if($sorting == false && $browse_by_rating == false)
         {
           $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' ORDER BY book_id DESC LIMIT $display_from, $display_to";
         }
-        else
+        else if($sorting == true && $browse_by_rating == false)
         {
           $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+        }
+        else if($sorting == false && $browse_by_rating == true)
+        {
+          if($rating_direction == 'up'){
+            $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' AND `average_rating` >= $rating_value ORDER BY book_id DESC LIMIT $display_from, $display_to";
+          }else{
+            $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' AND `average_rating` <= $rating_value ORDER BY book_id DESC LIMIT $display_from, $display_to";
+          }
+        }
+        else if($sorting == true && $browse_by_rating == true)
+        {
+          if($rating_direction == 'up'){
+            $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' AND `average_rating` >= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+          }else{
+            $query = "SELECT * FROM book WHERE `title` LIKE '%%$search%%' OR `authors` LIKE '%%$search%%' OR `category` LIKE '%%$search%%' AND `average_rating` <= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+          }
         }
       }
       else
@@ -63,26 +91,74 @@
         $search_for = $search_array[1];
         if ($search_by == 'Title')
         {
-          if($sorting == false){
+          if($sorting == false && $browse_by_rating == false){
             $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' ORDER BY title DESC LIMIT $display_from, $display_to";
-          }else {
+          }else if($sorting == true && $browse_by_rating == false) {
             $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+          }
+          else if($sorting == false && $browse_by_rating == true)
+          {
+            if($rating_direction == 'up'){
+              $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' AND `average_rating` >= $rating_value ORDER BY title DESC LIMIT $display_from, $display_to";
+            }else{
+              $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' AND `average_rating` <= $rating_value ORDER BY title DESC LIMIT $display_from, $display_to";
+            }
+          }
+          else if($sorting == true && $browse_by_rating == true)
+          {
+            if($rating_direction == 'up'){
+              $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' AND `average_rating` >= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+            }else{
+              $query = "SELECT * FROM book WHERE `title` LIKE '%%$search_for%%' AND `average_rating` <= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+            }
           }
         }
         else if ($search_by == 'Author')
         {
-          if($sorting == false){
+          if($sorting == false && $browse_by_rating == false){
             $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' ORDER BY authors DESC LIMIT $display_from, $display_to";
-          }else {
+          }else if($sorting == true && $browse_by_rating == false) {
             $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+          }
+          else if($sorting == false && $browse_by_rating == true)
+          {
+            if($rating_direction == 'up'){
+              $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' AND `average_rating` >= $rating_value ORDER BY authors DESC LIMIT $display_from, $display_to";
+            }else{
+              $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' AND `average_rating` <= $rating_value ORDER BY authors DESC LIMIT $display_from, $display_to";
+            }
+          }
+          else if($sorting == true && $browse_by_rating == true)
+          {
+            if($rating_direction == 'up'){
+              $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' AND `average_rating` >= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+            }else{
+              $query = "SELECT * FROM book WHERE `authors` LIKE '%%$search_for%%' AND `average_rating` <= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+            }
           }
         }
         else
         {
-          if($sorting == false){
+          if($sorting == false && $browse_by_rating == false){
             $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' ORDER BY category DESC LIMIT $display_from, $display_to";
-          }else {
+          }else if($sorting == true && $browse_by_rating == false) {
             $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+          }
+          else if($sorting == false && $browse_by_rating == true)
+          {
+            if($rating_direction == 'up'){
+              $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' AND `average_rating` >= $rating_value ORDER BY category DESC LIMIT $display_from, $display_to";
+            }else{
+              $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' AND `average_rating` <= $rating_value ORDER BY category DESC LIMIT $display_from, $display_to";
+            }
+          }
+          else if($sorting == true && $browse_by_rating == true)
+          {
+            if($rating_direction == 'up'){
+              $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' AND `average_rating` >= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+            }else{
+              $query = "SELECT * FROM book WHERE `category` LIKE '%%$search_for%%' AND `average_rating` <= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+            }
           }
         }
       }
@@ -90,29 +166,81 @@
     else
     {
         //determine query
-        if ($top_sellers == true && $sorting == false)
+        if ($top_sellers == true && $sorting == false && $browse_by_rating == false )
         {
           $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC LIMIT $display_from, $display_to";
         }
-        else if ($top_sellers == false && $sorting == false)
+        else if ($top_sellers == false && $sorting == false && $browse_by_rating == false)
         {
           $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY book_id DESC LIMIT $display_from, $display_to";
         }
-        else if ($top_sellers == true && $sorting == true && $order == false)
+        else if ($top_sellers == true && $sorting == true && $order == false && $browse_by_rating == false)
         {
           $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
         }
-        else if ($top_sellers == false && $sorting == true && $order == false)
+        else if ($top_sellers == false && $sorting == true && $order == false && $browse_by_rating == false)
         {
           $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
         }
-        else if ($top_sellers == true && $sorting == true && $order == true)
+        else if ($top_sellers == true && $sorting == true && $order == true && $browse_by_rating == false)
         {
           $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 ORDER BY sales DESC) as sub ORDER BY average_rating DESC LIMIT $display_from, $display_to";
         }
-        else if ($top_sellers == false && $sorting == true && $order == true)
+        else if ($top_sellers == false && $sorting == true && $order == true && $browse_by_rating == false)
         {
           $query = "SELECT * FROM book WHERE book_id > 0 ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+        }
+
+        // if $browse_by_rating == true with direction up
+        else if ($top_sellers == true && $sorting == false && $browse_by_rating == true && $rating_direction == 'up')
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 AND `average_rating` >= $rating_value ORDER BY sales DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == false && $browse_by_rating == true && $rating_direction == 'up')
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 AND `average_rating` >= $rating_value ORDER BY book_id DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == true && $sorting == true && $order == false && $browse_by_rating == true && $rating_direction == 'up')
+        {
+          $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 AND `average_rating` >= $rating_value ORDER BY sales DESC) as sub ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == true && $order == false && $browse_by_rating == true && $rating_direction == 'up')
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 AND `average_rating` >= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == true && $sorting == true && $order == true && $browse_by_rating == true && $rating_direction == 'up')
+        {
+          $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 AND `average_rating` >= $rating_value ORDER BY sales DESC) as sub ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == true && $order == true && $browse_by_rating == true && $rating_direction == 'up')
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 AND `average_rating` >= $rating_value ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+        }
+
+        // if $browse_by_rating == true with direction down
+        else if ($top_sellers == true && $sorting == false && $browse_by_rating == true && $rating_direction == 'down')
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 AND `average_rating` <= $rating_value ORDER BY sales DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == false && $browse_by_rating == true && $rating_direction == 'down')
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 AND `average_rating` <= $rating_value ORDER BY book_id DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == true && $sorting == true && $order == false && $browse_by_rating == true && $rating_direction == 'down')
+        {
+          $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 AND `average_rating` <= $rating_value ORDER BY sales DESC) as sub ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == true && $order == false && $browse_by_rating == true && $rating_direction == 'down')
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 AND `average_rating` <= $rating_value ORDER BY $sort_by ASC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == true && $sorting == true && $order == true && $browse_by_rating == true && $rating_direction == 'down')
+        {
+          $query = "SELECT * FROM (SELECT * FROM book WHERE book_id > 0 AND `average_rating` <= $rating_value ORDER BY sales DESC) as sub ORDER BY average_rating DESC LIMIT $display_from, $display_to";
+        }
+        else if ($top_sellers == false && $sorting == true && $order == true && $browse_by_rating == true && $rating_direction == 'down')
+        {
+          $query = "SELECT * FROM book WHERE book_id > 0 AND `average_rating` <= $rating_value ORDER BY average_rating DESC LIMIT $display_from, $display_to";
         }
     }
     $run = mysqli_query($con, $query);
@@ -207,6 +335,7 @@
     }
     $last_page = true;
   }
+
   function set_stars($start_double)
   {
     $result = '';

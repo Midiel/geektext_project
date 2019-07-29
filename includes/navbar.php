@@ -9,6 +9,11 @@
     $logged_in = false;
   }
 
+  $one_star = set_star(1);
+  $two_stars = set_star(2);
+  $three_stars = set_star(3);
+  $four_stars = set_star(4);
+  $five_stars = set_star(5);
   $logged_in = false;
 
   if(isset($_SESSION['token'])) {
@@ -100,6 +105,56 @@ if (isset($token) && !empty($token))
   }
 
   if (empty($items_in_cart)) { $items_in_cart = ""; }
+
+  $browse_by_rating_display = "Browse by Rating";
+  if (isset($_GET['browse_by_rating']) && !empty($_GET['browse_by_rating']))
+  {
+    $browse_by_rating_display = $_GET['browse_by_rating'];
+    $direction_display = $_GET['direction'];
+
+    if ($browse_by_rating_display == 1 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(1).' or up';
+    } else if ($browse_by_rating_display == 2 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(2).' or up';
+    } else if ($browse_by_rating_display == 3 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(3).' or up';
+    } else if ($browse_by_rating_display == 4 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(4).' or up';
+    } else if ($browse_by_rating_display == 5 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(5);
+    } else if ($browse_by_rating_display == 4 && $direction_display == 'down' ){
+      $browse_by_rating_display =  set_star(4).' or less';
+    }else if ($browse_by_rating_display == 3 && $direction_display == 'down' ){
+      $browse_by_rating_display =  set_star(3).' or less';
+    }else if ($browse_by_rating_display == 2 && $direction_display == 'down' ){
+      $browse_by_rating_display =  set_star(2).' or less';
+    }else if ($browse_by_rating_display == 1 && $direction_display == 'down' ){
+      $browse_by_rating_display =  set_star(1);
+    }
+
+  }
+
+  function set_star($start_double)
+  {
+    $result = '';
+    for($i = 0; $i < 5; $i++)
+    {
+      if($i <= ($start_double - 1))
+      {
+        $result .= '<i class="fa fa-star" style="color:black;"></i>';
+      }
+      else if($start_double > $i)
+      {
+        $result .= '<i class="fa fa-star-half-full"></i>';
+      } else
+      {
+        $result .= '<i class="fa fa-star-o" style="color:black;"></i>';
+      }
+
+    }
+
+    return $result;
+  }
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -125,6 +180,27 @@ if (isset($token) && !empty($token))
           <option id="op6">
         </datalist>
       </form>
+
+    </ul>
+    <ul class="navbar-nav ml-auto" style="display: <?php echo $on_homepage ? "flex" : "none";?>">
+      <li class="nav-item">
+        <div class="dropdown">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <?php echo $browse_by_rating_display; ?>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=1&direction=up';?>"><?php echo $one_star;?> or up</a>
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=2&direction=up';?>"><?php echo $two_stars;?> or up</a>
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=3&direction=up';?>"><?php echo $three_stars;?> or up</a>
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=4&direction=up';?>"><?php echo $four_stars;?> or up</a>
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=5&direction=up';?>"><?php echo $five_stars;?></a>
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=4&direction=down';?>"><?php echo $four_stars;?> or less</a>
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=3&direction=down';?>"><?php echo $three_stars;?> or less</a>
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=2&direction=down';?>"><?php echo $two_stars;?> or less</a>
+            <a class="dropdown-item" href="<?php echo $path.'browse_by_rating=1&direction=down';?>"><?php echo $one_star;?></a>
+          </div>
+        </div>
+      </li>
 
     </ul>
     <ul class="navbar-nav ml-auto" style="display: <?php echo $on_homepage ? "flex" : "none";?>">

@@ -102,8 +102,13 @@
 
         // set gloval variable for address
         if(!isset($_SESSION['shipping_address'])){
-            $_SESSION['shipping_address'] = $shippingInfo[0];
-        }
+            if(count($shippingInfo) < 1) {
+                $_SESSION['shipping_address'] = array();
+                $_SESSION['shipping_address']['street_address'] = "";
+            } else {
+                $_SESSION['shipping_address'] = $shippingInfo[0];
+            }
+        } 
         
 
         // get credid cards information
@@ -135,11 +140,15 @@
 
         // save list of cards to global variable
         $_SESSION['cards'] = $card;
-
     
         // set gloval variable for checkout card
         if(!isset($_SESSION['chechout_card'])){
-            $_SESSION['chechout_card'] = $_SESSION['cards'][0];
+            if(count($card) < 1) {
+                $_SESSION['chechout_card'] = array();
+                $_SESSION['chechout_card']['number'] = "";
+            } else {
+                $_SESSION['chechout_card'] = $_SESSION['cards'][0];
+            }
         }
 
         
@@ -208,20 +217,35 @@
                     <div class=" pt-2 col-3">
                         <h5>Shipping address</h5>
                     </div>
-                    <div id="address_field" class=" col-8 pt-2 pb-2">
-                        <div class="row">
-                            <div id="selected_address" class=" col-sm-9 ">
-                                <p>
-                                <?php echo $_SESSION['shipping_address']['f_name'] . ", " . $_SESSION['shipping_address']['l_name'];?> <br>
-                                <?php echo $_SESSION['shipping_address']['street_address'];?> <br>
-                                <?php echo $_SESSION['shipping_address']['city'] . ", " . $_SESSION['shipping_address']['state'] ." " . $_SESSION['shipping_address']['zip_code'];?> <br>
-                                </p>
-                            </div>
-                            <div class=" col-sm-3 pt-1 pb-1">
-                                <input type="submit" class="btn btn-link" onclick="changeAddress(); return false" name="change_shipping" value="Change">                   
+
+                    <?php
+                    if(strlen($_SESSION['shipping_address']['street_address']) < 1) { ?>
+                        <div id="address_field" class=" col-8 pt-2 pb-2">
+                            <div class="row">
+                                <div id="selected_address" class=" col-sm-9 ">
+                                    <button class="btn btn-link" name="submit" type="button" onclick="newAddressModal(); return false">Add a new address</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <?php }  else { ?>
+
+                        <div id="address_field" class=" col-8 pt-2 pb-2">
+                            <div class="row">
+                                <div id="selected_address" class=" col-sm-9 ">
+                                    <p>
+                                    <?php echo $_SESSION['shipping_address']['f_name'] . ", " . $_SESSION['shipping_address']['l_name'];?> <br>
+                                    <?php echo $_SESSION['shipping_address']['street_address'];?> <br>
+                                    <?php echo $_SESSION['shipping_address']['city'] . ", " . $_SESSION['shipping_address']['state'] ." " . $_SESSION['shipping_address']['zip_code'];?> <br>
+                                    </p>
+                                </div>
+                                <div class=" col-sm-3 pt-1 pb-1">
+                                    <input type="submit" class="btn btn-link" onclick="changeAddress(); return false" name="change_shipping" value="Change">                   
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php } ?>
+
                 </div>
 
                 <div class="row border-info border-bottom mr-2">        <!-- row 2 begins, payment method -->
@@ -231,19 +255,33 @@
                     <div class=" pt-2 col-3">
                         <h5>Payment method</h5>
                     </div>
-                    <div id="card_field" class="col-8">
-                        <div class="row  pt-2 pb-2">
-                            <div id="selected_card" class=" col-sm-9 ">
-                                <p>
-                                <?php echo $_SESSION['chechout_card']['type'];?> ending in <?php echo $_SESSION['chechout_card']['number'];?><br>
-                                <strong>Name on card</strong>: <?php echo $_SESSION['chechout_card']['cardholder'];?> <br>
-                                </p>
-                            </div>
-                            <div class=" col-sm-3 pt-1 pb-1">
-                                <input type="submit" class="btn btn-link" onclick="changeCard(); return false" value="Change">           
+
+                    <?php if(strlen($_SESSION['chechout_card']['number']) < 1) { ?>
+                        <div id="card_field" class="col-8">
+                            <div class="row  pt-2 pb-2">
+                                <div id="selected_card" class=" col-sm-9 ">
+                                    <button class="btn btn-link" name="submit" type="button" onclick="newCardModal(); return false">Add a new credit card</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    
+                    <?php } else { ?>
+
+                        <div id="card_field" class="col-8">
+                            <div class="row  pt-2 pb-2">
+                                <div id="selected_card" class=" col-sm-9 ">
+                                    <p>
+                                    <?php echo $_SESSION['chechout_card']['type'];?> ending in <?php echo $_SESSION['chechout_card']['number'];?><br>
+                                    <strong>Name on card</strong>: <?php echo $_SESSION['chechout_card']['cardholder'];?> <br>
+                                    </p>
+                                </div>
+                                <div class=" col-sm-3 pt-1 pb-1">
+                                    <input type="submit" class="btn btn-link" onclick="changeCard(); return false" value="Change">           
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php } ?>
                 </div>
 
                 <div class="row ">        <!-- row 3 begins -->
@@ -308,7 +346,7 @@
     <!-- modal/form to add new shipping address -->
     <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div class="modal-content" id="shipping_address">
                 <div class="modal-header">
                     <h5 class="modal-title" id="notLoggedInModalTitle">Enter a new shipping address</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
