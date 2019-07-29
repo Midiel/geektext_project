@@ -107,6 +107,32 @@ if (isset($token) && !empty($token))
   if (empty($items_in_cart)) { $items_in_cart = ""; }
 
   $browse_by_rating_display = "Browse by Rating";
+  if (isset($_GET['browse_by_rating']) && !empty($_GET['browse_by_rating']))
+  {
+    $browse_by_rating_display = $_GET['browse_by_rating'];
+    $direction_display = $_GET['direction'];
+
+    if ($browse_by_rating_display == 1 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(1).' or up';
+    } else if ($browse_by_rating_display == 2 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(2).' or up';
+    } else if ($browse_by_rating_display == 3 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(3).' or up';
+    } else if ($browse_by_rating_display == 4 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(4).' or up';
+    } else if ($browse_by_rating_display == 5 && $direction_display == 'up' ){
+      $browse_by_rating_display =  set_star(5);
+    } else if ($browse_by_rating_display == 4 && $direction_display == 'down' ){
+      $browse_by_rating_display =  set_star(4).' or less';
+    }else if ($browse_by_rating_display == 3 && $direction_display == 'down' ){
+      $browse_by_rating_display =  set_star(3).' or less';
+    }else if ($browse_by_rating_display == 2 && $direction_display == 'down' ){
+      $browse_by_rating_display =  set_star(2).' or less';
+    }else if ($browse_by_rating_display == 1 && $direction_display == 'down' ){
+      $browse_by_rating_display =  set_star(1);
+    }
+
+  }
 
   function set_star($start_double)
   {
