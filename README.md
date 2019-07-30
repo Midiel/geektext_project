@@ -1,6 +1,8 @@
 # Geektext Project
 #### Team 8's CEN4010 Final Project for Summer 2019
 
+www.geektext.us
+
 **To run:**
 
 1. Run XAMPP and start the Apache Web Server and MySQL Database
