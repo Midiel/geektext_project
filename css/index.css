@@ -170,3 +170,7 @@ img {
   color: #FFF;
   border-color: #FFF;
 }
+
+p {
+ text-indent: 2em;
+} 

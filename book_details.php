@@ -9,15 +9,14 @@
         // to connect to the database
         require_once('includes/connect.inc.php');
         //include_once('includes/cart_ajax.php');
-        include_once("includes/navbar_libs.php"); 
+        include_once("includes/navbar_libs.php");
         include_once("includes/navbar.php");
-
 
         $book_id = $_GET['book_id'];
 
         // to store all books from the shopping cart
 		$book = array();
-	
+
 		// get shooping cart from database
 		$query = "SELECT * from book WHERE book_id ='". $book_id ."'";
 
@@ -32,7 +31,7 @@
 
 		// Close Connection
         mysqli_close($con);
-        
+
 
     } else {
 
@@ -51,8 +50,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="css/book_details.css">
     <title>Book Details</title>
-		
+
 </head>
 
 <body>
@@ -64,7 +64,7 @@
             <img src="<?php echo $book['image_url']; ?>" class="mr-3" alt="...">
             <div class="media-body">
                 <h5 class="mt-0"><?php echo $book['title']; ?></h5>
-                
+
                 <form class="form-inline" name="author" method="GET" action="index.php">
                     <input type="hidden" name="search" value="<?php echo $book['authors'];?>">
                     by<input type="submit" class="btn btn-link" value="<?php echo $book['authors'];?>">
@@ -90,7 +90,7 @@
                         <button type="submit" id="test" name="add_to_cart" value="true" class="btn btn-default btn-sm">ADD TO CART </button>
                     </div>
                 </form>
-                
+
             </div>
         </div>
 
@@ -103,7 +103,7 @@
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-details-tab" data-toggle="tab" href="#nav-details" role="tab" aria-controls="nav-details" aria-selected="true">Product Details</a>
                     <a class="nav-item nav-link" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-description" aria-selected="false">Product Description</a>
-                    <a class="nav-item nav-link" id="nav-author-tab" data-toggle="tab" href="#nav-author" role="tab" aria-controls="nav-author" aria-selected="false">About the Author</a>  
+                    <a class="nav-item nav-link" id="nav-author-tab" data-toggle="tab" href="#nav-author" role="tab" aria-controls="nav-author" aria-selected="false">About the Author</a>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -118,8 +118,8 @@
                             <strong>Category</strong>:	        <?php echo $book['category'];?> <br>
                         </div>
                         </div>
-                        
-                    </div>  
+
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">
                     <div class="container m-3">
@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    
+
 </div>
 
 </body>

@@ -1,0 +1,16 @@
+body {
+  font-size: 100%;
+  color: white;
+  background: #262626;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+
+  background-color: #005eff;
+  color: #FFF;
+  border-color: #FFF;
+}
