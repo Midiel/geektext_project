@@ -416,7 +416,12 @@
 
           <div class="info-section">
             <div class="title-container">
-              <h2 class="title"><?php echo $book[$i]['title'];?></h2>
+              
+              <form name="book_details" method="GET" action="book_details.php">
+                  <input type="hidden" name="book_id" value="<?php echo $book[$i]['book_id'];?>">
+                  <input type="submit" class="btn btn-link title" value="<?php echo $book[$i]['title'];?>">
+              </form>
+              
             </div>
             <div class="author-container">
               <h2 class="author"><?php echo $book[$i]['author'];?></h2>
